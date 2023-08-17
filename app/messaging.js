@@ -20,13 +20,15 @@ const Messaging = () => {
 	const getRoom = async () => {
 		try {
 			const room_id = await AsyncStorage.getItem("room_id");
+			const name = await AsyncStorage.getItem("name");
 			if (room_id !== null) {
 				setId(room_id);
 			}
-			const name = await AsyncStorage.getItem("name");
 			if (name !== null) {
 				setName(name);
 			}
+			socket.emit("findRoom", room_id);
+			socket.on("foundRoom", (roomChats) => setChatMessages(roomChats));
 		} catch (e) {
 			console.error("Error while loading room!");
 		}
@@ -68,8 +70,6 @@ const Messaging = () => {
 		//router.setOptions({ title: name });
 		getUsername();
 		getRoom();
-		socket.emit("findRoom", room_id);
-		socket.on("foundRoom", (roomChats) => setChatMessages(roomChats));
 	}, []);
 
 	useEffect(() => {
