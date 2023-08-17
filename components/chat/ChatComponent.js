@@ -2,27 +2,22 @@ import { useRouter } from "expo-router";
 import { View, Text, Pressable } from "react-native";
 import React, { useLayoutEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
 import { styles } from "../../utils/styles";
 
 const ChatComponent = ({ item }) => {
   const router = useRouter();
-  const navigation = useNavigation();
   const [messages, setMessages] = useState({});
 
   useLayoutEffect(() => {
     setMessages(item.messages[item.messages.length - 1]);
   }, []);
 
-  const handleNavigation = () => {
-    navigation.navigate("Messaging", {
-      id: item.id,
-      name: item.name,
-    });
+  const handleNavigation = (id, name) => {
+    router.push("/messaging", { id, name });
   };
 
   return (
-    <Pressable style={styles.cchat} onPress={handleNavigation}>
+    <Pressable style={styles.cchat} onPress={() => handleNavigation(item.id, item.name)}>
       <Ionicons
         name='person-circle-outline'
         size={45}

@@ -1,15 +1,15 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { View, TextInput, Text, FlatList, Pressable } from "react-native";
-import { Stack, useRouter } from "expo-router";
+import { Stack, useRouter, useLocalSearchParams } from "expo-router";
 import socket from "../utils/socket";
 import { MessageComponent } from "../components";
 import { styles } from "../utils/styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const Messaging = ({ route, navigation }) => {
+const Messaging = () => {
 	const router = useRouter();
+	const { id, name } = useLocalSearchParams();
 	const [user, setUser] = useState("");
-	const { name, id } = route.params;
 
 	const [chatMessages, setChatMessages] = useState([]);
 	const [message, setMessage] = useState("");
@@ -47,7 +47,7 @@ const Messaging = ({ route, navigation }) => {
 	};
 
 	useLayoutEffect(() => {
-		navigation.setOptions({ title: name });
+		//router.setOptions({ title: name });
 		getUsername();
 		socket.emit("findRoom", id);
 		socket.on("foundRoom", (roomChats) => setChatMessages(roomChats));
