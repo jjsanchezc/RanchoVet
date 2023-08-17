@@ -2,17 +2,35 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import { View, TextInput, Text, FlatList, Pressable } from "react-native";
 import { Stack, useRouter, useLocalSearchParams } from "expo-router";
 import socket from "../utils/socket";
-import { MessageComponent } from "../components";
+import MessageComponent from "../components/chat/MessageComponent";
 import { styles } from "../utils/styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Messaging = () => {
 	const router = useRouter();
-	const { id, name } = useLocalSearchParams();
+	//const { state } = this.props.location;
+	//const { id, name } = useLocalSearchParams();
+	const [room_id, setId] = useState("");
+	const [name, setName] = useState("");
 	const [user, setUser] = useState("");
 
 	const [chatMessages, setChatMessages] = useState([]);
 	const [message, setMessage] = useState("");
+
+	const getRoom = async () => {
+		try {
+			const room_id = await AsyncStorage.getItem("room_id");
+			if (room_id !== null) {
+				setId(room_id);
+			}
+			const name = await AsyncStorage.getItem("name");
+			if (name !== null) {
+				setName(name);
+			}
+		} catch (e) {
+			console.error("Error while loading room!");
+		}
+	};
 
 	const getUsername = async () => {
 		try {
@@ -39,7 +57,7 @@ const Messaging = () => {
 		if (user) {
 			socket.emit("newMessage", {
 				message,
-				room_id: id,
+				room_id: room_id,
 				user,
 				timestamp: { hour, mins },
 			});
@@ -49,7 +67,8 @@ const Messaging = () => {
 	useLayoutEffect(() => {
 		//router.setOptions({ title: name });
 		getUsername();
-		socket.emit("findRoom", id);
+		getRoom();
+		socket.emit("findRoom", room_id);
 		socket.on("foundRoom", (roomChats) => setChatMessages(roomChats));
 	}, []);
 
@@ -65,7 +84,7 @@ const Messaging = () => {
 					{ paddingVertical: 15, paddingHorizontal: 10 },
 				]}
 			>
-				{chatMessages[0] ? (
+				{chatMessages && chatMessages.length > 0 ? (
 					<FlatList
 						data={chatMessages}
 						renderItem={({ item }) => (

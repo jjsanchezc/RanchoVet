@@ -3,6 +3,7 @@ import { View, Text, Pressable } from "react-native";
 import React, { useLayoutEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { styles } from "../../utils/styles";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ChatComponent = ({ item }) => {
   const router = useRouter();
@@ -12,8 +13,14 @@ const ChatComponent = ({ item }) => {
     setMessages(item.messages[item.messages.length - 1]);
   }, []);
 
-  const handleNavigation = (id, name) => {
-    router.push("/messaging", { id, name });
+  const handleNavigation = async (id, name) => {
+    try {
+      await AsyncStorage.setItem("room_id", id);
+      await AsyncStorage.setItem("name", name);
+      router.push("/messaging", { id, name });
+    } catch (e) {
+      console.error("Error! While saving room");
+    }
   };
 
   return (
