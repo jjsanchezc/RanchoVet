@@ -9,7 +9,7 @@ COPY package*.json ./
 
 # Instalar las dependencias
 RUN npm install
-
+RUN npm install -g expo-cli
 RUN npm install react-native@0.69.9
 RUN npm install expo-router react-native-safe-area-context react-native-screens expo-linking expo-constants expo-status-bar react-native-gesture-handler
 RUN npm install react-native-web@~0.18.7 react-dom@18.0.0
