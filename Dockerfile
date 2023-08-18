@@ -1,22 +1,32 @@
 # Seleccionar la imagen base
 FROM node:14
 
-# Establecer el directorio de trabajo dentro del contenedor
-WORKDIR /app
+RUN ["mkdir", "/install"]
 
-# Copiar los archivos de package.json y package-lock.json al directorio de trabajo
-COPY package*.json ./
+ADD ["./package.json", "/install"]
+WORKDIR /install
+RUN npm install --verbose
 
 # Instalar las dependencias
 RUN npm install
+RUN npm install -g nodemon
 RUN npm install -g expo-cli
-RUN npm install react-native@0.69.9
-RUN npm install expo-router react-native-safe-area-context react-native-screens expo-linking expo-constants expo-status-bar react-native-gesture-handler
-RUN npm install react-native-web@~0.18.7 react-dom@18.0.0
-RUN npm install @expo/webpack-config@^0.17.0
-RUN npm install @react-native-async-storage/async-storage
-RUN npm install socket.io-client
+RUN npx expo install react-native@0.69.9
+RUN npx expo install expo-router react-native-safe-area-context react-native-screens expo-linking expo-constants expo-status-bar react-native-gesture-handler
+RUN npx expo install react-native-web@~0.18.7 react-dom@18.0.0
+RUN npx expo install @expo/webpack-config@^0.17.0
+RUN npx expo install @react-native-async-storage/async-storage
+RUN npx expo install socket.io-client
 
+
+ENV NODE_PATH=/install/node_modules
+
+# Establecer el directorio de trabajo dentro del contenedor
+WORKDIR /app
+COPY . /app/
+
+# Copiar los archivos de package.json y package-lock.json al directorio de trabajo
+COPY package*.json ./
 
 # Instalar la CLI de React Native globalmente
 #RUN npm install -g react-native-cli@0.71.3

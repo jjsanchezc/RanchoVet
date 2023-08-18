@@ -10,6 +10,7 @@ services:
       - "19002:19002"
     volumes:
       - .:/app
+      - node_modules:/node_modules
   server:
     build:
       context: ./server
@@ -18,4 +19,6 @@ services:
       - "4000:4000"
     volumes:
       - ./server:/app/server
-    
+      - node_modules:/server/node_modules
+volumes:
+  node_modules:
