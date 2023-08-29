@@ -5,6 +5,7 @@ import socket from "../utils/socket";
 import MessageComponent from "../components/chat/MessageComponent";
 import { styles } from "../utils/styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { messagingTitle, messagingID } from "./MessagingTitle";
 
 const Messaging = () => {
 	const router = useRouter();
@@ -19,8 +20,8 @@ const Messaging = () => {
 
 	const getRoom = async () => {
 		try {
-			const room_id = await AsyncStorage.getItem("room_id");
-			const name = await AsyncStorage.getItem("name");
+			const room_id = messagingID.value;
+			const name = messagingTitle.value;
 			if (room_id !== null) {
 				setId(room_id);
 			}

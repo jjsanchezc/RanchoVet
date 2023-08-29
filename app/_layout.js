@@ -1,19 +1,18 @@
-// import * as SplashScreen from "expo-splash-screen";
-import { Stack } from "expo-router";
-import { useFonts } from "expo-font";
+import React from 'react';
+import { Stack } from 'expo-router';
+import { useFonts } from 'expo-font';
+import { messagingTitle } from "../components/chat/MessagingTitle";
 
-// SplashScreen.preventAutoHideAsync();
 
 export const unstable_settings = {
-  // Ensure any route can link back to `/`
-  initialRouteName: "login",
+  initialRouteName: 'login',
 };
 
 const Layout = () => {
   const [fontsLoaded] = useFonts({
-    DMBold: require("../assets/fonts/DMSans-Bold.ttf"),
-    DMMedium: require("../assets/fonts/DMSans-Medium.ttf"),
-    DMRegular: require("../assets/fonts/DMSans-Regular.ttf"),
+    DMBold: require('../assets/fonts/DMSans-Bold.ttf'),
+    DMMedium: require('../assets/fonts/DMSans-Medium.ttf'),
+    DMRegular: require('../assets/fonts/DMSans-Regular.ttf'),
   });
 
   if (!fontsLoaded) {
@@ -22,11 +21,11 @@ const Layout = () => {
 
   return (
     <Stack initialRouteName='login'>
-      <Stack.Screen name='login' />
-      <Stack.Screen name='chat' />
-      <Stack.Screen name='messaging' />
+      <Stack.Screen name='login' options={{ title: 'Login' }} />
+      <Stack.Screen name='chat' options={{ title: 'Chats' }} />
+      <Stack.Screen name='messaging' options={{ title: messagingTitle.value }} />
     </Stack>
-  )
+  );
 };
 
 export default Layout;
