@@ -3,7 +3,7 @@ import { View, Text, Pressable } from "react-native";
 import React, { useLayoutEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { styles } from "../../utils/styles";
-import { messagingTitle } from "./MessagingTitle";
+import { messagingTitle, messagingID } from "./MessagingTitle";
 
 const ChatComponent = ({ item }) => {
   const router = useRouter();
@@ -15,6 +15,7 @@ const ChatComponent = ({ item }) => {
 
   const handleNavigation = async (id, name) => {
     try {
+      messagingID = id;
       messagingTitle.value = name;
       router.push("/messaging", { id, name });
     } catch (e) {
