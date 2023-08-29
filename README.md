@@ -7,6 +7,8 @@ npx expo install react-native-web@~0.18.7 react-dom@18.0.0
 npx expo install @expo/webpack-config@^0.17.0
 npx expo install @react-native-async-storage/async-storage
 npx expo install socket.io-client
+npm install --save @redux-offline/redux-offline@expo
+npm install -g eas-cli
 
 Servidor
 npm install

@@ -5,7 +5,7 @@ import socket from "../utils/socket";
 import MessageComponent from "../components/chat/MessageComponent";
 import { styles } from "../utils/styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { messagingTitle, messagingID } from "./MessagingTitle";
+import { messagingTitle, messagingID } from "../components/chat/MessagingTitle";
 
 const Messaging = () => {
 	const router = useRouter();

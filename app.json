@@ -2,9 +2,42 @@
   "expo": {
     "scheme": "acme",
     "web": {
-      "bundler": "metro"
+      "bundler": "metro",
+      "favicon": "./logo.png"
     },
     "name": "RanchoVet",
-    "slug": "ranchovet"
+    "slug": "RanchoVet",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./logo.png",
+    "splash": {
+      "image": "./logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.pagepro.testpublishapp",
+      "buildNumber": "1.0.0"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./logo.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "com.pagepro.testpublishapp",
+      "versionCode": 1
+    },
+    "extra": {
+      "eas": {
+        "projectId": "bfff4af4-3315-4704-a96a-edc2ef76578e"
+      }
+    }
   }
 }
