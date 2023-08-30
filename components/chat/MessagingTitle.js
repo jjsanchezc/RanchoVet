@@ -1,2 +1,2 @@
-export var messagingTitle = { value: "Message" }; // Shared variable
-export var messagingID = { value: 0 };
+export const messagingTitle = { value: "Message" }; // Shared variable
+export const messagingID = { value: 0 };

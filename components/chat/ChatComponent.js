@@ -15,7 +15,7 @@ const ChatComponent = ({ item }) => {
 
   const handleNavigation = async (id, name) => {
     try {
-      messagingID = id;
+      messagingID.value = id;
       messagingTitle.value = name;
       router.push("/messaging", { id, name });
     } catch (e) {

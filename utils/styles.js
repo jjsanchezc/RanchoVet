@@ -29,7 +29,7 @@ export const styles = StyleSheet.create({
 		padding: 12,
 		marginVertical: 10,
 		width: "60%",
-		borderRadius: "50%",
+		borderRadius: 50,
 		elevation: 1,
 	},
 	loginbuttonText: {
