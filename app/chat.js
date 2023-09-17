@@ -6,7 +6,7 @@ import Modal from "../components/chat/Modal";
 import ChatComponent from "../components/chat/ChatComponent";
 import socket from "../utils/socket";
 import { styles } from "../utils/styles";
-import Menu from "../components/menu";
+import Menu from "../components/menu/Menu";
 
 const Chat = () => {
   const router = useRouter();
@@ -56,7 +56,7 @@ const Chat = () => {
           </View>
         )}
       </View>
-	  <Menu />
+      <Menu />
       {visible ? <Modal setVisible={setVisible} /> : ""}
     </SafeAreaView>
   );

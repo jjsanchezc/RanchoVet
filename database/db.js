@@ -66,15 +66,25 @@ userdata.get(user).then((document) => {
     console.log('Retrieved document:', document);
     chatids = document.chats;
     replicate(chats, remoteDBURLchats, filterchats);
-    chatids.forEach(c => {
-        chats.get(c).then((document) => {
-            console.log('Retrieved document:', document);
+    // chatids.forEach(c => {
+    //     chats.get(c).then((document) => {
+    //         console.log('Retrieved document:', document);
+    //     }).catch((error) => {
+    //         //console.error('Error retrieving document:', error);
+    //     });
+    // });
+
+    chats.allDocs({ include_docs: true })
+        .then((result) => {
+            const documents = result.rows.map((row) => row.doc);
+            console.log('All documents:', documents);
         }).catch((error) => {
             //console.error('Error retrieving document:', error);
         });
-    });
 }).catch((error) => {
     //console.error('Error retrieving document:', error);
 });
+
+
 
 

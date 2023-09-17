@@ -1,8 +1,7 @@
 import React, { useState, useLayoutEffect } from "react";
 import { SafeAreaView, View, TextInput, Pressable, Text } from "react-native";
 import { Stack, useRouter } from "expo-router";
-import { COLORS, icons, images, SIZES } from "../constants";
-import Icon from "react-native-vector-icons/FontAwesome"; 
+import Icon from "react-native-vector-icons/FontAwesome";
 import { styles } from "../utils/styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -46,22 +45,22 @@ const Login = () => {
       <View style={styles.loginscreen}>
         <Text style={styles.loginheading}>Log in</Text>
         <View style={styles.logininputContainer}>
-        <View style={styles.inputWrapper}>
-        <Icon name="user" size={24} color="#ccc" style={styles.icon} />
-          <TextInput
-            autoCorrect={false}
-            placeholder='Enter your username'
-            style={styles.logininput}
-            onChangeText={(value) => setUsername(value)}
-          />
-        </View>
-
-        <Pressable onPress={handleSignIn} style={styles.loginbutton}>
-          <View>
-            <Text style={styles.loginbuttonText}>Get Started</Text>
+          <View style={styles.inputWrapper}>
+            <Icon name="user" size={24} color="#ccc" style={styles.icon} />
+            <TextInput
+              autoCorrect={false}
+              placeholder='Enter your username'
+              style={styles.logininput}
+              onChangeText={(value) => setUsername(value)}
+            />
           </View>
-        </Pressable>
-      </View>
+
+          <Pressable onPress={handleSignIn} style={styles.loginbutton}>
+            <View>
+              <Text style={styles.loginbuttonText}>Get Started</Text>
+            </View>
+          </Pressable>
+        </View>
       </View>
     </SafeAreaView>
   );
