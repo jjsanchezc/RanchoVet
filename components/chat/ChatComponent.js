@@ -10,7 +10,7 @@ const ChatComponent = ({ item }) => {
   const [messages, setMessages] = useState({});
 
   useLayoutEffect(() => {
-    setMessages(item.messages[item.messages.length - 1]);
+    setMessages(item.mensajes["mensaje1"]);
   }, []);
 
   const handleNavigation = async (id, name) => {
@@ -24,7 +24,7 @@ const ChatComponent = ({ item }) => {
   };
 
   return (
-    <Pressable style={styles.cchat} onPress={() => handleNavigation(item.id, item.name)}>
+    <Pressable style={styles.cchat} onPress={() => handleNavigation(item.key, item.name)}>
       <Ionicons
         name='person-circle-outline'
         size={45}
@@ -37,12 +37,12 @@ const ChatComponent = ({ item }) => {
           <Text style={styles.cusername}>{item.name}</Text>
 
           <Text style={styles.cmessage}>
-            {messages?.text ? messages.text : "Tap to start chatting"}
+            {messages?.contenido ? messages.contenido : "Tap to start chatting"}
           </Text>
         </View>
         <View>
           <Text style={styles.ctime}>
-            {messages?.time ? messages.time : "now"}
+            {messages?.hora ? messages.hora : "now"}
           </Text>
         </View>
       </View>

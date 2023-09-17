@@ -1,0 +1,86 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getMessages, getUser } from "./fbTest";
+
+// Save data to AsyncStorage
+const saveData = async (key, data) => {
+    try {
+        const jsonValue = JSON.stringify(data);
+        await AsyncStorage.setItem(key, jsonValue);
+        //console.log(`Data saved with key: ${key}`);
+    } catch (error) {
+        console.error('Error saving data: ', error);
+    }
+};
+
+// Retrieve data from AsyncStorage
+const getData = async (key) => {
+    try {
+        const jsonValue = await AsyncStorage.getItem(key);
+        return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch (error) {
+        console.error('Error retrieving data: ', error);
+    }
+};
+
+// Remove data from AsyncStorage
+const removeData = async (key) => {
+    try {
+        await AsyncStorage.removeItem(key);
+        //console.log(`Data removed with key: ${key}`);
+    } catch (error) {
+        console.error('Error removing data: ', error);
+    }
+};
+
+const fetchDataAndStoreLocally = async (user) => {
+    console.log('User:', user);
+    try {
+        // Fetch data from Firebase using getdb
+        const userData = await getUser(user);
+        await saveData(user, userData);
+        //console.log('User Data:', await getData(user));
+
+        for (const chatid of userData.chats) {
+            const chatData = await getMessages(chatid);
+            var otherUser;
+            if (chatData.usuarios[0] == user)
+                otherUser = chatData.usuarios[1];
+            else otherUser = chatData.usuarios[0];
+            const otherUserData = await getUser(otherUser);
+            chatData["name"] = otherUserData.name;
+            //console.log('Chat data:', chatid, chatData);
+            await saveData(chatid, chatData);
+        }
+
+        //console.log('Data fetched from Firebase:', userData);
+    } catch (error) {
+        console.error('Error:', error);
+    }
+
+    // Usage example
+    await getAllAsyncStorageContents()
+        .then((contents) => {
+            console.log('AsyncStorage Contents:', contents);
+        })
+        .catch((error) => {
+            console.error('Error:', error.message);
+        });
+}
+
+// Function to get all AsyncStorage keys and their values
+async function getAllAsyncStorageContents() {
+    try {
+        const keys = await AsyncStorage.getAllKeys();
+        const contents = await AsyncStorage.multiGet(keys);
+
+        // contents is an array of [key, value] pairs
+        return contents;
+    } catch (error) {
+        console.error('Error fetching AsyncStorage contents:', error);
+        throw error;
+    }
+}
+
+
+
+export { saveData, getData, removeData, fetchDataAndStoreLocally };

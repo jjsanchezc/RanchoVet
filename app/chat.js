@@ -7,29 +7,37 @@ import ChatComponent from "../components/chat/ChatComponent";
 import socket from "../utils/socket";
 import { styles } from "../utils/styles";
 import Menu from "../components/menu/Menu";
+import { saveData, getData, removeData, fetchDataAndStoreLocally } from "../database/localdatabase";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Chat = () => {
   const router = useRouter();
   const [visible, setVisible] = useState(false);
   const [rooms, setRooms] = useState([]);
+  var user = "";
 
   useLayoutEffect(() => {
-    function fetchGroups() {
-      fetch("http://34.125.202.209:4000/api")
-        .then((res) => res.json())
-        .then((data) => setRooms(data))
-        .catch((err) => console.error(err));
-    }
-    fetchGroups();
   }, []);
 
   useEffect(() => {
-    socket.on("roomsList", (rooms) => {
-      setRooms(rooms);
-    });
-  }, [socket]);
+    getChats();
+  }, []);
 
   const handleCreateGroup = () => setVisible(true);
+
+  async function getChats() {
+    user = await AsyncStorage.getItem("username");
+    await fetchDataAndStoreLocally(user);
+    const userData = await getData(user);
+    //console.log("user data chats", userData.chats);
+    const r = [];
+    for (const chatid in userData.chats) {
+      const chatData = await getData(userData.chats[chatid]);
+      //console.log('Chat data:', userData.chats[chatid], chatData);
+      r.push(chatData)
+    }
+    setRooms(r);
+  }
 
   return (
     <SafeAreaView style={styles.chatscreen}>
@@ -47,7 +55,7 @@ const Chat = () => {
           <FlatList
             data={rooms}
             renderItem={({ item }) => <ChatComponent item={item} />}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.key}
           />
         ) : (
           <View style={styles.chatemptyContainer}>
