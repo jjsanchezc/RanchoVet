@@ -1,13 +1,33 @@
 import { StyleSheet } from "react-native";
+import { COLORS } from "../constants";
+import { ColorSpace } from "react-native-reanimated";
 
 export const styles = StyleSheet.create({
 	loginscreen: {
 		flex: 1,
-		backgroundColor: "#EEF1FF",
+		backgroundColor: COLORS.primary,
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 12,
 		width: "100%",
+		borderWidth: 1,
+		borderColor: "#ccc",
+		borderRadius: 5,
+		padding: 10,
+		marginBottom: 20,
+	},
+	inputWrapper: {
+		flexDirection: "row", // Alinea los elementos en fila horizontalmente
+		alignItems: "center", // Centra verticalmente los elementos en la fila
+		borderWidth: 1,
+		borderColor: COLORS.secondary,
+		borderRadius: 5,
+		padding: 10,
+		marginBottom: 20,
+	},
+	icon: {
+		marginRight: 10,
+		color: COLORS.tertiary,
 	},
 	loginheading: {
 		fontSize: 26,
@@ -19,16 +39,19 @@ export const styles = StyleSheet.create({
 		justifyContent: "center",
 	},
 	logininput: {
-		borderWidth: 1,
-		width: "90%",
-		padding: 8,
-		borderRadius: 2,
+		orderWidth: 1,
+		borderColor: COLORS.secondary,
+		borderRadius: 5,
+		padding: 10,
+		marginBottom: 5,
+		fontSize: 16,
+		flex: 1,
 	},
 	loginbutton: {
-		backgroundColor: "green",
+		backgroundColor: COLORS.tertiary,
 		padding: 12,
 		marginVertical: 10,
-		width: "60%",
+		width: "30%",
 		borderRadius: 50,
 		elevation: 1,
 	},
@@ -38,7 +61,7 @@ export const styles = StyleSheet.create({
 		fontWeight: "600",
 	},
 	chatscreen: {
-		backgroundColor: "#F7F7F7",
+		backgroundColor: COLORS.primary,
 		flex: 1,
 		padding: 10,
 		position: "relative",
@@ -46,10 +69,10 @@ export const styles = StyleSheet.create({
 	chatheading: {
 		fontSize: 24,
 		fontWeight: "bold",
-		color: "green",
+		color: COLORS.tertiary,
 	},
 	chattopContainer: {
-		backgroundColor: "#F7F7F7",
+		backgroundColor: "#FBF4E1",
 		height: 70,
 		width: "100%",
 		padding: 20,
@@ -74,11 +97,12 @@ export const styles = StyleSheet.create({
 	chatemptyText: { fontWeight: "bold", fontSize: 24, paddingBottom: 30 },
 	messagingscreen: {
 		flex: 1,
+		backgroundColor: "#FBF4E1",
 	},
 	messaginginputContainer: {
 		width: "100%",
 		minHeight: 100,
-		backgroundColor: "white",
+		backgroundColor: "#FBF4E1",
 		paddingVertical: 30,
 		paddingHorizontal: 15,
 		justifyContent: "center",
@@ -90,10 +114,11 @@ export const styles = StyleSheet.create({
 		flex: 1,
 		marginRight: 10,
 		borderRadius: 20,
+		borderColor: COLORS.tertiary,
 	},
 	messagingbuttonContainer: {
 		width: "30%",
-		backgroundColor: "green",
+		backgroundColor: COLORS.tertiary,
 		borderRadius: 3,
 		alignItems: "center",
 		justifyContent: "center",
@@ -102,11 +127,11 @@ export const styles = StyleSheet.create({
 	modalbutton: {
 		width: "40%",
 		height: 45,
-		backgroundColor: "green",
+		backgroundColor: COLORS.secondary,
 		borderRadius: 5,
 		alignItems: "center",
 		justifyContent: "center",
-		color: "#fff",
+		color: COLORS.black,
 	},
 	modalbuttonContainer: {
 		flexDirection: "row",
@@ -145,12 +170,12 @@ export const styles = StyleSheet.create({
 		marginBottom: 15,
 	},
 	mmessage: {
-		maxWidth: "50%",
-		backgroundColor: "#f5ccc2",
+		maxWidth: "100%", // Ajusta el ancho máximo al 100%
+		backgroundColor: COLORS.secondary,
 		padding: 15,
 		borderRadius: 10,
 		marginBottom: 2,
-	},
+	  },	  
 	mvatar: {
 		marginRight: 5,
 	},
@@ -160,7 +185,7 @@ export const styles = StyleSheet.create({
 		alignItems: "center",
 		borderRadius: 5,
 		paddingHorizontal: 15,
-		backgroundColor: "#fff",
+		backgroundColor: "#FBF4E1",
 		height: 80,
 		marginBottom: 10,
 	},
@@ -184,4 +209,57 @@ export const styles = StyleSheet.create({
 	ctime: {
 		opacity: 0.5,
 	},
-});
+//menu
+	container: {
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0,
+		width: '100%',
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center',
+	  },
+	  menu: {
+		display: 'flex',
+		flexGrow: 1,
+		height: 72,
+		maxWidth: 370,
+		borderRadius: 12,
+		overflow: 'hidden',
+		backgroundColor: '#fff',
+		shadowColor: '#342ead',
+		shadowOpacity: 0.25,
+		shadowRadius: 1,
+		shadowOffset: {
+		  width: 0,
+		  height: 1,
+		},
+		elevation: 3, // Use elevation for Android shadow
+	  },
+	  menuItem: {
+		flex: 1,
+		flexDirection: 'column',
+		justifyContent: 'center',
+		alignItems: 'center',
+		textDecorationLine: 'none',
+	  },
+	  menuItemFocused: {
+		// Define styles for focused or hovered state here
+		// Example: backgroundColor: '#342ead'
+	  },
+	  materialIcons: {
+		fontFamily: 'Material Icons',
+		marginBottom: 4,
+		fontSize: 26,
+		color: '#342ead',
+		transitionDuration: '0.25s',
+	  },
+	  menuItemLabel: {
+		fontSize: 13,
+		color: '#342ead',
+		transitionDuration: '0.25s',
+	  },
+	});
+	

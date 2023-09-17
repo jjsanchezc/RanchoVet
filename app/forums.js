@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Likes from "../components/forums/likes";
 import Comments from "../components/forums/comments";
 import { useNavigate } from "react-router-dom";
-import Nav from "./Nav";
 
 const forums = () => {
 	const [thread, setThread] = useState("");
