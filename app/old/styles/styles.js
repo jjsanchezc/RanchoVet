@@ -1,10 +1,12 @@
 import { StyleSheet } from "react-native";
-import { SIZES } from "../constants";
+import { COLORS } from "../constants";
+import { Colors } from "react-native/Libraries/NewAppScreen";
+
 
 export const styles = StyleSheet.create({
 	loginscreen: {
 		flex: 1,
-		backgroundColor: "#EEF1FF",
+		backgroundColor: COLORS.primary,
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 12,
@@ -20,13 +22,21 @@ export const styles = StyleSheet.create({
 		justifyContent: "center",
 	},
 	logininput: {
+	// 	borderWidth: 1,
+	// 	width: "90%",
+	// 	padding: 8,
+	// 	borderRadius: 2,
+	// },
+	// 
 		borderWidth: 1,
-		width: "90%",
-		padding: 8,
-		borderRadius: 2,
-	},
+		borderColor: "#ccc",
+		borderRadius: 5,
+		padding: 10,
+		marginBottom: 20,
+		fontSize: 16,
+	  },
 	loginbutton: {
-		backgroundColor: "green",
+		backgroundColor: COLORS.secondary,
 		padding: 12,
 		marginVertical: 10,
 		width: "60%",
@@ -35,11 +45,12 @@ export const styles = StyleSheet.create({
 	},
 	loginbuttonText: {
 		textAlign: "center",
-		color: "#fff",
+		color: COLORS.black,
 		fontWeight: "600",
+		fontSize: 18,
 	},
 	chatscreen: {
-		backgroundColor: "#F7F7F7",
+		backgroundColor: COLORS.primary,
 		flex: 1,
 		padding: 10,
 		position: "relative",
@@ -47,10 +58,10 @@ export const styles = StyleSheet.create({
 	chatheading: {
 		fontSize: 24,
 		fontWeight: "bold",
-		color: "green",
+		color: "#EFC88B",
 	},
 	chattopContainer: {
-		backgroundColor: "#F7F7F7",
+		backgroundColor: COLORS.primary,
 		height: 70,
 		width: "100%",
 		padding: 20,
@@ -94,7 +105,7 @@ export const styles = StyleSheet.create({
 	},
 	messagingbuttonContainer: {
 		width: "30%",
-		backgroundColor: "green",
+		backgroundColor: "#EFC88B",
 		borderRadius: 3,
 		alignItems: "center",
 		justifyContent: "center",

@@ -3,6 +3,7 @@ import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { styles } from "../../utils/styles";
 
+
 export default function MessageComponent({ item, user }) {
   const isCurrentUser = item.user !== user;
 
@@ -26,7 +27,7 @@ export default function MessageComponent({ item, user }) {
             style={
               isCurrentUser
                 ? styles.mmessage
-                : [styles.mmessage, { backgroundColor: "rgb(194, 243, 194)" }]
+                : [styles.mmessage, { backgroundColor: "F4E3B2" }]
             }
           >
             <Text>{item.text}</Text>

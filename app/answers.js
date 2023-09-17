@@ -9,7 +9,7 @@ const answers = () => {
 	const { id } = useParams();
 
 	const addReply = () => {
-		fetch("http://localhost:4000/api/create/reply", {
+		fetch("http://34.125.202.209:4000/api/create/reply", {
 			method: "POST",
 			body: JSON.stringify({
 				id,
@@ -35,7 +35,7 @@ const answers = () => {
 
 	useEffect(() => {
 		const fetchReplies = () => {
-			fetch("http://localhost:4000/api/thread/replies", {
+			fetch("http://34.125.202.209:4000/api/thread/replies", {
 				method: "POST",
 				body: JSON.stringify({
 					id,

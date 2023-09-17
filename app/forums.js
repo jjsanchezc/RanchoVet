@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Likes from "../components/forums/likes";
 import Comments from "../components/forums/comments";
 import { useNavigate } from "react-router-dom";
-import Nav from "./Nav";
 
 const forums = () => {
 	const [thread, setThread] = useState("");
@@ -14,7 +13,7 @@ const forums = () => {
 			if (!localStorage.getItem("_id")) {
 				navigate("/");
 			} else {
-				fetch("http://localhost:4000/api/all/threads")
+				fetch("http://34.125.202.209:4000/api/all/threads")
 					.then((res) => res.json())
 					.then((data) => setThreadList(data.threads))
 					.catch((err) => console.error(err));
@@ -24,7 +23,7 @@ const forums = () => {
 	}, [navigate]);
 
 	const createThread = () => {
-		fetch("http://localhost:4000/api/create/thread", {
+		fetch("http://34.125.202.209:4000/api/create/thread", {
 			method: "POST",
 			body: JSON.stringify({
 				thread,

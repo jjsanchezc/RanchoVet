@@ -82,7 +82,7 @@ const Messaging = () => {
 			<View
 				style={[
 					styles.messagingscreen,
-					{ paddingVertical: 15, paddingHorizontal: 10 },
+					{ paddingVertical: 15, paddingHorizontal: 10, flex: 1 },
 				]}
 			>
 				{chatMessages && chatMessages.length > 0 ? (
@@ -108,7 +108,7 @@ const Messaging = () => {
 					onPress={handleNewMessage}
 				>
 					<View>
-						<Text style={{ color: "#f2f0f1", fontSize: 20 }}>SEND</Text>
+						<Text style={{ color: "#FBF4E1", fontSize: 20 }}>SEND</Text>
 					</View>
 				</Pressable>
 			</View>
