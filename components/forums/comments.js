@@ -1,8 +1,8 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Stack, useRouter } from "expo-router";
 
 const Comments = ({ numberOfComments, threadId }) => {
-	const navigate = useNavigate();
+	const navigate = useRouter();
 
 	const handleAddComment = () => {
 		navigate(`/${threadId}/replies`);

@@ -2,7 +2,7 @@ import React from "react";
 
 const Likes = ({ numberOfLikes, threadId }) => {
 	const handleLikeFunction = () => {
-		fetch("http://localhost:4000/api/thread/like", {
+		fetch("http://localhost:4000/api/thread", {
 			method: "POST",
 			body: JSON.stringify({
 				threadId,
