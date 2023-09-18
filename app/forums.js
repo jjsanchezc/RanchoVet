@@ -7,7 +7,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { styles } from "../utils/styles";
 import { useForm, Controller } from 'react-hook-form';
 import { Button } from "react-native";
-import { useHistory } from "expo-router";
 
 const Forums = () => {
   const [threadList, setThreadList] = useState([]);
@@ -15,55 +14,38 @@ const Forums = () => {
   const navigate = useRouter();
 
   useEffect(() => {
-	const checkUser = async () => {
-	  try {
-		const userId = await AsyncStorage.getItem("username");
-		if (!userId) {
-		  navigate("/");
-		} else {
-		  fetch("http://34.125.202.209:4000/api/thread")
-			.then((res) => res.json())
-			.then((data) => setThreadList(data.threads))
-			.catch((err) => console.error(err));
-		}
-	  } catch (error) {
-		console.error("Error reading _id from AsyncStorage:", error);
-	  }
-	};
-	checkUser();
-  }, [navigate]);
+    const loadLocalData = async () => {
+      try {
+        const storedThreads = await AsyncStorage.getItem("storedThreads");
+        if (storedThreads) {
+          setThreadList(JSON.parse(storedThreads));
+        }
+      } catch (error) {
+        console.error("Error reading storedThreads from AsyncStorage:", error);
+      }
+    };
+    loadLocalData();
+  }, []);
 
   const createThread = async (data) => {
-  try {
-    const userId = await AsyncStorage.getItem("username");
-    if (!userId) {
-      navigate("/");
-      return;
-    }
+    try {
+      const userId = await AsyncStorage.getItem("username");
+      if (!userId) {
+        navigate("/");
+        return;
+      }
 
-    const response = await fetch("http://34.125.202.209:4000/api/thread", {
-      method: "POST",
-      body: JSON.stringify({
-        thread: data.Pregunta,
-        id: userId,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+      const newThread = { title: data.Pregunta, likes: [], replies: [] };
+      const updatedThreads = [...threadList, newThread];
 
-    if (response.ok) {
-      const responseData = await response.json();
-      alert(responseData.message);
-      setThreadList(responseData.threads);
-      setValue("Pregunta", ""); // Clear the input field
-    } else {
-      console.error("Failed to create thread:", response.status);
+      await AsyncStorage.setItem("storedThreads", JSON.stringify(updatedThreads));
+
+      setThreadList(updatedThreads);
+
+    } catch (error) {
+      console.error("Error:", error);
     }
-  } catch (error) {
-    console.error("Error:", error);
-  }
-};
+  };
 
   return (
     <>
@@ -86,17 +68,17 @@ const Forums = () => {
       </View>
 
       <View className='thread__container'>
-        {threadList.map((thread) => (
-          <View className='thread__item' key={thread.id}>
-            <p>{thread.title}</p>
+        {threadList.map((thread, index) => (
+          <View className='thread__item' key={index}>
+            <Text>{thread.title}</Text>
             <View className='react__container'>
               <Likes
                 numberOfLikes={thread.likes.length}
-                threadId={thread.id}
+                threadId={index} // Use the index as the threadId
               />
               <Comments
                 numberOfComments={thread.replies.length}
-                threadId={thread.id}
+                threadId={index} // Use the index as the threadId
                 title={thread.title}
               />
             </View>

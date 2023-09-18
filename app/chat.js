@@ -6,7 +6,7 @@ import Modal from "../components/chat/Modal";
 import ChatComponent from "../components/chat/ChatComponent";
 import socket from "../utils/socket";
 import { styles } from "../utils/styles";
-import Menu from "../components/menu/Menu";
+import Menu from "../components/Menu/Menu";
 import { saveData, getData, removeData, fetchDataAndStoreLocally } from "../database/localdatabase";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
