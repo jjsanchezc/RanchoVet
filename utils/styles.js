@@ -72,7 +72,7 @@ export const styles = StyleSheet.create({
 		color: COLORS.tertiary,
 	},
 	chattopContainer: {
-		backgroundColor: "#FBF4E1",
+		backgroundColor: COLORS.background,
 		height: 70,
 		width: "100%",
 		padding: 20,
@@ -97,12 +97,12 @@ export const styles = StyleSheet.create({
 	chatemptyText: { fontWeight: "bold", fontSize: 24, paddingBottom: 30 },
 	messagingscreen: {
 		flex: 1,
-		backgroundColor: "#FBF4E1",
+		backgroundColor: COLORS.background,
 	},
 	messaginginputContainer: {
 		width: "100%",
 		minHeight: 100,
-		backgroundColor: "#FBF4E1",
+		backgroundColor: COLORS.background,
 		paddingVertical: 30,
 		paddingHorizontal: 15,
 		justifyContent: "center",
@@ -185,7 +185,7 @@ export const styles = StyleSheet.create({
 		alignItems: "center",
 		borderRadius: 5,
 		paddingHorizontal: 15,
-		backgroundColor: "#FBF4E1",
+		backgroundColor: COLORS.background,
 		height: 80,
 		marginBottom: 10,
 	},

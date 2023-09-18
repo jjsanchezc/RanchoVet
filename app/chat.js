@@ -5,7 +5,7 @@ import { Feather } from "@expo/vector-icons";
 import Modal from "../components/chat/Modal";
 import ChatComponent from "../components/chat/ChatComponent";
 import { styles } from "../utils/styles";
-import Menu from "../components/menu/Menu";
+import Menu from "../components/Menu/Menu";
 import { getData, fetchDataAndStoreLocally } from "../database/localdatabase";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
