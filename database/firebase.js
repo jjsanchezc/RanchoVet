@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getDatabase, ref, get } from "firebase/database";
+import { getDatabase, ref, get, push, onValue } from "firebase/database";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAXD32UYLrtra2OMgyxDC-Y9_M0HOctWA8",
@@ -52,4 +52,19 @@ async function getMessages(chatid) {
   }
 }
 
-export { getMessages, getUser };
+async function newMessage(chatid, message) {
+  const messagesRef = ref(database, `chats/${chatid}/mensajes`);
+  try {
+    const newMessageRef = await push(messagesRef, message);
+    const newMessageId = newMessageRef.key; // Get the auto-generated ID
+    console.log("New message added to Firebase with ID:", newMessageId);
+    return newMessageId;
+  } catch (error) {
+    console.error("Error sending message:", error);
+    throw error; // Re-throw the error to handle it in the calling code
+  }
+
+}
+
+
+export { getMessages, getUser, newMessage };

@@ -6,6 +6,7 @@ import { styles } from "../../utils/styles";
 
 export default function MessageComponent({ item, user }) {
   const isCurrentUser = item.user !== user;
+  //console.log("item: ", item);
 
   return (
     <View>
@@ -30,10 +31,10 @@ export default function MessageComponent({ item, user }) {
                 : [styles.mmessage, { backgroundColor: "F4E3B2" }]
             }
           >
-            <Text>{item.text}</Text>
+            <Text>{item.contenido}</Text>
           </View>
         </View>
-        <Text style={{ marginLeft: 40 }}>{item.time}</Text>
+        <Text style={{ marginLeft: 40 }}>{item.hora}</Text>
       </View>
     </View>
   );
