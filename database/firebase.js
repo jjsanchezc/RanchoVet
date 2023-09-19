@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getDatabase, ref, get, push, onValue } from "firebase/database";
+import { getDatabase, ref, set, get, push, onValue } from "firebase/database";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAXD32UYLrtra2OMgyxDC-Y9_M0HOctWA8",
@@ -63,8 +63,36 @@ async function newMessage(chatid, message) {
     console.error("Error sending message:", error);
     throw error; // Re-throw the error to handle it in the calling code
   }
-
 }
 
+// Function to create a new chat
+async function createNewChat(user, destinatary) {
+  try {
+    const chatData = {
+      id: null, // Leave this null to auto-generate the ID
+      mensajes: { "null": "null" },
+      usuarios: [user, destinatary],
+    };
+    // Push a new chat with an auto-generated key
+    const newChatRef = push(ref(database, "chats"));
+    const newChatKey = newChatRef.key;
 
-export { getMessages, getUser, newMessage };
+    // Update the chat ID with the auto-generated key
+    chatData.id = newChatKey;
+
+    // Set the chat data under the generated key
+    await set(ref(database, `chats/${newChatKey}`), chatData);
+    const userRef = ref(database, `users/${user}/chats`);
+    await push(userRef, newChatKey);
+    const destinataryRef = ref(database, `users/${destinatary}/chats`);
+    await push(destinataryRef, newChatKey);
+
+    // Log the success message
+    console.log("New chat added to Firebase with ID:", newChatKey);
+  } catch (error) {
+    console.error("Error creating new chat:", error);
+    throw error;
+  }
+}
+
+export { getMessages, getUser, newMessage, createNewChat };

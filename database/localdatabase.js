@@ -38,9 +38,9 @@ const fetchDataAndStoreLocally = async (user) => {
         // Fetch data from Firebase using getdb
         const userData = await getUser(user);
         await saveData(user, userData);
-        //console.log('User Data:', await getData(user));
+        //console.log('User Data:', userData);
 
-        for (const chatid of userData.chats) {
+        for (const chatid of Object.values(userData.chats)) {
             const chatData = await getMessages(chatid);
             var otherUser;
             if (chatData.usuarios[0] == user)
@@ -49,6 +49,8 @@ const fetchDataAndStoreLocally = async (user) => {
             const otherUserData = await getUser(otherUser);
             chatData["name"] = otherUserData.name;
             //console.log('Chat data:', chatid, chatData);
+            if (chatData.mensajes.hasOwnProperty("null"))
+                delete chatData.mensajes["null"];
             await saveData(chatid, chatData);
         }
 

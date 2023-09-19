@@ -78,7 +78,7 @@ const Messaging = () => {
 						renderItem={({ item }) => (
 							<MessageComponent item={item} user={user} />
 						)}
-						keyExtractor={(item) => item.id}
+						keyExtractor={() => Math.random().toString(36).substring(2)}
 						onContentSizeChange={scrollToBottom}
 					/>
 				) : (

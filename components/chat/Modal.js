@@ -1,14 +1,16 @@
 import { View, Text, TextInput, Pressable } from "react-native";
 import React, { useState } from "react";
-import socket from "../../utils/socket";
 import { styles } from "../../utils/styles";
+import { createNewChat } from "../../database/firebase";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Modal = ({ setVisible }) => {
   const closeModal = () => setVisible(false);
-  const [groupName, setGroupName] = useState("");
+  const [destinatary, setDestinatary] = useState("");
 
-  const handleCreateRoom = () => {
-    socket.emit("createRoom", groupName);
+  const handleCreateRoom = async () => {
+    const user = await AsyncStorage.getItem("username");
+    createNewChat(user, destinatary);
     closeModal();
   };
 
@@ -18,7 +20,7 @@ const Modal = ({ setVisible }) => {
       <TextInput
         style={styles.modalinput}
         placeholder='Group name'
-        onChangeText={(value) => setGroupName(value)}
+        onChangeText={(value) => setDestinatary(value)}
       />
       <View style={styles.modalbuttonContainer}>
         <Pressable style={styles.modalbutton} onPress={handleCreateRoom}>

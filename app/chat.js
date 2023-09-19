@@ -38,6 +38,7 @@ const Chat = () => {
       chatIdentifiers.push(chatid);
     }
     setRooms(r);
+    console.log(r);
   }
 
   return (
@@ -50,13 +51,12 @@ const Chat = () => {
           </Pressable>
         </View>
       </View>
-
       <View style={styles.chatlistContainer}>
         {rooms.length > 0 ? (
           <FlatList
             data={rooms}
             renderItem={({ item }) => <ChatComponent item={item} />}
-            keyExtractor={(item) => item.key}
+            keyExtractor={() => Math.random().toString(36).substring(2)}
           />
         ) : (
           <View style={styles.chatemptyContainer}>
@@ -66,7 +66,7 @@ const Chat = () => {
         )}
       </View>
       <Menu />
-      {visible ? <Modal setVisible={setVisible} /> : ""}
+      {visible ? <Modal setVisible={setVisible} /> : null}
     </SafeAreaView>
   );
 };
