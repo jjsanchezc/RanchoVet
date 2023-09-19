@@ -8,6 +8,7 @@ npx expo install @expo/webpack-config@^0.17.0
 npx expo install @react-native-async-storage/async-storage
 npx expo install socket.io-client
 npm install react-router-dom
+npm install react-hook-form
 npx expo install firebase
 
 Servidor

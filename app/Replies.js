@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Comments from "../components/forums/comments";
 import { Stack, useRouter } from "expo-router";
 import { View, TextInput, Text } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -8,17 +7,34 @@ import { useForm, Controller } from 'react-hook-form';
 import { Button } from "react-native";
 
 const Replies = () => {
-    const [reply, setReply] = useState("");
+    const [reply, setReply] = useState([]);
+    const { control, handleSubmit, setValue } = useForm();
 
-    const handleSubmitReply = (e) => {
-        e.preventDefault();
-        console.log({ reply });
-        setReply("");
+    const createReply = async (data) => {
+      try {
+        const userId = await AsyncStorage.getItem("username");
+        if (!userId) {
+          navigate("/");
+          return;
+        }
+  
+        const newReply = { Respuesta: data.Respuesta };
+        const updatedReplies = [...reply, newReply];
+  
+        await AsyncStorage.setItem("storedReplies", JSON.stringify(updatedReplies));
+  
+        setReply(updatedReplies);
+  
+      } catch (error) {
+        console.error("Error:", error);
+      }
     };
+  
 
     return (
+      <>
         <View>
-        <Text style={styles.loginheading}>Haz una pregunta!</Text>
+        <Text style={styles.loginheading}>Responde a la pregunta!</Text>
         <Controller
           control={control}
           name="Respuesta"
@@ -32,8 +48,17 @@ const Replies = () => {
             />
           )}
         />
-        <Button title="ENVIAR RESPUESTA" onPress={handleSubmitReply} />
+        <Button title="ENVIAR RESPUESTA" onPress={handleSubmit(createReply)} />
       </View>
+
+      <View className='reply__container'>
+        {reply.map((reply, index) => (
+          <View className='reply__item' key={index}>
+            <Text>{reply.Respuesta}</Text>
+          </View>
+        ))}
+        </View>
+        </>
 
     );
 };
