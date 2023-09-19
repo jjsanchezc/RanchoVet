@@ -10,7 +10,10 @@ const ChatComponent = ({ item }) => {
   const [messages, setMessages] = useState({});
 
   useLayoutEffect(() => {
-    setMessages(item.mensajes["mensaje1"]);
+    const keys = Object.keys(item.mensajes);
+    const lastKey = keys[keys.length - 1];
+    const lastItem = item.mensajes[lastKey];
+    setMessages(lastItem);
   }, []);
 
   const handleNavigation = async (id, name) => {
@@ -19,12 +22,12 @@ const ChatComponent = ({ item }) => {
       messagingTitle.value = name;
       router.push("/messaging", { id, name });
     } catch (e) {
-      console.error("Error! While saving room");
+      console.error("Error! While saving room", e);
     }
   };
 
   return (
-    <Pressable style={styles.cchat} onPress={() => handleNavigation(item.key, item.name)}>
+    <Pressable style={styles.cchat} onPress={() => handleNavigation(item.id, item.name)}>
       <Ionicons
         name='person-circle-outline'
         size={45}

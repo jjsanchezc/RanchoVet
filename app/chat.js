@@ -1,13 +1,12 @@
 import React, { useState, useLayoutEffect, useEffect } from "react";
 import { View, Text, Pressable, SafeAreaView, FlatList } from "react-native";
-import { Stack, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 import Modal from "../components/chat/Modal";
 import ChatComponent from "../components/chat/ChatComponent";
-import socket from "../utils/socket";
 import { styles } from "../utils/styles";
 import Menu from "../components/Menu/Menu";
-import { saveData, getData, removeData, fetchDataAndStoreLocally } from "../database/localdatabase";
+import { getData, fetchDataAndStoreLocally } from "../database/localdatabase";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Chat = () => {
@@ -15,6 +14,7 @@ const Chat = () => {
   const [visible, setVisible] = useState(false);
   const [rooms, setRooms] = useState([]);
   var user = "";
+  const chatIdentifiers = [];
 
   useLayoutEffect(() => {
   }, []);
@@ -35,6 +35,7 @@ const Chat = () => {
       const chatData = await getData(userData.chats[chatid]);
       //console.log('Chat data:', userData.chats[chatid], chatData);
       r.push(chatData)
+      chatIdentifiers.push(chatid);
     }
     setRooms(r);
   }

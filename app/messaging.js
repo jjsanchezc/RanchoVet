@@ -1,11 +1,11 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState, useRef } from "react";
 import { View, TextInput, Text, FlatList, Pressable } from "react-native";
-import { Stack, useRouter, useLocalSearchParams } from "expo-router";
-import socket from "../utils/socket";
+import { useRouter } from "expo-router";
 import MessageComponent from "../components/chat/MessageComponent";
 import { styles } from "../utils/styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { messagingTitle, messagingID } from "../components/chat/MessagingTitle";
+import { getData, sendMessage } from "../database/localdatabase";
 
 const Messaging = () => {
 	const router = useRouter();
@@ -14,68 +14,54 @@ const Messaging = () => {
 	const [room_id, setId] = useState("");
 	const [name, setName] = useState("");
 	const [user, setUser] = useState("");
+	const flatListRef = useRef(null);
 
 	const [chatMessages, setChatMessages] = useState([]);
 	const [message, setMessage] = useState("");
 
 	const getRoom = async () => {
 		try {
+			const value = await AsyncStorage.getItem("username");
 			const room_id = messagingID.value;
 			const name = messagingTitle.value;
-			if (room_id !== null) {
+			if (value !== null)
+				setUser(value);
+			if (room_id !== null)
 				setId(room_id);
-			}
-			if (name !== null) {
+			if (name !== null)
 				setName(name);
-			}
-			socket.emit("findRoom", room_id);
-			socket.on("foundRoom", (roomChats) => setChatMessages(roomChats));
+			//console.log(room_id);
+			const cm = await getData(room_id);
+			setChatMessages(Object.values(cm["mensajes"]));
+			//console.log(Object.values(cm["mensajes"]));
 		} catch (e) {
 			console.error("Error while loading room!");
 		}
 	};
 
-	const getUsername = async () => {
-		try {
-			const value = await AsyncStorage.getItem("username");
-			if (value !== null) {
-				setUser(value);
+	const handleNewMessage = async () => {
+		if (user) {
+			await sendMessage(room_id, message, user);
+			getRoom();
+			setMessage("");
+			if (flatListRef.current) {
+				flatListRef.current.scrollToEnd({ animated: true });
 			}
-		} catch (e) {
-			console.error("Error while loading username!");
 		}
 	};
 
-	const handleNewMessage = () => {
-		const hour =
-			new Date().getHours() < 10
-				? `0${new Date().getHours()}`
-				: `${new Date().getHours()}`;
-
-		const mins =
-			new Date().getMinutes() < 10
-				? `0${new Date().getMinutes()}`
-				: `${new Date().getMinutes()}`;
-
-		if (user) {
-			socket.emit("newMessage", {
-				message,
-				room_id: room_id,
-				user,
-				timestamp: { hour, mins },
-			});
+	const scrollToBottom = () => {
+		if (flatListRef.current) {
+			flatListRef.current.scrollToEnd({ animated: false });
 		}
 	};
 
 	useLayoutEffect(() => {
-		//router.setOptions({ title: name });
-		getUsername();
-		getRoom();
-	}, []);
-
-	useEffect(() => {
-		socket.on("foundRoom", (roomChats) => setChatMessages(roomChats));
-	}, [socket]);
+		const intervalId = setInterval(() => {
+			getRoom();
+		}, 100);
+		return () => clearInterval(intervalId);
+	}, [getRoom]);
 
 	return (
 		<View style={styles.messagingscreen}>
@@ -85,13 +71,15 @@ const Messaging = () => {
 					{ paddingVertical: 15, paddingHorizontal: 10, flex: 1 },
 				]}
 			>
-				{chatMessages && chatMessages.length > 0 ? (
+				{chatMessages.length > 0 ? (
 					<FlatList
+						ref={flatListRef}
 						data={chatMessages}
 						renderItem={({ item }) => (
 							<MessageComponent item={item} user={user} />
 						)}
 						keyExtractor={(item) => item.id}
+						onContentSizeChange={scrollToBottom}
 					/>
 				) : (
 					""
@@ -102,6 +90,8 @@ const Messaging = () => {
 				<TextInput
 					style={styles.messaginginput}
 					onChangeText={(value) => setMessage(value)}
+					value={message}
+					onSubmitEditing={handleNewMessage}
 				/>
 				<Pressable
 					style={styles.messagingbuttonContainer}

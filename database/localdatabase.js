@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getMessages, getUser } from "./fbTest";
+import { getMessages, getUser, newMessage } from "./firebase";
 
 // Save data to AsyncStorage
 const saveData = async (key, data) => {
@@ -81,6 +81,18 @@ async function getAllAsyncStorageContents() {
     }
 }
 
+const sendMessage = async (chatid, contenido, user) => {
+    const message = {
+        contenido,
+        estado: "enviado",
+        hora: new Date().toLocaleTimeString(),
+        user
+    };
+    const newID = await newMessage(chatid, message);
+    const chatData = await getData(chatid);
+    chatData.mensajes[newID] = message;
+    await saveData(chatid, chatData);
+}
 
 
-export { saveData, getData, removeData, fetchDataAndStoreLocally };
+export { saveData, getData, removeData, fetchDataAndStoreLocally, sendMessage };
