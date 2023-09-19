@@ -1,15 +1,11 @@
 # Seleccionar la imagen base
 FROM node:14
 
-RUN ["mkdir", "/installServer"]
-
-ADD ["./package.json", "/installServer"]
-WORKDIR /installServer
-RUN npm install --verbose
-ENV NODE_PATH=/installServer/node_modules
+WORKDIR /app/server
+RUN npm install
+ENV NODE_PATH=/server/node_modules
 
 # Establecer el directorio de trabajo dentro del contenedor
-WORKDIR /app/server
 COPY . /app/server/
 
 # Copiar los archivos de package.json y package-lock.json al directorio de trabajo
