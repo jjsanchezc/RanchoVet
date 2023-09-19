@@ -38,7 +38,6 @@ const fetchDataAndStoreLocally = async (user) => {
         // Fetch data from Firebase using getdb
         const userData = await getUser(user);
         await saveData(user, userData);
-        //console.log('User Data:', userData);
 
         for (const chatid of Object.values(userData.chats)) {
             const chatData = await getMessages(chatid);

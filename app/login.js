@@ -1,17 +1,36 @@
-import React, { useState, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect, useEffect } from "react";
 import { SafeAreaView, View, TextInput, Pressable, Text } from "react-native";
 import { Stack, useRouter } from "expo-router";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { styles } from "../utils/styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getUsersPasswords } from "../database/firebase";
 
 const Login = () => {
   const router = useRouter();
   const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [validUsers, setValidUsers] = useState([]);
+  const [validPass, setValidPass] = useState([]);
 
-  const storeUsername = async () => {
+  useEffect(() => {
+    const fetchUsersPasswords = async () => {
+      try {
+        const users = await getUsersPasswords();
+        setValidUsers(Object.values(users));
+        setValidPass(Object.keys(users));
+      } catch (error) {
+        console.error("Error fetching user passwords:", error);
+      }
+    };
+    fetchUsersPasswords();
+  }, []);
+
+  const storeUsername = async (validUser) => {
     try {
-      await AsyncStorage.setItem("username", username);
+      const userIdIndex = validUsers.indexOf(validUser); // Find the index of the valid user
+      await AsyncStorage.setItem("username", validPass[userIdIndex]);
       router.push("/chat");
     } catch (e) {
       console.error("Error! While saving username");
@@ -19,10 +38,18 @@ const Login = () => {
   };
 
   const handleSignIn = () => {
-    if (username.trim()) {
-      storeUsername();
+    if (username.trim() && password.trim()) {
+      const validUser = validUsers.find(
+        (user) => user.name === username.trim() && user.pass === password
+      );
+
+      if (validUser) {
+        storeUsername(validUser);
+      } else {
+        setError("Usuario o contraseña incorrectos."); // Set error message
+      }
     } else {
-      console.error("Username is required.");
+      setError("Usuario y contraseña son requeridos."); // Set error message
     }
   };
 
@@ -49,9 +76,19 @@ const Login = () => {
             <Icon name="user" size={24} color="#ccc" style={styles.icon} />
             <TextInput
               autoCorrect={false}
-              placeholder='Enter your username'
+              placeholder="Nombre de usuario"
               style={styles.logininput}
               onChangeText={(value) => setUsername(value)}
+            />
+          </View>
+          <View style={styles.inputWrapper}>
+            <Icon name="lock" size={24} color="#ccc" style={styles.icon} />
+            <TextInput
+              autoCorrect={false}
+              secureTextEntry={true} // Password input
+              placeholder="Contraseña"
+              style={styles.logininput}
+              onChangeText={(value) => setPassword(value)}
             />
           </View>
 
@@ -60,6 +97,9 @@ const Login = () => {
               <Text style={styles.loginbuttonText}>Get Started</Text>
             </View>
           </Pressable>
+
+          {/* Display error message */}
+          {error ? <Text style={styles.errorText}>{error}</Text> : null}
         </View>
       </View>
     </SafeAreaView>

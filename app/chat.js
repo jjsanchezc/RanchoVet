@@ -66,7 +66,7 @@ const Chat = () => {
         )}
       </View>
       <Menu />
-      {visible ? <Modal setVisible={setVisible} /> : null}
+      {visible ? <Modal setVisible={setVisible} getChats={getChats} /> : null}
     </SafeAreaView>
   );
 };

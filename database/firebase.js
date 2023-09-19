@@ -95,4 +95,21 @@ async function createNewChat(user, destinatary) {
   }
 }
 
-export { getMessages, getUser, newMessage, createNewChat };
+async function getUsersPasswords() {
+  const usersRef = ref(database, `users`);
+  try {
+    const snapshot = await get(usersRef);
+    if (snapshot.exists()) {
+      const usersData = snapshot.val();
+      //console.log("User Data:", userData);
+      return usersData;
+    } else {
+      console.log("Item not found.");
+    }
+  } catch (error) {
+    console.error("Error retrieving users:", error);
+    throw error; // Re-throw the error to handle it in the calling code
+  }
+}
+
+export { getMessages, getUser, newMessage, createNewChat, getUsersPasswords };
