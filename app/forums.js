@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Likes from "../components/forums/likes";
 import Comments from "../components/forums/comments";
 import { Stack, useRouter } from "expo-router";
-import { View, TextInput, Text } from "react-native";
+import { View, TextInput, Text, Alert } from "react-native"; // Import Alert
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { styles } from "../utils/styles";
 import { useForm, Controller } from 'react-hook-form';
@@ -10,7 +10,8 @@ import { Button } from "react-native";
 
 const Forums = () => {
   const [threadList, setThreadList] = useState([]);
-  const { control, handleSubmit, setValue } = useForm();
+  const [inputError, setInputError] = useState(false); // State for input error
+  const { control, handleSubmit} = useForm();
   const navigate = useRouter();
 
   useEffect(() => {
@@ -35,12 +36,20 @@ const Forums = () => {
         return;
       }
 
+      if (!data.Pregunta) {
+        // Empty input validation
+        setInputError(true); // Set input error state to true
+        Alert.alert("Error", "Please enter a question."); // Show alert
+        return;
+      }
+
       const newThread = { title: data.Pregunta, likes: [], replies: [] };
       const updatedThreads = [...threadList, newThread];
 
       await AsyncStorage.setItem("storedThreads", JSON.stringify(updatedThreads));
 
       setThreadList(updatedThreads);
+      setInputError(false); // Reset input error state
 
     } catch (error) {
       console.error("Error:", error);
@@ -51,20 +60,25 @@ const Forums = () => {
     <>
       <View>
         <Text style={styles.loginheading}>Haz una pregunta!</Text>
-        <Controller
-          control={control}
-          name="Pregunta"
-          render={({ field }) => (
-            <TextInput
-              autoCorrect={false}
-              placeholder='Ingresa tu pregunta'
-              style={styles.logininput}
-              value={field.value}
-              onChangeText={field.onChange}
-            />
+        <View>
+          <Controller
+            control={control}
+            name="Pregunta"
+            render={({ field }) => (
+              <TextInput
+                autoCorrect={false}
+                placeholder='Ingresa tu pregunta'
+                style={[
+                  styles.logininput,
+                  { borderColor: inputError ? 'red' : 'black' } // Change border color based on input error state
+                ]}
+                value={field.value}
+                onChangeText={field.onChange}
+              />
           )}
-        />
-        <Button title="CREAR PREGUNTA" onPress={handleSubmit(createThread)} />
+          />
+          <Button title="CREAR PREGUNTA" onPress={handleSubmit(createThread)} />
+        </View>
       </View>
 
       <View className='thread__container'>
@@ -74,11 +88,11 @@ const Forums = () => {
             <View className='react__container'>
               <Likes
                 numberOfLikes={thread.likes.length}
-                threadId={index} // Use the index as the threadId
+                threadId={index}
               />
               <Comments
                 numberOfComments={thread.replies.length}
-                threadId={index} // Use the index as the threadId
+                threadId={index}
                 title={thread.title}
               />
             </View>
