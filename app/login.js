@@ -31,7 +31,7 @@ const Login = () => {
     try {
       const userIdIndex = validUsers.indexOf(validUser); // Find the index of the valid user
       await AsyncStorage.setItem("username", validPass[userIdIndex]);
-      router.push("/chat");
+      router.push("/index");
     } catch (e) {
       console.error("Error! While saving username");
     }
@@ -58,7 +58,7 @@ const Login = () => {
       try {
         const value = await AsyncStorage.getItem("username");
         if (value !== null) {
-          router.push("/chat");
+          router.push("/index");
         }
       } catch (e) {
         console.error("Error while loading username!");

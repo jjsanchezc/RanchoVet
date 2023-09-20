@@ -8,10 +8,10 @@ const Menu = () => {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <View style={{ flexDirection: 'row' }}>
-        <TouchableOpacity style={{ alignItems: 'center', marginRight: 20 }}>
+        <TouchableOpacity style={{ alignItems: 'center', marginRight: 20 }} onPress={() => router.push("/index")}>
           <MaterialIcons name="home" size={24} color="#CF5C36" />
-          <Text>Inicio</Text>
-        </TouchableOpacity>
+          <Text>Menú</Text>
+        </TouchableOpacity> 
         <TouchableOpacity style={{ alignItems: 'center', marginRight: 20 }} onPress={() => router.push("/chat")}>
           <MaterialIcons name="chat" size={24} color="#CF5C36" />
           <Text>Chats</Text>
@@ -22,7 +22,7 @@ const Menu = () => {
         </TouchableOpacity>
         <TouchableOpacity style={{ alignItems: 'center' }}>
           <MaterialIcons name="person" size={24} color="#CF5C36" />
-          <Text>Cuenta</Text>
+          <Text>Perfil</Text>
         </TouchableOpacity>
       </View>
     </View>
