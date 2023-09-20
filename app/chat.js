@@ -8,6 +8,7 @@ import { styles } from "../utils/styles";
 import Menu from "../components/Menu/Menu";
 import { getData, fetchDataAndStoreLocally } from "../database/localdatabase";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as constantes from "../constants";
 
 const Chat = () => {
   const router = useRouter();
@@ -47,7 +48,7 @@ const Chat = () => {
         <View style={styles.chatheader}>
           <Text style={styles.chatheading}>Chats</Text>
           <Pressable onPress={handleCreateGroup}>
-            <Feather name="edit" size={24} color="#CF5C36" />
+            <Feather name="edit" size={constantes.SIZES.xLarge} color={constantes.COLORS.tertiary} />
           </Pressable>
         </View>
       </View>
