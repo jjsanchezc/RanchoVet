@@ -6,6 +6,7 @@ import { styles } from "../utils/styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { messagingTitle, messagingID } from "../components/chat/MessagingTitle";
 import { getData, sendMessage } from "../database/localdatabase";
+import { updateChat } from "../database/firebase";
 
 const Messaging = () => {
 	const router = useRouter();
@@ -31,7 +32,7 @@ const Messaging = () => {
 			if (name !== null)
 				setName(name);
 			//console.log(room_id);
-			const cm = await getData(room_id);
+			const cm = await updateChat(room_id);
 			setChatMessages(Object.values(cm["mensajes"]));
 			//console.log(Object.values(cm["mensajes"]));
 		} catch (e) {
@@ -59,7 +60,7 @@ const Messaging = () => {
 	useLayoutEffect(() => {
 		const intervalId = setInterval(() => {
 			getRoom();
-		}, 100);
+		}, 50);
 		return () => clearInterval(intervalId);
 	}, [getRoom]);
 

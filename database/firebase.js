@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getDatabase, ref, set, get, push, onValue } from "firebase/database";
+import { saveData } from "./localdatabase";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAXD32UYLrtra2OMgyxDC-Y9_M0HOctWA8",
@@ -42,6 +43,26 @@ async function getMessages(chatid) {
     if (snapshot.exists()) {
       const chatData = snapshot.val();
       //console.log("Chat Data:", chatData);
+      return chatData;
+    } else {
+      console.log("Item not found.");
+    }
+  } catch (error) {
+    console.error("Error retrieving chats:", error);
+    throw error; // Re-throw the error to handle it in the calling code
+  }
+}
+
+async function updateChat(chatid) {
+  const chatsRef = ref(database, `chats/${chatid}`);
+  try {
+    const snapshot = await get(chatsRef);
+    if (snapshot.exists()) {
+      const chatData = snapshot.val();
+      //console.log("Chat Data:", chatData);
+      if (chatData.mensajes.hasOwnProperty("null"))
+        delete chatData.mensajes["null"];
+      await saveData(chatid, chatData);
       return chatData;
     } else {
       console.log("Item not found.");
@@ -123,4 +144,4 @@ const isFirebaseConnected = async () => {
   });
 };
 
-export { getMessages, getUser, newMessage, createNewChat, getUsersPasswords, isFirebaseConnected };
+export { getMessages, getUser, newMessage, createNewChat, getUsersPasswords, isFirebaseConnected, updateChat };
