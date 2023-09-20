@@ -38,7 +38,7 @@ const Chat = () => {
       chatIdentifiers.push(chatid);
     }
     setRooms(r);
-    console.log(r);
+    //console.log("rooms", r);
   }
 
   return (

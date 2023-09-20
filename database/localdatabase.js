@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getMessages, getUser, newMessage } from "./firebase";
+import { getMessages, getUser, newMessage, isFirebaseConnected } from "./firebase";
 
 // Save data to AsyncStorage
 const saveData = async (key, data) => {
@@ -34,38 +34,32 @@ const removeData = async (key) => {
 
 const fetchDataAndStoreLocally = async (user) => {
     console.log('User:', user);
+    // Testing, print everything in Async Storage
+    getAllAsyncStorageContents();
     try {
-        // Fetch data from Firebase using getdb
-        const userData = await getUser(user);
-        await saveData(user, userData);
-
-        for (const chatid of Object.values(userData.chats)) {
-            const chatData = await getMessages(chatid);
-            var otherUser;
-            if (chatData.usuarios[0] == user)
-                otherUser = chatData.usuarios[1];
-            else otherUser = chatData.usuarios[0];
-            const otherUserData = await getUser(otherUser);
-            chatData["name"] = otherUserData.name;
-            //console.log('Chat data:', chatid, chatData);
-            if (chatData.mensajes.hasOwnProperty("null"))
-                delete chatData.mensajes["null"];
-            await saveData(chatid, chatData);
+        if (await isFirebaseConnected()) {
+            // Fetch data from Firebase using getUser
+            const userData = await getUser(user);
+            await saveData(user, userData);
+            for (const chatid of Object.values(userData.chats)) {
+                const chatData = await getMessages(chatid);
+                var otherUser;
+                if (chatData.usuarios[0] == user)
+                    otherUser = chatData.usuarios[1];
+                else otherUser = chatData.usuarios[0];
+                const otherUserData = await getUser(otherUser);
+                chatData["name"] = otherUserData.name;
+                //console.log('Chat data:', chatid, chatData);
+                if (chatData.mensajes.hasOwnProperty("null"))
+                    delete chatData.mensajes["null"];
+                await saveData(chatid, chatData);
+            }
         }
 
         //console.log('Data fetched from Firebase:', userData);
     } catch (error) {
-        console.error('Error:', error);
+        console.error('No conection:');
     }
-
-    // Usage example
-    await getAllAsyncStorageContents()
-        .then((contents) => {
-            console.log('AsyncStorage Contents:', contents);
-        })
-        .catch((error) => {
-            console.error('Error:', error.message);
-        });
 }
 
 // Function to get all AsyncStorage keys and their values
@@ -75,7 +69,7 @@ async function getAllAsyncStorageContents() {
         const contents = await AsyncStorage.multiGet(keys);
 
         // contents is an array of [key, value] pairs
-        return contents;
+        console.log('AsyncStorage Contents:', contents);
     } catch (error) {
         console.error('Error fetching AsyncStorage contents:', error);
         throw error;

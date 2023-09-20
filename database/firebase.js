@@ -112,4 +112,15 @@ async function getUsersPasswords() {
   }
 }
 
-export { getMessages, getUser, newMessage, createNewChat, getUsersPasswords };
+const isFirebaseConnected = async () => {
+  const connectionRef = ref(database, '.info/connected');
+
+  return new Promise((resolve) => {
+    onValue(connectionRef, (snapshot) => {
+      const isConnected = snapshot.val() === true;
+      resolve(isConnected);
+    });
+  });
+};
+
+export { getMessages, getUser, newMessage, createNewChat, getUsersPasswords, isFirebaseConnected };
