@@ -1,6 +1,6 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import home from "./app/home"
+import index from "./app/index"
 import chat from "./app/chat"
 import forums from "./app/forums"
 
@@ -10,11 +10,9 @@ export default function app() {
     return(
         <>
         <NavigationContainer>
-            <Stack.Navigator initialRouuteName="home">
+            <Stack.Navigator initialRouuteName="Menu">
                 {/* Pantalla home */}
-                <Stack.Screen name="home">
-                    {(props) => <home {...props} channelname={"RanchoVet"}/>}
-                </Stack.Screen>
+                <Stack.Screen name="Menu" component={index} />
                 {/* Pantalla de chats */}
                 <Stack.Screen name="chat" component={chat} />
                 {/* Pantalla de foros */}

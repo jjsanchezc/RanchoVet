@@ -26,6 +26,7 @@ const Layout = () => {
       <Stack.Screen name='messaging' options={{ title: messagingTitle.value }} />
       <Stack.Screen name='forums' options={{ title: 'Forum' }} />
       <Stack.Screen name='answers' options={{ title: 'Dentro del forum' }} />
+      <Stack.Screen name='main' options={{ title: 'Menu principal' }} />
     </Stack>
   );
 };
