@@ -2,16 +2,17 @@ import React, { useEffect, useState } from "react";
 import Likes from "../components/forums/likes";
 import Comments from "../components/forums/comments";
 import { Stack, useRouter } from "expo-router";
-import { View, TextInput, Text, Alert } from "react-native"; // Import Alert
+import { View, TextInput, Text, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { styles } from "../utils/styles";
 import { useForm, Controller } from 'react-hook-form';
 import { Button } from "react-native";
+import * as constantes from "../constants";
 
 const Forums = () => {
   const [threadList, setThreadList] = useState([]);
-  const [inputError, setInputError] = useState(false); // State for input error
-  const { control, handleSubmit} = useForm();
+  const [inputError, setInputError] = useState(false);
+  const { control, handleSubmit } = useForm();
   const navigate = useRouter();
 
   useEffect(() => {
@@ -27,6 +28,7 @@ const Forums = () => {
     };
     loadLocalData();
   }, []);
+  
 
   const createThread = async (data) => {
     try {
@@ -37,9 +39,8 @@ const Forums = () => {
       }
 
       if (!data.Pregunta) {
-        // Empty input validation
-        setInputError(true); // Set input error state to true
-        Alert.alert("Error", "Please enter a question."); // Show alert
+        setInputError(true);
+        Alert.alert("Error", "Please enter a question.");
         return;
       }
 
@@ -49,7 +50,7 @@ const Forums = () => {
       await AsyncStorage.setItem("storedThreads", JSON.stringify(updatedThreads));
 
       setThreadList(updatedThreads);
-      setInputError(false); // Reset input error state
+      setInputError(false);
 
     } catch (error) {
       console.error("Error:", error);
@@ -57,49 +58,53 @@ const Forums = () => {
   };
 
   return (
-    <>
-      <View>
-        <Text style={styles.loginheading}>Haz una pregunta!</Text>
-        <View>
-          <Controller
-            control={control}
-            name="Pregunta"
-            render={({ field }) => (
-              <TextInput
-                autoCorrect={false}
-                placeholder='Ingresa tu pregunta'
-                style={[
-                  styles.logininput,
-                  { borderColor: inputError ? 'red' : 'black' } // Change border color based on input error state
-                ]}
-                value={field.value}
-                onChangeText={field.onChange}
-              />
-          )}
-          />
-          <Button title="CREAR PREGUNTA" onPress={handleSubmit(createThread)} />
-        </View>
-      </View>
-
-      <View className='thread__container'>
-        {threadList.map((thread, index) => (
-          <View className='thread__item' key={index}>
-            <Text>{thread.title}</Text>
-            <View className='react__container'>
-              <Likes
-                numberOfLikes={thread.likes.length}
-                threadId={index}
-              />
-              <Comments
-                numberOfComments={thread.replies.length}
-                threadId={index}
-                title={thread.title}
-              />
-            </View>
+    <View style={{ backgroundColor: constantes.COLORS.background, flex: 1 }}>
+    <View className='thread__container' style={styles.chatlistContainer}>
+      {threadList.map((thread, index) => (
+        <View className='thread__item' key={index}>
+          <Text>{thread.title}</Text>
+          <View className='react__container'>
+            <Likes
+              numberOfLikes={thread.likes.length}
+              threadId={index}
+            />
+            <Comments
+              numberOfComments={thread.replies.length}
+              threadId={index}
+              title={thread.title}
+            />
           </View>
-        ))}
+        </View>
+      ))}
+    </View>
+    <View>
+
+    </View>
+      <Text style={styles.loginheading}>Haz una pregunta!</Text>
+      <View>
+        <Controller
+          control={control}
+          name="Pregunta"
+          render={({ field }) => (
+            <TextInput
+              autoCorrect={false}
+              placeholder='Ingresa tu pregunta'
+              style={[
+                styles.logininput,
+                { borderColor: inputError ? 'red' : 'black' }
+              ]}
+              value={field.value}
+              onChangeText={field.onChange}
+            />
+          )}
+        />
+        <Button
+          title="CREAR PREGUNTA"
+          onPress={handleSubmit(createThread)}
+          color={constantes.COLORS.tertiary}
+        />
       </View>
-    </>
+    </View>
   );
 };
 
