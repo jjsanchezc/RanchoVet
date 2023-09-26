@@ -1,10 +1,9 @@
 # Seleccionar la imagen base
-FROM node:14
+FROM node:14-alpine
 
 WORKDIR /app
 
-RUN npm install
-RUN npm install react-native-svg@13.4.0
+
 ENV NODE_PATH=/node_modules
 
 
@@ -15,12 +14,11 @@ COPY . /app
 COPY package*.json ./
 
 # Instalar las dependencias
-RUN npm install
-RUN npm install -g nodemon
-RUN npm install -g expo-cli
-# Instalar la CLI de React Native globalmente
-RUN npm install -g react-native-cli
-RUN npm install react-native-svg@13.4.0
+RUN npm install && \
+    npm install -g nodemon && \
+    npm install -g expo-cli && \
+    npm install -g react-native-cli && \
+    npm install react-native-svg@13.4.0
 # Exponer el puerto 19000 para Metro Bundler
 EXPOSE 19000
 
