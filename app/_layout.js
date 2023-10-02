@@ -21,12 +21,12 @@ const Layout = () => {
 
   return (
     <Stack initialRouteName='login'>
-      <Stack.Screen name='login' options={{ title: 'Login' }} />
+      <Stack.Screen name='login' options={{ title: 'Inicio de sesión' }} />
       <Stack.Screen name='chat' options={{ title: 'Chats' }} />
       <Stack.Screen name='messaging' options={{ title: messagingTitle.value }} />
-      <Stack.Screen name='forums' options={{ title: 'Forum' }} />
-      <Stack.Screen name='answers' options={{ title: 'Dentro del forum' }} />
-      <Stack.Screen name='main' options={{ title: 'Menu principal' }} />
+      <Stack.Screen name='forums' options={{ title: 'Foros' }} />
+      <Stack.Screen name='answers' options={{ title: 'Respuestas' }} />
+      <Stack.Screen name='main' options={{ title: 'Menú principal' }} />
     </Stack>
   );
 };

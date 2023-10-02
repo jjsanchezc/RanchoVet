@@ -23,7 +23,7 @@ const Replies = () => {
         if (!data.Respuesta) {
           // Empty input validation
           setInputError(true); // Set input error state to true
-          Alert.alert("Error", "Please enter a response."); // Show alert
+          Alert.alert("Error", "por favor ingresa una respuesta."); // Show alert
           return;
         }
 

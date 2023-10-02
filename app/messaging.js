@@ -36,7 +36,7 @@ const Messaging = () => {
 			setChatMessages(Object.values(cm["mensajes"]));
 			//console.log(Object.values(cm["mensajes"]));
 		} catch (e) {
-			console.error("Error while loading room!");
+			console.error("Error al cargar chat!");
 		}
 	};
 
@@ -99,7 +99,7 @@ const Messaging = () => {
 					onPress={handleNewMessage}
 				>
 					<View>
-						<Text style={{ color: "#FBF4E1", fontSize: 20 }}>SEND</Text>
+						<Text style={{ color: "#FBF4E1", fontSize: 20 }}>ENVIAR</Text>
 					</View>
 				</Pressable>
 			</View>

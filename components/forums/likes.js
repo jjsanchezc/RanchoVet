@@ -30,7 +30,7 @@ const Likes = ({ numberOfLikes, threadId }) => {
 		<div className='likes__container'>
 			<TouchableOpacity style={{ alignItems: 'center', marginRight: 20 }}>
           	<MaterialIcons name="emoji-emotions" size={24} color="#CF5C36" />
-          	<Text>Like</Text>
+          	<Text>Me gusta</Text>
         </TouchableOpacity>
 		</div>
 	);

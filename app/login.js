@@ -21,7 +21,7 @@ const Login = () => {
         setValidUsers(Object.values(users));
         setValidPass(Object.keys(users));
       } catch (error) {
-        console.error("Error fetching user passwords:", error);
+        console.error("Error al obtener contraseña de usuario", error);
       }
     };
     fetchUsersPasswords();
@@ -33,7 +33,7 @@ const Login = () => {
       await AsyncStorage.setItem("username", validPass[userIdIndex]);
       router.push("/main");
     } catch (e) {
-      console.error("Error! While saving username");
+      console.error("Error! mientras se guardaba el usuario");
     }
   };
 
@@ -61,7 +61,7 @@ const Login = () => {
           router.push("/main");
         }
       } catch (e) {
-        console.error("Error while loading username!");
+        console.error("Error mientras cargaba el usuario");
       }
     };
     getUsername();
@@ -70,7 +70,7 @@ const Login = () => {
   return (
     <SafeAreaView style={styles.loginscreen}>
       <View style={styles.loginscreen}>
-        <Text style={styles.loginheading}>Log in</Text>
+        <Text style={styles.loginheading}>Iniciar sesión</Text>
         <View style={styles.logininputContainer}>
           <View style={styles.inputWrapper}>
             <Icon name="user" size={24} color="#ccc" style={styles.icon} />
@@ -94,7 +94,7 @@ const Login = () => {
 
           <Pressable onPress={handleSignIn} style={styles.loginbutton}>
             <View>
-              <Text style={styles.loginbuttonText}>Get Started</Text>
+              <Text style={styles.loginbuttonText}>Iniciar</Text>
             </View>
           </Pressable>
 

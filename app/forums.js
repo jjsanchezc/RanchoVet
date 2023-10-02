@@ -40,7 +40,7 @@ const Forums = () => {
 
       if (!data.Pregunta) {
         setInputError(true);
-        Alert.alert("Error", "Please enter a question.");
+        Alert.alert("Error", "Por favor ingresa una pregunta.");
         return;
       }
 

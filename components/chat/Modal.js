@@ -18,7 +18,7 @@ const Modal = ({ setVisible, getChats }) => {
         setValidUsers(Object.values(users));
         setValidIDs(Object.keys(users));
       } catch (error) {
-        console.error("Error fetching user passwords:", error);
+        console.error("Error al obtener contraseña del usuario:", error);
       }
     };
     fetchData();
@@ -38,7 +38,7 @@ const Modal = ({ setVisible, getChats }) => {
         closeModal();
         getChats();
       } else {
-        setError("Invalid username or password."); // Set error message
+        setError("Usuario o contraseña erróneo."); // Set error message
       }
     }
   };
