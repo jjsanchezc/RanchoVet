@@ -23,6 +23,7 @@ const Layout = () => {
     <Stack initialRouteName='login'>
       <Stack.Screen name='login' options={{ title: 'Inicio de sesión' }} />
       <Stack.Screen name='chat' options={{ title: 'Chats' }} />
+      <Stack.Screen name='directory' options={{ title: 'Directorio' }} />
       <Stack.Screen name='messaging' options={{ title: messagingTitle.value }} />
       <Stack.Screen name='forums' options={{ title: 'Foros' }} />
       <Stack.Screen name='answers' options={{ title: 'Respuestas' }} />

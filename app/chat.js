@@ -2,7 +2,6 @@ import React, { useState, useLayoutEffect, useEffect } from "react";
 import { View, Text, Pressable, SafeAreaView, FlatList } from "react-native";
 import { useRouter } from "expo-router";
 import { Feather } from "@expo/vector-icons";
-import Modal from "../components/chat/Modal";
 import ChatComponent from "../components/chat/ChatComponent";
 import { styles } from "../utils/styles";
 import Menu from "../components/Menu/Menu";
@@ -12,7 +11,6 @@ import * as constantes from "../constants";
 
 const Chat = () => {
   const router = useRouter();
-  const [visible, setVisible] = useState(false);
   const [rooms, setRooms] = useState([]);
   const [user_type, setuser_type] = useState("");
   var user = "";
@@ -25,7 +23,7 @@ const Chat = () => {
     getChats();
   }, []);
 
-  const handleCreateGroup = () => setVisible(true);
+  const handleCreateGroup = () => router.push("/directory");
 
   async function getChats() {
     user = await AsyncStorage.getItem("username");
@@ -71,7 +69,6 @@ const Chat = () => {
         )}
       </View>
       <Menu />
-      {visible ? <Modal setVisible={setVisible} getChats={getChats} /> : null}
     </SafeAreaView>
   );
 };

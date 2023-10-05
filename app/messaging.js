@@ -83,7 +83,7 @@ const Messaging = () => {
 						onContentSizeChange={scrollToBottom}
 					/>
 				) : (
-					""
+					null
 				)}
 			</View>
 
