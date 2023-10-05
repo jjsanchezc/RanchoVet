@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Pressable } from "react-native";
+import { View, Text, Pressable, FlatList } from "react-native";
 import React, { useState, useEffect } from "react";
 import { styles } from "../../utils/styles";
 import { createNewChat } from "../../database/firebase";
@@ -9,14 +9,21 @@ const Modal = ({ setVisible, getChats }) => {
   const closeModal = () => setVisible(false);
   const [destinatary, setDestinatary] = useState("");
   const [validUsers, setValidUsers] = useState([]);
-  const [validIDs, setValidIDs] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const users = await getUsersPasswords();
-        setValidUsers(Object.values(users));
-        setValidIDs(Object.keys(users));
+        const Vusers = Object.values(users);
+        const ids = Object.keys(users);
+        const vetUsers = [];
+        for (let index = 0; index < Vusers.length; index++) {
+          if (Vusers[index].type == 'vet') {
+            Vusers[index].id = ids[index];
+            vetUsers.push(Vusers[index]);
+          }
+        }
+        setValidUsers(vetUsers);
       } catch (error) {
         console.error("Error al obtener contraseña del usuario:", error);
       }
@@ -25,38 +32,48 @@ const Modal = ({ setVisible, getChats }) => {
   }, []);
 
   const handleCreateRoom = async () => {
-    if (destinatary.trim()) {
-      const validUser = validUsers.find(
-        (user) => user.name === destinatary.trim()
-      );
-
-      if (validUser) {
-        const user = await AsyncStorage.getItem("username");
-        const userIdIndex = validUsers.indexOf(validUser); // Find the index of the valid user
-        const destinyID = validIDs[userIdIndex];
-        await createNewChat(user, destinyID);
-        closeModal();
-        getChats();
-      } else {
-        setError("Usuario o contraseña erróneo."); // Set error message
-      }
+    if (destinatary) {
+      const user = await AsyncStorage.getItem("username");
+      await createNewChat(user, destinatary.id);
+      //console.log("destinyID", destinatary.id);
+      //console.log("validUsers", validUsers);
+      closeModal();
+      getChats();
     }
   };
 
+  const renderItem = ({ item }) => (
+    <Pressable
+      onPress={() => setDestinatary(item)} // Set the selected user on press
+      style={[
+        styles.modalbutton,
+        {
+          backgroundColor: destinatary && destinatary.id === item.id ? 'green' : '#E14D2A', // Highlight the selected user
+        },
+      ]}
+    >
+      <Text style={styles.modaltext}>{item.name}</Text>
+    </Pressable>
+  );
+
   return (
     <View style={styles.modalContainer}>
-      <Text style={styles.modalsubheading}>Nombre del destinatario</Text>
-      <TextInput
-        style={styles.modalinput}
-        placeholder='Nombre'
-        onChangeText={(value) => setDestinatary(value)}
+      <Text style={styles.modalsubheading}>Selecciona un veterinario</Text>
+      <FlatList
+        data={validUsers}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
       />
       <View style={styles.modalbuttonContainer}>
-        <Pressable style={[styles.modalbutton, { backgroundColor: "#E14D2A" }]} onPress={handleCreateRoom}>
+        <Pressable
+          style={[styles.modalbutton, { backgroundColor: '#E14D2A' }]}
+          onPress={handleCreateRoom}
+          disabled={!destinatary} // Disable button if no user is selected
+        >
           <Text style={styles.modaltext}>Crear</Text>
         </Pressable>
         <Pressable
-          style={[styles.modalbutton, { backgroundColor: "#E14D2A" }]}
+          style={[styles.modalbutton, { backgroundColor: '#E14D2A' }]}
           onPress={closeModal}
         >
           <Text style={styles.modaltext}>Cancelar</Text>

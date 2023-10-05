@@ -31,6 +31,7 @@ const Login = () => {
     try {
       const userIdIndex = validUsers.indexOf(validUser); // Find the index of the valid user
       await AsyncStorage.setItem("username", validPass[userIdIndex]);
+      await AsyncStorage.setItem("user_type", validUser.type);
       router.push("/main");
     } catch (e) {
       console.error("Error! mientras se guardaba el usuario");

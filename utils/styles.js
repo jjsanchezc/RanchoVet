@@ -146,7 +146,7 @@ export const styles = StyleSheet.create({
 		borderTopColor: "#ddd",
 		borderTopWidth: 1,
 		elevation: 1,
-		height: 400,
+		height: "90%",
 		backgroundColor: "#fff",
 		position: "absolute",
 		bottom: 0,
@@ -175,7 +175,7 @@ export const styles = StyleSheet.create({
 		padding: 15,
 		borderRadius: 10,
 		marginBottom: 2,
-	  },	  
+	},
 	mvatar: {
 		marginRight: 5,
 	},
@@ -209,7 +209,7 @@ export const styles = StyleSheet.create({
 	ctime: {
 		opacity: 0.5,
 	},
-//menu
+	//menu
 	container: {
 		position: 'absolute',
 		top: 0,
@@ -220,8 +220,8 @@ export const styles = StyleSheet.create({
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'center',
-	  },
-	  menu: {
+	},
+	menu: {
 		display: 'flex',
 		flexGrow: 1,
 		height: 72,
@@ -233,33 +233,32 @@ export const styles = StyleSheet.create({
 		shadowOpacity: 0.25,
 		shadowRadius: 1,
 		shadowOffset: {
-		  width: 0,
-		  height: 1,
+			width: 0,
+			height: 1,
 		},
 		elevation: 3, // Use elevation for Android shadow
-	  },
-	  menuItem: {
+	},
+	menuItem: {
 		flex: 1,
 		flexDirection: 'column',
 		justifyContent: 'center',
 		alignItems: 'center',
 		textDecorationLine: 'none',
-	  },
-	  menuItemFocused: {
+	},
+	menuItemFocused: {
 		// Define styles for focused or hovered state here
 		// Example: backgroundColor: '#342ead'
-	  },
-	  materialIcons: {
+	},
+	materialIcons: {
 		fontFamily: 'Material Icons',
 		marginBottom: 4,
 		fontSize: 26,
 		color: '#342ead',
 		transitionDuration: '0.25s',
-	  },
-	  menuItemLabel: {
+	},
+	menuItemLabel: {
 		fontSize: 13,
 		color: '#342ead',
 		transitionDuration: '0.25s',
-	  },
-	});
-	
+	},
+});
