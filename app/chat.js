@@ -20,8 +20,11 @@ const Chat = () => {
   }, []);
 
   useEffect(() => {
-    getChats();
-  }, []);
+    const intervalId = setInterval(() => {
+      getChats();
+    }, 200);
+    return () => clearInterval(intervalId);
+  }, [getChats]);
 
   const handleCreateGroup = () => router.push("/directory");
 

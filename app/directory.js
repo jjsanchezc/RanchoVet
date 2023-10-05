@@ -41,11 +41,31 @@ const Directory = () => {
     const handleCreateRoom = async () => {
         if (destinatary) {
             const user = await AsyncStorage.getItem("username");
-            const newChatKey = await createNewChat(user, destinatary.id);
+            const userData = await AsyncStorage.getItem(user);
+            console.log("user", user);
+            console.log("userData", userData);
+            const userChats = Object.values(JSON.parse(userData).chats);
+            console.log("userChats", userChats);
+            var chatKey = "";
+            var newChat = true;
+            var chat;
+            for (let index = 0; index < userChats.length; index++) {
+                chat = JSON.parse(await AsyncStorage.getItem(userChats[index]));
+                console.log("chat", chat);
+                console.log("chat.user", chat.usuarios);
+                console.log("destinatary.id", destinatary.id);
+                if (chat.usuarios[0] == destinatary.id || chat.usuarios[1] == destinatary.id) {
+                    newChat = false;
+                    chatKey = chat.id;
+                    break;
+                }
+            }
+            if (newChat)
+                chatKey = await createNewChat(user, destinatary.id);
             //console.log("destinyID", destinatary.id);
             //console.log("validUsers", validUsers);
             try {
-                messagingID.value = newChatKey;
+                messagingID.value = chatKey;
                 messagingTitle.value = destinatary.id;
                 router.back();
                 router.push("/messaging");
@@ -69,7 +89,7 @@ const Directory = () => {
                 <View>
                     <Ionicons
                         name="person-circle-outline"
-                        size={45}
+                        size={80}
                         color="black"
                         style={styles.cavatar}
                     />
@@ -77,8 +97,7 @@ const Directory = () => {
                 <View>
                     <Text style={styles.directoryText}>{item.name}</Text>
                     <Text style={styles.directoryText}>Especialidad: {item.vet_data.specialty}</Text>
-                    <Text style={styles.directoryText}>Telefono: {item.vet_data.phone}</Text>
-                    <Text style={styles.directoryText}>Correo: {item.vet_data.mail}</Text>
+                    <Text style={styles.directoryText}>Calificacion: {item.vet_data.rating}</Text>
                     <Text style={styles.directoryText}>Ubicacion: {item.location}</Text>
                 </View>
             </Pressable>

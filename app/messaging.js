@@ -57,7 +57,7 @@ const Messaging = () => {
 		}
 	};
 
-	useLayoutEffect(() => {
+	useEffect(() => {
 		const intervalId = setInterval(() => {
 			getRoom();
 		}, 50);

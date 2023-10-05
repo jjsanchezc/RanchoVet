@@ -27,7 +27,7 @@ const ChatComponent = ({ item }) => {
   };
 
   return (
-    <Pressable style={styles.cchat} onPress={() => handleNavigation(item.id, item.name)}>
+    item && (<Pressable style={styles.cchat} onPress={() => handleNavigation(item.id, item.name)}>
       <Ionicons
         name='person-circle-outline'
         size={45}
@@ -49,7 +49,7 @@ const ChatComponent = ({ item }) => {
           </Text>
         </View>
       </View>
-    </Pressable>
+    </Pressable>)
   );
 };
 
