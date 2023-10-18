@@ -5,6 +5,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { styles } from "../utils/styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getUsersPasswords } from "../database/firebase";
+import { fetchDataAndStoreLocally } from "../database/localdatabase";
 
 const Login = () => {
   const router = useRouter();
@@ -32,6 +33,7 @@ const Login = () => {
       const userIdIndex = validUsers.indexOf(validUser); // Find the index of the valid user
       await AsyncStorage.setItem("username", validPass[userIdIndex]);
       await AsyncStorage.setItem("user_type", validUser.type);
+      fetchDataAndStoreLocally(validPass[userIdIndex]);
       router.push("/main");
     } catch (e) {
       console.error("Error! mientras se guardaba el usuario");
@@ -57,8 +59,9 @@ const Login = () => {
   useLayoutEffect(() => {
     const getUsername = async () => {
       try {
-        const value = await AsyncStorage.getItem("username");
-        if (value !== null) {
+        const user = await AsyncStorage.getItem("username");
+        if (user !== null) {
+          fetchDataAndStoreLocally(user);
           router.push("/main");
         }
       } catch (e) {

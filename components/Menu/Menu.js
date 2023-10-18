@@ -6,7 +6,7 @@ import { Stack, useRouter } from "expo-router";
 const Menu = () => {
   const router = useRouter();
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <View style={{ alignItems: 'center', justifyContent: 'center' }}>
       <View style={{ flexDirection: 'row' }}>
         <TouchableOpacity style={{ alignItems: 'center', marginRight: 20 }} onPress={() => router.back()}>
           <MaterialIcons name="home" size={24} color="#CF5C36" />

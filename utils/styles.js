@@ -87,6 +87,7 @@ export const styles = StyleSheet.create({
 	},
 	chatlistContainer: {
 		paddingHorizontal: 10,
+		flex: 1,
 	},
 	chatemptyContainer: {
 		width: "100%",
@@ -181,7 +182,12 @@ export const styles = StyleSheet.create({
 		padding: 10,
 	},
 	directoryText: {
-		color: "#fff",
+		color: COLORS.white,
+	},
+	directoryDetailsText: {
+		color: COLORS.black,
+		flex: 1,
+		padding: 10,
 	},
 	mmessageWrapper: {
 		width: "100%",
