@@ -7,6 +7,7 @@ import { getUsersPasswords } from "../database/firebase";
 import { useRouter } from "expo-router";
 import { messagingTitle, messagingID } from "../components/chat/MessagingTitle";
 import { Ionicons } from "@expo/vector-icons";
+import Menu from "../components/Menu/Menu";
 
 const Directory = () => {
     const router = useRouter();
@@ -128,6 +129,7 @@ const Directory = () => {
                     <Text style={styles.modaltext}>Cancelar</Text>
                 </Pressable>
             </View>
+            <Menu />
         </View>
     );
 };

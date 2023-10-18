@@ -8,15 +8,19 @@ const Menu = () => {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <View style={{ flexDirection: 'row' }}>
-        <TouchableOpacity style={{ alignItems: 'center', marginRight: 20 }} onPress={() => router.push("/main")}>
+        <TouchableOpacity style={{ alignItems: 'center', marginRight: 20 }} onPress={() => router.back()}>
           <MaterialIcons name="home" size={24} color="#CF5C36" />
           <Text>Menú</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{ alignItems: 'center', marginRight: 20 }} onPress={() => router.push("/chat")}>
+        <TouchableOpacity style={{ alignItems: 'center', marginRight: 20 }} onPress={() => router.replace("/chat")}>
           <MaterialIcons name="chat" size={24} color="#CF5C36" />
           <Text>Chats</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{ alignItems: 'center', marginRight: 20 }} onPress={() => router.push("/forums")}>
+        <TouchableOpacity style={{ alignItems: 'center', marginRight: 20 }} onPress={() => router.replace("/directory")}>
+          <MaterialIcons name="folder" size={24} color="#CF5C36" />
+          <Text>Directorio</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={{ alignItems: 'center', marginRight: 20 }} onPress={() => router.replace("/forums")}>
           <MaterialIcons name="forum" size={24} color="#CF5C36" />
           <Text>Foro</Text>
         </TouchableOpacity>

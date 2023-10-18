@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState, useLayoutEffect } from "react";
 import { Stack } from 'expo-router';
 import { useFonts } from 'expo-font';
-import { messagingTitle } from "../components/chat/MessagingTitle";
+import { messagingTitle, router } from "../components/chat/MessagingTitle";
 
 
 export const unstable_settings = {
@@ -9,6 +9,13 @@ export const unstable_settings = {
 };
 
 const Layout = () => {
+  const [mTitle, setMTitle] = useState("");
+
+  useLayoutEffect(() => {
+    console.log("Router changed in Layout ", messagingTitle.value);
+    setMTitle(messagingTitle.value);
+  }, [messagingTitle.value, router])
+
   const [fontsLoaded] = useFonts({
     DMBold: require('../assets/fonts/DMSans-Bold.ttf'),
     DMMedium: require('../assets/fonts/DMSans-Medium.ttf'),
@@ -24,7 +31,7 @@ const Layout = () => {
       <Stack.Screen name='login' options={{ title: 'Inicio de sesión' }} />
       <Stack.Screen name='chat' options={{ title: 'Chats' }} />
       <Stack.Screen name='directory' options={{ title: 'Directorio' }} />
-      <Stack.Screen name='messaging' options={{ title: messagingTitle.value }} />
+      <Stack.Screen name='messaging' options={{ title: mTitle }} />
       <Stack.Screen name='forums' options={{ title: 'Foros' }} />
       <Stack.Screen name='answers' options={{ title: 'Respuestas' }} />
       <Stack.Screen name='main' options={{ title: 'Menú principal' }} />

@@ -46,7 +46,7 @@ const Main = () => {
   };
 
   const directorio = () => {
-
+    router.push("/directory");
   };
 
   const bitacora = () => {
