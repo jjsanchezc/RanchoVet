@@ -2,7 +2,9 @@ const COLORS = {
   primary: "#F7EDCF",//"#F4E3B2", vainilla
   secondary: "#EFC88B",//sunset
   tertiary: "#CF5C36",//flame
+  fourth: "#F3DBAD",
   background: "#FBF4E1",//cosmic latte
+  
 
   gray: "#D3D5D7",
   gray2: "#C1C0C8",
@@ -14,7 +16,7 @@ const COLORS = {
 };
 
 const FONT = {
-  regular: "DMRegular",
+  regular: "Poppins",
   medium: "DMMedium",
   bold: "DMBold",
 };

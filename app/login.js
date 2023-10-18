@@ -5,6 +5,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { styles } from "../utils/styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getUsersPasswords } from "../database/firebase";
+import { Image } from 'react-native';
 
 const Login = () => {
   const router = useRouter();
@@ -69,7 +70,8 @@ const Login = () => {
 
   return (
     <SafeAreaView style={styles.loginscreen}>
-      <View style={styles.loginscreen}>
+      <View style={styles.loginBox}>
+        <Image source={require("../logo.png")} style={styles.logo}/>
         <Text style={styles.loginheading}>Iniciar sesión</Text>
         <View style={styles.logininputContainer}>
           <View style={styles.inputWrapper}>
