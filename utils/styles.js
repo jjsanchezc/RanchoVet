@@ -1,11 +1,26 @@
 import { StyleSheet } from "react-native";
 import { COLORS } from "../constants";
+import { FONT } from "../constants";
 import { ColorSpace } from "react-native-reanimated";
 
 export const styles = StyleSheet.create({
+	loginBox: {
+		width: "50%", // Adjust the width as needed
+		backgroundColor: COLORS.primary,
+		padding: 20,
+		borderRadius: 10,
+		elevation: 5,
+		alignItems: "center",
+	},
+	logo: {
+		width: 100, // Adjust the width as needed
+		height: 100, // Adjust the height as needed
+		resizeMode: "contain", // Ensure the logo scales correctly
+		marginBottom: 20,
+	},
 	loginscreen: {
 		flex: 1,
-		backgroundColor: COLORS.primary,
+		backgroundColor: COLORS.background,
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 12,
@@ -20,7 +35,8 @@ export const styles = StyleSheet.create({
 		flexDirection: "row", // Alinea los elementos en fila horizontalmente
 		alignItems: "center", // Centra verticalmente los elementos en la fila
 		borderWidth: 1,
-		borderColor: COLORS.secondary,
+		borderColor: COLORS.background,
+		backgroundColor: COLORS.background,
 		borderRadius: 5,
 		padding: 10,
 		marginBottom: 20,
@@ -87,7 +103,6 @@ export const styles = StyleSheet.create({
 	},
 	chatlistContainer: {
 		paddingHorizontal: 10,
-		flex: 1,
 	},
 	chatemptyContainer: {
 		width: "100%",
@@ -147,7 +162,7 @@ export const styles = StyleSheet.create({
 		borderTopColor: "#ddd",
 		borderTopWidth: 1,
 		elevation: 1,
-		height: "100%",
+		height: 400,
 		backgroundColor: "#fff",
 		position: "absolute",
 		bottom: 0,
@@ -236,25 +251,25 @@ export const styles = StyleSheet.create({
 	},
 	//menu
 	container: {
-		position: 'absolute',
+		position: "absolute",
 		top: 0,
 		left: 0,
 		right: 0,
 		bottom: 0,
-		width: '100%',
-		display: 'flex',
-		alignItems: 'center',
-		justifyContent: 'center',
+		width: "100%",
+		display: "flex",
+		alignItems: "center",
+		justifyContent: "center",
 	},
 	menu: {
-		display: 'flex',
+		display: "flex",
 		flexGrow: 1,
 		height: 72,
 		maxWidth: 370,
 		borderRadius: 12,
-		overflow: 'hidden',
-		backgroundColor: '#fff',
-		shadowColor: '#342ead',
+		overflow: "hidden",
+		backgroundColor: "#fff",
+		shadowColor: "#342ead",
 		shadowOpacity: 0.25,
 		shadowRadius: 1,
 		shadowOffset: {
@@ -265,25 +280,25 @@ export const styles = StyleSheet.create({
 	},
 	menuItem: {
 		flex: 1,
-		flexDirection: 'column',
-		justifyContent: 'center',
-		alignItems: 'center',
-		textDecorationLine: 'none',
+		flexDirection: "column",
+		justifyContent: "center",
+		alignItems: "center",
+		textDecorationLine: "none",
 	},
 	menuItemFocused: {
 		// Define styles for focused or hovered state here
 		// Example: backgroundColor: '#342ead'
 	},
 	materialIcons: {
-		fontFamily: 'Material Icons',
+		fontFamily: "Material Icons",
 		marginBottom: 4,
 		fontSize: 26,
-		color: '#342ead',
-		transitionDuration: '0.25s',
+		color: "#342ead",
+		transitionDuration: "0.25s",
 	},
 	menuItemLabel: {
 		fontSize: 13,
-		color: '#342ead',
-		transitionDuration: '0.25s',
+		color: "#342ead",
+		transitionDuration: "0.25s",
 	},
 });

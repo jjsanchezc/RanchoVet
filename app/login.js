@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect, useEffect } from "react";
-import { SafeAreaView, View, TextInput, Pressable, Text } from "react-native";
+import { SafeAreaView, View, TextInput, Pressable, Text, Image } from "react-native";
 import { Stack, useRouter } from "expo-router";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { styles } from "../utils/styles";
@@ -73,7 +73,8 @@ const Login = () => {
 
   return (
     <SafeAreaView style={styles.loginscreen}>
-      <View style={styles.loginscreen}>
+      <View style={styles.loginBox}>
+        <Image source={require("../logo.png")} style={styles.logo}/>
         <Text style={styles.loginheading}>Iniciar sesión</Text>
         <View style={styles.logininputContainer}>
           <View style={styles.inputWrapper}>
