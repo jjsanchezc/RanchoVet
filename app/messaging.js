@@ -57,7 +57,7 @@ const Messaging = () => {
 		}
 	};
 
-	useLayoutEffect(() => {
+	useEffect(() => {
 		const intervalId = setInterval(() => {
 			getRoom();
 		}, 50);
@@ -83,7 +83,7 @@ const Messaging = () => {
 						onContentSizeChange={scrollToBottom}
 					/>
 				) : (
-					""
+					null
 				)}
 			</View>
 

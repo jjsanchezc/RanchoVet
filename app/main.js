@@ -62,11 +62,17 @@ const Main = () => {
     router.push("/forums");
   };
 
-  const directorio = () => {};
+  const directorio = () => {
+    router.push("/directory");
+  };
 
-  const bitacora = () => {};
+  const bitacora = () => {
+    router.push("/journal");
+  };
 
-  const perfil = () => {};
+  const perfil = () => {
+
+  };
 
   return (
     <View style={styles.container}>

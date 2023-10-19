@@ -1,11 +1,11 @@
 import React, { useState, useLayoutEffect, useEffect } from "react";
-import { SafeAreaView, View, TextInput, Pressable, Text } from "react-native";
+import { SafeAreaView, View, TextInput, Pressable, Text, Image } from "react-native";
 import { Stack, useRouter } from "expo-router";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { styles } from "../utils/styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getUsersPasswords } from "../database/firebase";
-import { Image } from 'react-native';
+import { fetchDataAndStoreLocally } from "../database/localdatabase";
 
 const Login = () => {
   const router = useRouter();
@@ -32,6 +32,8 @@ const Login = () => {
     try {
       const userIdIndex = validUsers.indexOf(validUser); // Find the index of the valid user
       await AsyncStorage.setItem("username", validPass[userIdIndex]);
+      await AsyncStorage.setItem("user_type", validUser.type);
+      fetchDataAndStoreLocally(validPass[userIdIndex]);
       router.push("/main");
     } catch (e) {
       console.error("Error! mientras se guardaba el usuario");
@@ -57,8 +59,9 @@ const Login = () => {
   useLayoutEffect(() => {
     const getUsername = async () => {
       try {
-        const value = await AsyncStorage.getItem("username");
-        if (value !== null) {
+        const user = await AsyncStorage.getItem("username");
+        if (user !== null) {
+          fetchDataAndStoreLocally(user);
           router.push("/main");
         }
       } catch (e) {

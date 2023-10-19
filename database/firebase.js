@@ -110,6 +110,7 @@ async function createNewChat(user, destinatary) {
 
     // Log the success message
     console.log("New chat added to Firebase with ID:", newChatKey);
+    return newChatKey;
   } catch (error) {
     console.error("Error creating new chat:", error);
     throw error;

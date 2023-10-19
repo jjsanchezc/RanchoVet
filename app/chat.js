@@ -2,7 +2,6 @@ import React, { useState, useLayoutEffect, useEffect } from "react";
 import { View, Text, Pressable, SafeAreaView, FlatList } from "react-native";
 import { useRouter } from "expo-router";
 import { Feather } from "@expo/vector-icons";
-import Modal from "../components/chat/Modal";
 import ChatComponent from "../components/chat/ChatComponent";
 import { styles } from "../utils/styles";
 import Menu from "../components/Menu/Menu";
@@ -12,8 +11,8 @@ import * as constantes from "../constants";
 
 const Chat = () => {
   const router = useRouter();
-  const [visible, setVisible] = useState(false);
   const [rooms, setRooms] = useState([]);
+  const [user_type, setuser_type] = useState("");
   var user = "";
   const chatIdentifiers = [];
 
@@ -21,13 +20,17 @@ const Chat = () => {
   }, []);
 
   useEffect(() => {
-    getChats();
-  }, []);
+    const intervalId = setInterval(() => {
+      getChats();
+    }, 200);
+    return () => clearInterval(intervalId);
+  }, [getChats]);
 
-  const handleCreateGroup = () => setVisible(true);
+  const handleCreateGroup = () => router.push("/directory");
 
   async function getChats() {
     user = await AsyncStorage.getItem("username");
+    setuser_type(await AsyncStorage.getItem("user_type"));
     await fetchDataAndStoreLocally(user);
     const userData = await getData(user);
     //console.log("user data chats", userData.chats);
@@ -47,9 +50,11 @@ const Chat = () => {
       <View style={styles.chattopContainer}>
         <View style={styles.chatheader}>
           <Text style={styles.chatheading}>Chats</Text>
-          <Pressable onPress={handleCreateGroup}>
-            <Feather name="edit" size={constantes.SIZES.xLarge} color={constantes.COLORS.tertiary} />
-          </Pressable>
+          {user_type !== 'vet' && (
+            <Pressable onPress={handleCreateGroup}>
+              <Feather name="edit" size={constantes.SIZES.xLarge} color={constantes.COLORS.tertiary} />
+            </Pressable>
+          )}
         </View>
       </View>
       <View style={styles.chatlistContainer}>
@@ -67,7 +72,6 @@ const Chat = () => {
         )}
       </View>
       <Menu />
-      {visible ? <Modal setVisible={setVisible} getChats={getChats} /> : null}
     </SafeAreaView>
   );
 };

@@ -33,9 +33,9 @@ const removeData = async (key) => {
 };
 
 const fetchDataAndStoreLocally = async (user) => {
-    console.log('User:', user);
+    //console.log('User:', user);
     // Testing, print everything in Async Storage
-    getAllAsyncStorageContents();
+    //getAllAsyncStorageContents();
     try {
         if (await isFirebaseConnected()) {
             // Fetch data from Firebase using getUser
