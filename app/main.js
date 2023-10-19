@@ -50,7 +50,7 @@ const Main = () => {
   };
 
   const bitacora = () => {
-
+    router.push("/journal");
   };
 
   const perfil = () => {
