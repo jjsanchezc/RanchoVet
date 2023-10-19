@@ -2,17 +2,15 @@ import React, { useEffect, useState } from "react";
 import Likes from "../components/forums/likes";
 import Comments from "../components/forums/comments";
 import { Stack, useRouter } from "expo-router";
-import { View, TextInput, Text, Alert } from "react-native";
+import { View, TextInput, Text, Alert, Button } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { styles } from "../utils/styles";
-import { useForm, Controller } from 'react-hook-form';
-import { Button } from "react-native";
 import * as constantes from "../constants";
 
 const Forums = () => {
   const [threadList, setThreadList] = useState([]);
   const [inputError, setInputError] = useState(false);
-  const { control, handleSubmit } = useForm();
+  const [inputValue, setInputValue] = useState("");
   const navigate = useRouter();
 
   useEffect(() => {
@@ -28,9 +26,8 @@ const Forums = () => {
     };
     loadLocalData();
   }, []);
-  
 
-  const createThread = async (data) => {
+  const createThread = async () => {
     try {
       const userId = await AsyncStorage.getItem("username");
       if (!userId) {
@@ -38,19 +35,20 @@ const Forums = () => {
         return;
       }
 
-      if (!data.Pregunta) {
+      if (!inputValue) {
         setInputError(true);
         Alert.alert("Error", "Por favor ingresa una pregunta.");
         return;
       }
 
-      const newThread = { title: data.Pregunta, likes: [], replies: [] };
+      const newThread = { title: inputValue, likes: [], replies: [] };
       const updatedThreads = [...threadList, newThread];
 
       await AsyncStorage.setItem("storedThreads", JSON.stringify(updatedThreads));
 
       setThreadList(updatedThreads);
       setInputError(false);
+      setInputValue(""); // Clear the input field
 
     } catch (error) {
       console.error("Error:", error);
@@ -58,12 +56,25 @@ const Forums = () => {
   };
 
   return (
-    <View style={{ backgroundColor: constantes.COLORS.background, flex: 1 }}>
-    <View className='thread__container' style={styles.chatlistContainer}>
-      {threadList.map((thread, index) => (
-        <View className='thread__item' key={index}>
-          <Text>{thread.title}</Text>
-          <View className='react__container'>
+    <View style={styles.forumScreen}>
+      <Text style={styles.loginheading}>Haz una pregunta!</Text>
+      <TextInput
+        autoCorrect={true}
+        placeholder='Ingresa tu pregunta'
+        style={styles.forumInput}
+        value={inputValue}
+        onChangeText={setInputValue}
+      />
+      <Button
+        title="CREAR PREGUNTA"
+        onPress={createThread}
+        color={constantes.COLORS.tertiary}
+        style={styles.forumButton}
+      />
+      <View style={styles.forumThreadContainer}>
+        {threadList.map((thread, index) => (
+          <View style={styles.forumThreadItem} key={index}>
+            <Text style={styles.forumThreadTitle}>{thread.title}</Text>
             <Likes
               numberOfLikes={thread.likes.length}
               threadId={index}
@@ -74,35 +85,7 @@ const Forums = () => {
               title={thread.title}
             />
           </View>
-        </View>
-      ))}
-    </View>
-    <View>
-
-    </View>
-      <Text style={styles.loginheading}>Haz una pregunta!</Text>
-      <View>
-        <Controller
-          control={control}
-          name="Pregunta"
-          render={({ field }) => (
-            <TextInput
-              autoCorrect={false}
-              placeholder='Ingresa tu pregunta'
-              style={[
-                styles.logininput,
-                { borderColor: inputError ? 'red' : 'black' }
-              ]}
-              value={field.value}
-              onChangeText={field.onChange}
-            />
-          )}
-        />
-        <Button
-          title="CREAR PREGUNTA"
-          onPress={handleSubmit(createThread)}
-          color={constantes.COLORS.tertiary}
-        />
+        ))}
       </View>
     </View>
   );

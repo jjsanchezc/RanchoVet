@@ -15,12 +15,9 @@ const Journal = () => {
         const fetchData = async () => {
             try {
                 const user = await AsyncStorage.getItem("username");
-                console.log("user", user);
                 const userJournal = JSON.parse(await AsyncStorage.getItem(user)).journal;
-                console.log("userJournal", userJournal);
                 const Vanimals = Object.values(userJournal);
                 const ids = Object.keys(userJournal);
-                console.log("ids", ids);
                 const animals = [];
                 for (let index = 0; index < Vanimals.length; index++) {
                     Vanimals[index].id = ids[index];
