@@ -117,6 +117,66 @@ async function createNewChat(user, destinatary) {
   }
 }
 
+async function createNewForum(title) {
+  try {
+
+    const forumData = {
+      id: null,
+      title: title
+    };
+
+    // New forum with auto-generated key
+    const newForumRef = push(ref(database, "forums"));
+    const newForumKey = newForumRef.key;
+
+    // ID with auto-generated key
+    forumData.id = newForumKey;
+
+    await set(ref(database, `forums/${newForumKey}`), forumData);
+
+    console.log("New forum added to Firebase with ID:", newForumKey);
+    return newForumKey;
+  } catch (error) {
+    console.error("Error creating new forum:", error);
+    throw error;
+  }
+}
+
+async function updateForum(forumid) {
+  const forumsRef = ref(database, `forums/${forumid}`);
+  try {
+    const snapshot = await get(forumsRef);
+    if (snapshot.exists()) {
+      const forumData = snapshot.val();
+      if (forumData.replies.hasOwnProperty("null"))
+        delete forumData.replies["null"];
+      await saveData(forumid, forumData);
+      return forumData;
+    } else {
+      console.log("Item not found.");
+    }
+  } catch (error) {
+    console.error("Error retrieving forums:", error);
+    throw error; // Re-throw the error to handle it in the calling code
+  }
+}
+
+async function getForums() {
+  const forumsRef = ref(database, `forums`);
+  try {
+    const snapshot = await get(forumsRef);
+    if (snapshot.exists()) {
+      const forumData = snapshot.val();
+      return forumData;
+    } else {
+      console.log("Item not found.");
+    }
+  } catch (error) {
+    console.error("Error retrieving forums:", error);
+    throw error; // Re-throw the error to handle it in the calling code
+  }
+}
+
 async function getUsersPasswords() {
   const usersRef = ref(database, `users`);
   try {
@@ -145,4 +205,4 @@ const isFirebaseConnected = async () => {
   });
 };
 
-export { getMessages, getUser, newMessage, createNewChat, getUsersPasswords, isFirebaseConnected, updateChat };
+export { getMessages, getUser, newMessage, createNewChat, createNewForum, updateForum, getForums, getUsersPasswords, isFirebaseConnected, updateChat };

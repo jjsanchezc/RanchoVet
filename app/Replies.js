@@ -1,77 +1,73 @@
 import React, { useEffect, useState } from "react";
 import { Stack, useRouter } from "expo-router";
-import { View, TextInput, Text, Alert } from "react-native"; // Import Alert
+import { View, TextInput, Text, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { styles } from "../utils/styles";
 import { useForm, Controller } from 'react-hook-form';
 import { Button } from "react-native";
+import * as constantes from "../constants";
 
 const Replies = () => {
-    const [reply, setReply] = useState([]);
-    const [inputError, setInputError] = useState(false); // State for input error
-    const { control, handleSubmit} = useForm();
-    const navigate = useRouter();
+  const [reply, setReply] = useState([]);
+  const [inputError, setInputError] = useState(false);
+  const { control, handleSubmit } = useForm();
+  const [inputValue, setInputValue] = useState("");
+  const navigate = useRouter();
 
-    const createReply = async (data) => {
-      try {
-        const userId = await AsyncStorage.getItem("username");
-        if (!userId) {
-          navigate("/");
-          return;
-        }
-
-        if (!data.Respuesta) {
-          // Empty input validation
-          setInputError(true); // Set input error state to true
-          Alert.alert("Error", "por favor ingresa una respuesta."); // Show alert
-          return;
-        }
-
-        const newReply = { Respuesta: data.Respuesta };
-        const updatedReplies = [...reply, newReply];
-
-        await AsyncStorage.setItem("storedReplies", JSON.stringify(updatedReplies));
-
-        setReply(updatedReplies);
-        setInputError(false); // Reset input error state
-
-      } catch (error) {
-        console.error("Error:", error);
+  const createReply = async (data) => {
+    try {
+      const userId = await AsyncStorage.getItem("username");
+      if (!userId) {
+        navigate("/");
+        return;
       }
-    };
 
-    return (
-      <>
-        <View>
-          <Text style={styles.loginheading}>Responde a la pregunta!</Text>
-          <Controller
-            control={control}
-            name="Respuesta"
-            render={({ field }) => (
-              <TextInput
-                autoCorrect={false}
-                placeholder='Ingresa tu respuesta'
-                style={[
-                  styles.logininput,
-                  { borderColor: inputError ? 'red' : 'black' } // Change border color based on input error state
-                ]}
-                value={field.value}
-                onChangeText={field.onChange}
-              />
-            )}
-          />
-          <Button title="ENVIAR RESPUESTA" onPress={handleSubmit(createReply)} />
-        </View>
+      if (!inputValue) {
+        setInputError(true);
+        Alert.alert("Error", "Por favor ingresa una respuesta.");
+        return;
+      }
 
-        <View className='reply__container'>
+      const newReply = { Respuesta: inputValue };
+      const updatedReplies = [...reply, newReply];
+
+      await AsyncStorage.setItem("storedReplies", JSON.stringify(updatedReplies));
+
+      setReply(updatedReplies);
+      setInputError(false);
+
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  return (
+    <>
+      <View style={styles.forumScreen}>
+        <Text style={styles.loginheading}>Ingresa tu respuesta!</Text>
+        <TextInput
+          autoCorrect={true}
+          placeholder='Ingresa tu respuesta'
+          style={styles.forumInput}
+          value={inputValue}
+          onChangeText={setInputValue}
+        />
+        <Button
+          title="CREAR RESPUESTA"
+          onPress={handleSubmit(createReply)}
+          color={constantes.COLORS.tertiary}
+          style={styles.forumButton}
+        />
+        <View style={styles.forumThreadContainer}>
           {reply.map((reply, index) => (
-            <View className='reply__item' key={index}>
-              <Text>{reply.Respuesta}</Text>
+            <View style={styles.forumThreadItem} key={index}>
+              <Text style={styles.forumThreadTitle}>{reply.Respuesta}</Text>
             </View>
           ))}
         </View>
-      </>
-    );
+      </View>
+    </>
+  );
 };
 
 export default Replies;

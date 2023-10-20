@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Likes from "../components/forums/likes";
 import Comments from "../components/forums/comments";
+import { createNewForum } from "../database/firebase";
 import { Stack, useRouter } from "expo-router";
 import { View, TextInput, Text, Alert, Button } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -27,6 +27,7 @@ const Forums = () => {
     loadLocalData();
   }, []);
 
+  // Create a new thread and save it to Firebase and AsyncStorage
   const createThread = async () => {
     try {
       const userId = await AsyncStorage.getItem("username");
@@ -41,9 +42,10 @@ const Forums = () => {
         return;
       }
 
-      const newThread = { title: inputValue, likes: [], replies: [] };
+      const newThread = { title: inputValue };
       const updatedThreads = [...threadList, newThread];
 
+      await createNewForum(newThread);
       await AsyncStorage.setItem("storedThreads", JSON.stringify(updatedThreads));
 
       setThreadList(updatedThreads);
@@ -75,14 +77,10 @@ const Forums = () => {
         {threadList.map((thread, index) => (
           <View style={styles.forumThreadItem} key={index}>
             <Text style={styles.forumThreadTitle}>{thread.title}</Text>
-            <Likes
-              numberOfLikes={thread.likes.length}
-              threadId={index}
-            />
             <Comments
-              numberOfComments={thread.replies.length}
               threadId={index}
               title={thread.title}
+              navigateToReplies={() => navigate.push("/Replies", { threadId: index, title: thread.title })}
             />
           </View>
         ))}
