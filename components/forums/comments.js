@@ -2,7 +2,9 @@ import React from "react";
 import { View, TouchableOpacity } from "react-native";
 import { MaterialIcons } from '@expo/vector-icons';
 
-const Comments = ({ title, threadId, navigateToReplies }) => {
+
+const Comments = ({ navigateToReplies }) => {
+  
   return (
     <View className='likes__container'>
       <TouchableOpacity

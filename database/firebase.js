@@ -119,21 +119,16 @@ async function createNewChat(user, destinatary) {
 
 async function createNewForum(title) {
   try {
-
     const forumData = {
       id: null,
       title: title
     };
-
     // New forum with auto-generated key
     const newForumRef = push(ref(database, "forums"));
     const newForumKey = newForumRef.key;
-
     // ID with auto-generated key
     forumData.id = newForumKey;
-
     await set(ref(database, `forums/${newForumKey}`), forumData);
-
     console.log("New forum added to Firebase with ID:", newForumKey);
     return newForumKey;
   } catch (error) {
@@ -142,22 +137,33 @@ async function createNewForum(title) {
   }
 }
 
-async function updateForum(forumid) {
-  const forumsRef = ref(database, `forums/${forumid}`);
+async function createNewReply(threadId, reply) {
+  const repliesRef = ref(database, `forums/${threadId}/replies`);
   try {
-    const snapshot = await get(forumsRef);
+    const newReplyRef = await push(repliesRef, reply);
+    const newReplyId = newReplyRef.key; // Get the auto-generated ID
+    console.log("New reply added to Firebase with ID:", newReplyId);
+    return newReplyId;
+  } catch (error) {
+    console.error("Error sending reply:", error);
+    throw error; // Re-throw the error to handle it in the calling code
+  }
+}
+
+async function getReplies(threadId) {
+  const repliesRef = ref(database, `forums/${threadId}/replies`);
+  try {
+    const snapshot = await get(repliesRef);
     if (snapshot.exists()) {
-      const forumData = snapshot.val();
-      if (forumData.replies.hasOwnProperty("null"))
-        delete forumData.replies["null"];
-      await saveData(forumid, forumData);
-      return forumData;
+      const repliesData = snapshot.val();
+      return repliesData;
     } else {
       console.log("Item not found.");
+      return {}; // Return an empty object if no replies are found
     }
   } catch (error) {
-    console.error("Error retrieving forums:", error);
-    throw error; // Re-throw the error to handle it in the calling code
+    console.error("Error retrieving replies:", error);
+    throw error;
   }
 }
 
@@ -205,4 +211,4 @@ const isFirebaseConnected = async () => {
   });
 };
 
-export { getMessages, getUser, newMessage, createNewChat, createNewForum, updateForum, getForums, getUsersPasswords, isFirebaseConnected, updateChat };
+export { getMessages, getUser, newMessage, createNewChat, createNewForum, createNewReply, getReplies, getForums, getUsersPasswords, isFirebaseConnected, updateChat };
