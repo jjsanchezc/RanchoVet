@@ -21,7 +21,9 @@ useEffect(() => {
   const loadAsyncStorageData = async () => {
     try {
       const storageKey = `storedReplies_${params.threadId}`;
+      //console.log("storageKey:", storageKey);
       const storedReplies = await AsyncStorage.getItem(storageKey);
+      //console.log("storedReplies:", storedReplies);
       if (storedReplies) {
         setReply(JSON.parse(storedReplies));
       }
@@ -36,8 +38,10 @@ useEffect(() => {
 useEffect(() => {
   const loadFirebaseData = async () => {
     try {
+      console.log("params.threadId:", params.threadId);
       const replies = await getReplies(params.threadId);
-      setReply(replies);
+      console.log("replies:", Object.values(replies));
+      setReply(Object.values(replies));
     } catch (error) {
       console.error("Error reading replies from Firebase:", error);
     }
