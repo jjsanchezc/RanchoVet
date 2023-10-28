@@ -45,10 +45,6 @@ const Directory = () => {
         setDestinatary({});
     }
 
-    const handleFilterChange = (value) => {
-        setFilterBy(value); // Almacena la opción seleccionada
-    };
-
     const handleCreateRoom = async () => {
         if (destinatary) {
             const user = await AsyncStorage.getItem("username");
@@ -150,11 +146,15 @@ const Directory = () => {
         </View>
     );
     
-    const handleSearch = () => {
+    const handleFilterChange = (value) => {
+        setFilterBy(value); // Almacena la opción seleccionada
+    };
+
+    const handleSearch = (filterValue) => {
         // Aquí puedes implementar la lógica de búsqueda según la opción seleccionada (filterBy)
         // Por ejemplo, filtrar la lista de veterinarios
         // ...lógica de filtrado
-        console.log("Realizar búsqueda con filtro:", filterBy);
+        console.log("Realizar búsqueda con filtro:", filterValue);
     };
     const renderFilterPicker = () => (
             <View style={styles.filterContainer}>
@@ -172,7 +172,7 @@ const Directory = () => {
                 </Picker>
                 <Button style={styles.loginbutton}
                 title="Buscar"
-                onPress={handleSearch}
+                onPress={handleSearch(filterBy)}
             />
             </View>
     );
