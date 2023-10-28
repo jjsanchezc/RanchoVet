@@ -372,4 +372,26 @@ export const styles = StyleSheet.create({
 		justifyContent: "space-between",
 		margin: 20,
 	},
+	filterMenu: {
+		position: "absolute",
+		top: 0,
+		right: 0,
+		left: 0,
+		backgroundColor: COLORS.background, // Color de fondo
+		padding: 10, // Espaciado interno
+		borderWidth: 1, // Ancho del borde
+		borderColor: COLORS.secondary, // Color del borde
+		borderRadius: 5, // Bordes redondeados
+		zIndex: 60, // Asegura que el menú esté sobre otros elementos
+	  },
+	  menuItem: {
+		padding: 10,
+		borderBottomWidth: 1,
+		borderBottomColor: COLORS.secondary,
+	  },
+	
+	  menuItemLabel: {
+		color: COLORS.tertiary,
+		fontSize: 16,
+	  },
 });

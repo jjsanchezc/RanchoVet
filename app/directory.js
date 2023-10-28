@@ -1,4 +1,4 @@
-import { View, Text, Pressable, FlatList } from "react-native";
+import { View, Text, Pressable, FlatList,Picker, Button } from "react-native";
 import React, { useState, useEffect } from "react";
 import { styles } from "../utils/styles";
 import { createNewChat } from "../database/firebase";
@@ -14,6 +14,7 @@ const Directory = () => {
     const router = useRouter();
     const [destinatary, setDestinatary] = useState({});
     const [validUsers, setValidUsers] = useState([]);
+    const [filterBy, setFilterBy] = useState(''); // Estado para almacenar la opción de filtrado
 
     useEffect(() => {
         const fetchData = async () => {
@@ -43,6 +44,10 @@ const Directory = () => {
     const clear = () => {
         setDestinatary({});
     }
+
+    const handleFilterChange = (value) => {
+        setFilterBy(value); // Almacena la opción seleccionada
+    };
 
     const handleCreateRoom = async () => {
         if (destinatary) {
@@ -144,6 +149,33 @@ const Directory = () => {
             </View>
         </View>
     );
+    
+    const handleSearch = () => {
+        // Aquí puedes implementar la lógica de búsqueda según la opción seleccionada (filterBy)
+        // Por ejemplo, filtrar la lista de veterinarios
+        // ...lógica de filtrado
+        console.log("Realizar búsqueda con filtro:", filterBy);
+    };
+    const renderFilterPicker = () => (
+            <View style={styles.filterContainer}>
+                <Text>Filtrar por: </Text>
+                <Picker
+                    selectedValue={filterBy}
+                    style={styles.pickerStyle}
+                    onValueChange={(itemValue) => handleFilterChange(itemValue)}
+                >
+                    <Picker.Item label="Seleccionar filtro" value="" />
+                    <Picker.Item label="Ubicación" value="ubicacion" />
+                    <Picker.Item label="Precio" value="precio" />
+                    <Picker.Item label="Calificación" value="calificacion" />
+                    <Picker.Item label="Especialización" value="especializacion" />
+                </Picker>
+                <Button style={styles.loginbutton}
+                title="Buscar"
+                onPress={handleSearch}
+            />
+            </View>
+    );
 
     return (
         <View style={styles.directoryscreen}>
@@ -153,6 +185,7 @@ const Directory = () => {
             ) : (
                 <View style={styles.directoryscreen}>
                     <Text style={styles.modalsubheading}>Selecciona un veterinario</Text>
+                    {renderFilterPicker()}
                     <FlatList
                         data={validUsers}
                         renderItem={renderItem}
