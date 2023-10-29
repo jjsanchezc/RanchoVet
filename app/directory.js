@@ -237,6 +237,7 @@ const Directory = () => {
     console.log("Realizar búsqueda con filtro:", filterBy);
   };
 
+
   const renderFilter = () => {
     const handleFilterChange = (itemValue) => {
       setFilterBy(itemValue);
@@ -250,6 +251,7 @@ const Directory = () => {
       { label: t.rating, value: "Calificación" },
       { label: t.specialization, value: "Especialización" },
     ];
+
 
     return (
       <View style={styles.container}>
