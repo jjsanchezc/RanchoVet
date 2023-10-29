@@ -94,7 +94,7 @@ const Directory = () => {
                 style={[
                     styles.directoryBox,
                     {
-                        borderColor: '#D3D5D7', // Cambia 'red' al color que desees
+                        borderColor: '#D3D5D7', 
                         borderBottomWidth: 2,
                         backgroundColor: '#F7EDCF', // Highlight the selected user
                     },

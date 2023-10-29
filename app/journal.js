@@ -50,7 +50,9 @@ const Journal = () => {
                 style={[
                     styles.directoryBox,
                     {
-                        backgroundColor: '#E14D2A', // Highlight the selected user
+                        borderColor: '#D3D5D7', 
+                        borderBottomWidth: 2,
+                        backgroundColor: '#F7EDCF', // Highlight the selected user
                     },
                 ]}
             >
@@ -63,7 +65,7 @@ const Journal = () => {
                     />
                 </View>
                 <View>
-                    <Text style={styles.directoryText}>{item.name}</Text>
+                    <Text style={styles.directoryText}><Text style={{ fontWeight: 'bold' }}>{item.name}</Text></Text>
                     <Text style={styles.directoryText}>Especie: {item.species}</Text>
                     <Text style={styles.directoryText}>Veterinario: {item.veterinary}</Text>
                 </View>
