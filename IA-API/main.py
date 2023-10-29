@@ -15,7 +15,7 @@ firebase_admin.initialize_app(cred, {
 def get_data():
     #ref = db.reference('/data')  # Reemplaza con la ruta de tu base de datos en Firebase
     #data = ref.get()
-    print('AÑLOKSDFÑASDHAHJUIASFKIJHASDFLKJASHDFLKAJSHDFLKSAJHFAS')
+    
     return jsonify({"hola":"holaaaa"})
 
 # Ruta para obtener valores de Firebase con un parámetro entero
