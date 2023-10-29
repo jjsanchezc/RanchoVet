@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect, useEffect } from "react";
-import { View, Text, Pressable, SafeAreaView, FlatList } from "react-native";
+import { View, Text, Pressable, SafeAreaView, FlatList, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 import ChatComponent from "../components/chat/ChatComponent";
@@ -44,12 +44,26 @@ const Chat = () => {
     setRooms(r);
     //console.log("rooms", r);
   }
-
+  const [searchText, setSearchText] = useState('');
+  const handleSearch = () => {
+    // Realiza acciones de búsqueda aquí con el valor de searchText
+    console.log("Realizar búsqueda con texto:", searchText);
+  };
   return (
     <SafeAreaView style={styles.chatscreen}>
       <View style={styles.chattopContainer}>
         <View style={styles.chatheader}>
-          <Text style={styles.chatheading}>Chats</Text>
+        <View style={styles.searchContainer}>
+            <TextInput
+            style={styles.searchInput}
+            placeholder="Buscar"
+            value={searchText}
+            onChangeText={setSearchText}
+          />
+          <TouchableOpacity style={styles.searchBtn} onPress={handleSearch}>
+            <Text style={styles.searchButtonText}>Buscar</Text>
+          </TouchableOpacity>
+        </View>
           {user_type !== 'vet' && (
             <Pressable onPress={handleCreateGroup}>
               <Feather name="edit" size={constantes.SIZES.xLarge} color={constantes.COLORS.tertiary} />

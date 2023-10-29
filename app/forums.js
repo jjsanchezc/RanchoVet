@@ -80,6 +80,7 @@ const Forums = () => {
 
     setThreadList(updatedThreads);
     setInputError(false);
+    setInputValue("");
 
     } catch (error) {
       console.error("Error:", error);
@@ -89,10 +90,9 @@ const Forums = () => {
   return (
     <View style={styles.forumScreen}>
       <ScrollView style={styles.scrollView}>
-        <Text style={styles.loginheading}>Haz una pregunta!</Text>
         <TextInput
           autoCorrect={true}
-          placeholder='Ingresa tu pregunta'
+          placeholder='Realiza tu pregunta aqui'
           style={styles.forumInput}
           value={inputValue}
           onChangeText={setInputValue}

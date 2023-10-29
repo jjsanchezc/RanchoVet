@@ -1,4 +1,4 @@
-import { View, Text, Pressable, FlatList, Button } from "react-native";
+import { View, Text, Pressable, TouchableOpacity, Modal, FlatList, Button } from "react-native";
 import React, { useState, useEffect } from "react";
 import { styles } from "../utils/styles";
 import { createNewChat } from "../database/firebase";
@@ -15,6 +15,7 @@ const Directory = () => {
     const [destinatary, setDestinatary] = useState({});
     const [validUsers, setValidUsers] = useState([]);
     const [filterBy, setFilterBy] = useState(''); // Estado para almacenar la opción de filtrado
+    const [isDropdownVisible, setDropdownVisible] = useState(false); 
 
     useEffect(() => {
         const fetchData = async () => {
@@ -93,7 +94,9 @@ const Directory = () => {
                 style={[
                     styles.directoryBox,
                     {
-                        backgroundColor: '#E14D2A', // Highlight the selected user
+                        borderColor: '#D3D5D7', // Cambia 'red' al color que desees
+                        borderBottomWidth: 2,
+                        backgroundColor: '#F7EDCF', // Highlight the selected user
                     },
                 ]}
             >
@@ -106,10 +109,13 @@ const Directory = () => {
                     />
                 </View>
                 <View>
-                    <Text style={styles.directoryText}>{item.name}</Text>
+                    <Text style={styles.directoryText}><Text style={{ fontWeight: 'bold' }}>{item.name}</Text></Text>
                     <RatingStars rating={item.vet_data.rating} maxRating={5} />
                     <Text style={styles.directoryText}>Especialidad: {item.vet_data.specialty}</Text>
-                    <Text style={styles.directoryText}>Ubicacion: {item.location}</Text>
+                    <Text style={styles.directoryText}>Ubicación: {item.location}</Text>
+                    <Text style= {styles.directoryText}>Mail: {item.vet_data.mail}</Text>
+                    <Text style= {styles.directoryText}>Teléfono: {item.vet_data.phone}</Text>
+                    <Text style= {styles.directoryText}>Precios: {item.vet_data.prices}</Text>
                 </View>
             </Pressable>
         </View>
@@ -156,26 +162,53 @@ const Directory = () => {
         // ...lógica de filtrado
         console.log("Realizar búsqueda con filtro:", filterBy);
     };
-    const renderFilterPicker = () => (
-        <View style={styles.filterContainer}>
-          <Text>Filtrar por: </Text>
-          {/** <Pickercmomenté esto
-            selectedValue={filterBy}
-            style={styles.pickerStyle}
-            onValueChange={(itemValue) => handleFilterChange(itemValue)}
-          >
-            <Picker.Item label="Seleccionar filtro" value="" />
-            <Picker.Item label="Ubicación" value="ubicacion" />
-            <Picker.Item label="Precio" value="precio" />
-            <Picker.Item label="Calificación" value="calificacion" />
-            <Picker.Item label="Especialización" value="especializacion" />
-          </Picker>
-          */}
-          <Pressable onPress={handleSearch} style={styles.searchButton}>
-            <Text style={styles.loginbuttonText}>Buscar</Text>
-          </Pressable>
-        </View>
-      );
+    
+    const renderFilter = () => {
+
+        const handleFilterChange = (itemValue) => {
+            setFilterBy(itemValue);
+            setDropdownVisible(false); 
+          };
+      
+        const options = [
+          { label: 'Seleccionar filtro', value: '' },
+          { label: 'Ubicación', value: 'Ubicación' },
+          { label: 'Precio', value: 'Precio' },
+          { label: 'Calificación', value: 'Calificación' },
+          { label: 'Especialización', value: 'Especialización' },
+        ];
+      
+        return (
+            <View style={styles.container}>
+              <TouchableOpacity
+                onPress={() => setDropdownVisible(true)}
+                style={styles.dropdownButton}
+              >
+                <Text>{filterBy || 'Seleccionar filtro'}</Text>
+              </TouchableOpacity>
+        
+              <Modal
+                animationType="slide"
+                transparent={true}
+                visible={isDropdownVisible}
+              >
+                <View style={styles.modalContainer}>
+                  {options.map((option) => (
+                    <TouchableOpacity
+                      key={option.value}
+                      style={styles.modalItem}
+                      onPress={() => handleFilterChange(option.value)}
+                    >
+                      <Text>{option.label}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </Modal>
+            </View>
+          );
+        };
+        
+
 
     return (
         <View style={styles.directoryscreen}>
@@ -184,8 +217,7 @@ const Directory = () => {
                 renderItemDetails()
             ) : (
                 <View style={styles.directoryscreen}>
-                    <Text style={styles.modalsubheading}>Selecciona un veterinario</Text>
-                    {renderFilterPicker()}
+                    {renderFilter()}
                     <FlatList
                         data={validUsers}
                         renderItem={renderItem}

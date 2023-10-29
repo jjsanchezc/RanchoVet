@@ -83,6 +83,7 @@ useEffect(() => {
   
       setReply(updatedReplies);
       setInputError(false);
+      setInputValue("");
   
     } catch (error) {
       console.error("Error:", error);
@@ -97,7 +98,7 @@ useEffect(() => {
               <Text style={styles.loginheading}>{params.title}</Text>
               <TextInput
                 autoCorrect={true}
-                placeholder='Ingresa tu respuesta'
+                placeholder='Deja tu respuesta'
                 style={styles.forumInput}
                 value={inputValue}
                 onChangeText={setInputValue}

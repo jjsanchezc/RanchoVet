@@ -108,6 +108,28 @@ export const styles = StyleSheet.create({
 		color: "white",
 		fontSize: 20,
 	},
+	//chat 
+	searchContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		backgroundColor: COLORS.secundary,
+		borderRadius: 8,
+		flex: 1,
+		marginRight: 16,
+	  },
+	  searchInput: {
+		flex: 1,
+		padding: 8,
+	  },
+	  searchBtn: {
+		padding: 6,
+		backgroundColor: '#CF5C36',
+		borderRadius: 10,
+	  },
+	  searchButtonText: {
+		color: '#050517',
+	  },
+
 	chatscreen: {
 		backgroundColor: COLORS.primary,
 		flex: 1,
@@ -120,7 +142,7 @@ export const styles = StyleSheet.create({
 		color: COLORS.tertiary,
 	},
 	chattopContainer: {
-		backgroundColor: COLORS.background,
+		backgroundColor: COLORS.secondary,
 		height: 70,
 		width: "100%",
 		padding: 20,
@@ -221,16 +243,17 @@ export const styles = StyleSheet.create({
 	},
 	directoryBox: {
 		width: "100%",
-		height: "100%",
+		height: 200,
 		borderRadius: 5,
 		alignItems: "center",
-		justifyContent: "center",
+		justifyContent: "flex-start",
 		color: COLORS.black,
 		flexDirection: "row",
 		padding: 10,
 	},
 	directoryText: {
-		color: COLORS.white,
+		color: COLORS.black,
+
 	},
 	directoryDetailsText: {
 		color: COLORS.black,
@@ -395,6 +418,7 @@ export const styles = StyleSheet.create({
 		color: COLORS.tertiary,
 		fontSize: 16,
 	  },
+	  //Directory
 	  searchButton: {
 		backgroundColor: COLORS.tertiary,
 		padding: 12,
@@ -403,4 +427,47 @@ export const styles = StyleSheet.create({
 		borderRadius: 50,
 		elevation: 1,
 	  },
+	  container: {
+		flexDirection: 'row',
+		alignItems: 'center',
+	  },
+	  dropdownButton: {
+		backgroundColor: COLORS.primary,
+		padding: 10,
+		borderRadius: 5,
+		borderWidth: 1,
+		borderColor: '#ccc',
+		marginLeft: 10,
+	  },
+	  modalContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		backgroundColor: 'rgba(0, 0, 0, 0.5)',
+	  },
+	  modalItem: {
+		backgroundColor: COLORS.primary,
+		padding: 10,
+		borderBottomWidth: 1,
+		borderBottomColor: '#ccc',
+	  },
+	  directoryItemContent: {
+		flexDirection: 'row', // Esto alinea los elementos en fila (horizontalmente)
+		justifyContent: 'space-between', // Esto distribuye los elementos a lo largo del espacio disponible
+		alignItems: 'center', // Esto centra los elementos verticalmente
+		padding: 10, // Añade relleno si es necesario
+	  },
+	  userInfo: {
+		alignItems: 'center', 
+		marginBottom: 10, 
+
+	  },
+	  buttonRow: {
+		flexDirection: 'row',
+		justifyContent: 'flex-start',
+		alignItems: 'down',
+
+	  },
+
 });
+	
+

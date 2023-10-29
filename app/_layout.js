@@ -2,6 +2,7 @@ import React, { useState, useLayoutEffect } from "react";
 import { Stack } from 'expo-router';
 import { useFonts } from 'expo-font';
 import { messagingTitle, router } from "../components/chat/MessagingTitle";
+import { View, Text } from "react-native";
 
 
 export const unstable_settings = {
@@ -28,14 +29,14 @@ const Layout = () => {
 
   return (
     <Stack initialRouteName='login'>
-      <Stack.Screen name='login' options={{ title: 'Inicio de sesión' }} />
-      <Stack.Screen name='chat' options={{ title: 'Chats' }} />
-      <Stack.Screen name='directory' options={{ title: 'Directorio' }} />
-      <Stack.Screen name='messaging' options={{ title: mTitle }} />
-      <Stack.Screen name='forums' options={{ title: 'Foros' }} />
-      <Stack.Screen name='answers' options={{ title: 'Respuestas' }} />
-      <Stack.Screen name='main' options={{ title: 'Menú principal' }} />
-      <Stack.Screen name='journal' options={{ title: 'Bitacora' }} />
+      <Stack.Screen name='login' options={{ title: 'Inicio de sesión', headerStyle: {backgroundColor: "#CF5C36" , },  headerTitleStyle: { color: "#050517",  fontFamily: 'DMBold', }, }} />
+      <Stack.Screen name='chat' options={{ title: 'Chats', headerStyle: {backgroundColor: "#CF5C36" , },  headerTitleStyle: { color: "#050517",  fontFamily: 'DMBold', }, }} />
+      <Stack.Screen name='directory' options={{ title: 'Directorio' , headerStyle: {backgroundColor: "#CF5C36" , },  headerTitleStyle: { color: "#050517",  fontFamily: 'DMBold', }, }}/>
+      <Stack.Screen name='messaging' options={{ title: mTitle , headerStyle: {backgroundColor: "#CF5C36" , },  headerTitleStyle: { color: "#050517",  fontFamily: 'DMBold', }, }} />
+      <Stack.Screen name='forums' options={{ title: 'Foros' , headerStyle: {backgroundColor: "#CF5C36" , },  headerTitleStyle: { color: "#050517",  fontFamily: 'DMBold', }, }}/>
+      <Stack.Screen name='answers' options={{ title: 'Respuestas' , headerStyle: {backgroundColor: "#CF5C36" , },  headerTitleStyle: { color: "#050517",  fontFamily: 'DMBold', }, }} />
+      <Stack.Screen name='main' options={{ title: 'Menú principal', headerStyle: {backgroundColor: "#CF5C36" , },  headerTitleStyle: { color: "#050517",  fontFamily: 'DMBold', }, }}/>
+      <Stack.Screen name='journal' options={{ title: 'Bitácora' , headerStyle: {backgroundColor: "#CF5C36" , },  headerTitleStyle: { color: "#050517",  fontFamily: 'DMBold', }, }}/>
     </Stack>
   );
 };
