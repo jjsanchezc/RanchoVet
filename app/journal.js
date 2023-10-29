@@ -6,6 +6,7 @@ import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import Menu from "../components/Menu/Menu";
 import * as constantes from "../constants";
+import { ScrollView } from "react-native";
 
 const Journal = () => {
     const router = useRouter();
@@ -45,92 +46,94 @@ const Journal = () => {
     };
 
     const renderItem = ({ item }) => (
-        <View style={styles.directoryBox}>
-            <View style={styles.rowContainer}>
-                <View
-                    style={[
-                        styles.directoryBox,
-                        {
-                            borderColor: '#D3D5D7', 
-                            borderBottomWidth: 2,
-                            backgroundColor: '#F7EDCF', // Highlight the selected user
-                        },
-                    ]}
-                >
-                    <View>
-                        <Ionicons
-                            name="person-circle-outline"
-                            size={80}
-                            color="black"
-                            style={styles.cavatar}
-                        />
-                    </View>
+        <ScrollView style={styles.scrollView}>
+            <View style={styles.directoryBox}>
+                <View style={styles.rowContainer}>
+                    <View
+                        style={[
+                            styles.directoryBox,
+                            {
+                                borderColor: '#D3D5D7', 
+                                borderBottomWidth: 2,
+                                backgroundColor: '#F7EDCF', // Highlight the selected user
+                            },
+                        ]}
+                    >
                         <View>
-                            <Text style={styles.directoryText}><Text style={{ fontWeight: 'bold' }}>{item.name}</Text></Text>
-                            <Text style={styles.directoryText}>Animal: {item.species}</Text>
-                            <Text style={styles.directoryText}>Veterinario: {item.veterinary}</Text>
+                            <Ionicons
+                                name="person-circle-outline"
+                                size={80}
+                                color="black"
+                                style={styles.cavatar}
+                            />
                         </View>
-                <View style={styles.columnContainer}>
-                    <Button
-                        title="Ver detalles"
-                            onPress={() => setanimal(item)}
-                            color={constantes.COLORS.tertiary}
-                            style={styles.journalButton}
-                        />
+                            <View>
+                                <Text style={styles.directoryText}><Text style={{ fontWeight: 'bold' }}>{item.name}</Text></Text>
+                                <Text style={styles.directoryText}>Animal: {item.species}</Text>
+                                <Text style={styles.directoryText}>Veterinario: {item.veterinary}</Text>
+                            </View>
+                    <View style={styles.columnContainer}>
+                        <Button
+                            title="Ver detalles"
+                                onPress={() => setanimal(item)}
+                                color={constantes.COLORS.tertiary}
+                                style={styles.journalButton}
+                            />
+                    </View>
+                  </View>
                 </View>
             </View>
-
-            </View>
-
-        </View>
+        </ScrollView>
     );
 
     const renderItemDetails = () => (
-        <View style={styles.directoryDetailsText}>
-            <View>
-                <Ionicons
-                    name="person-circle-outline"
-                    size={80}
-                    color="black"
-                    style={styles.cavatar}
-                />
-                <Text>{animal.name}</Text>
-                <Text>{animal.folder}</Text>
-            </View>
+        <ScrollView style={styles.scrollView}>
+            <View style={styles.directoryDetailsText}>
+                <View>
+                    <Ionicons
+                        name="person-circle-outline"
+                        size={80}
+                        color="black"
+                        style={styles.cavatar}
+                    />
+                    <Text>{animal.name}</Text>
+                    <Text>{animal.folder}</Text>
+                </View>
 
-            <View style={styles.modalbuttonContainer}>
-                <Pressable
-                    style={[styles.modalbutton, { backgroundColor: '#E14D2A' }]}
-                    onPress={handleCreateRoom}
-                >
-                    <Text style={styles.modaltext}>Editar</Text>
-                </Pressable>
-                <Pressable
-                    style={[styles.modalbutton, { backgroundColor: '#E14D2A' }]}
-                    onPress={clear}
-                >
-                    <Text style={styles.modaltext}>Regresar</Text>
-                </Pressable>
+                <View style={styles.modalbuttonContainer}>
+                    <Pressable
+                        style={[styles.modalbutton, { backgroundColor: '#E14D2A' }]}
+                        onPress={handleCreateRoom}
+                    >
+                        <Text style={styles.modaltext}>Editar</Text>
+                    </Pressable>
+                    <Pressable
+                        style={[styles.modalbutton, { backgroundColor: '#E14D2A' }]}
+                        onPress={clear}
+                    >
+                        <Text style={styles.modaltext}>Regresar</Text>
+                    </Pressable>
+                </View>
             </View>
-        </View>
+        </ScrollView>
     );
 
-    return (
-        <View style={styles.directoryscreen}>
-            {Object.keys(animal).length > 0 ? (
-                // Render details when a animal is selected
-                renderItemDetails()
-            ) : (
+        return (
                 <View style={styles.directoryscreen}>
-                    <FlatList
-                        data={validAnimals}
-                        renderItem={renderItem}
-                        keyExtractor={(item) => item.id}
-                    />
+                    {Object.keys(animal).length > 0 ? (
+                        // Render details when a animal is selected
+                        renderItemDetails()
+                    ) : (
+                        <View style={styles.directoryscreen}>
+                            <FlatList
+                                data={validAnimals}
+                                renderItem={renderItem}
+                                keyExtractor={(item) => item.id}
+                            />
+                        </View>
+                    )}
+                    <Menu />
                 </View>
-            )}
-            <Menu />
-        </View>
     );
 };
 

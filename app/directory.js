@@ -9,6 +9,7 @@ import { messagingTitle, messagingID } from "../components/chat/MessagingTitle";
 import { Ionicons } from "@expo/vector-icons";
 import Menu from "../components/Menu/Menu";
 import RatingStars from "../components/forums/stars";
+import { ScrollView } from "react-native";
 
 const Directory = () => {
     const router = useRouter();
@@ -88,37 +89,39 @@ const Directory = () => {
     };
 
     const renderItem = ({ item }) => (
-        <View style={styles.directoryBox}>
-            <Pressable
-                onPress={() => setDestinatary(item)} // Set the selected user on press
-                style={[
-                    styles.directoryBox,
-                    {
-                        borderColor: '#D3D5D7', 
-                        borderBottomWidth: 2,
-                        backgroundColor: '#F7EDCF', // Highlight the selected user
-                    },
-                ]}
-            >
-                <View>
-                    <Ionicons
-                        name="person-circle-outline"
-                        size={80}
-                        color="black"
-                        style={styles.cavatar}
-                    />
-                </View>
-                <View>
-                    <Text style={styles.directoryText}><Text style={{ fontWeight: 'bold' }}>{item.name}</Text></Text>
-                    <RatingStars rating={item.vet_data.rating} maxRating={5} />
-                    <Text style={styles.directoryText}>Especialidad: {item.vet_data.specialty}</Text>
-                    <Text style={styles.directoryText}>Ubicación: {item.location}</Text>
-                    <Text style= {styles.directoryText}>Mail: {item.vet_data.mail}</Text>
-                    <Text style= {styles.directoryText}>Teléfono: {item.vet_data.phone}</Text>
-                    <Text style= {styles.directoryText}>Precios: {item.vet_data.prices}</Text>
-                </View>
-            </Pressable>
-        </View>
+        <ScrollView style={styles.scrollView}>
+            <View style={styles.directoryBox}>
+                <Pressable
+                    onPress={() => setDestinatary(item)} // Set the selected user on press
+                    style={[
+                        styles.directoryBox,
+                        {
+                            borderColor: '#D3D5D7', 
+                            borderBottomWidth: 2,
+                            backgroundColor: '#F7EDCF', // Highlight the selected user
+                        },
+                    ]}
+                >
+                    <View>
+                        <Ionicons
+                            name="person-circle-outline"
+                            size={80}
+                            color="black"
+                            style={styles.cavatar}
+                        />
+                    </View>
+                    <View>
+                        <Text style={styles.directoryText}><Text style={{ fontWeight: 'bold' }}>{item.name}</Text></Text>
+                        <RatingStars rating={item.vet_data.rating} maxRating={5} />
+                        <Text style={styles.directoryText}>Especialidad: {item.vet_data.specialty}</Text>
+                        <Text style={styles.directoryText}>Ubicación: {item.location}</Text>
+                        <Text style= {styles.directoryText}>Mail: {item.vet_data.mail}</Text>
+                        <Text style= {styles.directoryText}>Teléfono: {item.vet_data.phone}</Text>
+                        <Text style= {styles.directoryText}>Precios: {item.vet_data.prices}</Text>
+                    </View>
+                </Pressable>
+            </View>
+        </ScrollView>
     );
 
     const renderItemDetails = () => (
