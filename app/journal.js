@@ -1,10 +1,11 @@
-import { View, Text, Pressable, FlatList } from "react-native";
+import { View, Text, Pressable, FlatList, Button } from "react-native";
 import React, { useState, useEffect } from "react";
 import { styles } from "../utils/styles";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import Menu from "../components/Menu/Menu";
+import * as constantes from "../constants";
 
 const Journal = () => {
     const router = useRouter();
@@ -45,31 +46,42 @@ const Journal = () => {
 
     const renderItem = ({ item }) => (
         <View style={styles.directoryBox}>
-            <Pressable
-                onPress={() => setanimal(item)} // Set the selected user on press
-                style={[
-                    styles.directoryBox,
-                    {
-                        borderColor: '#D3D5D7', 
-                        borderBottomWidth: 2,
-                        backgroundColor: '#F7EDCF', // Highlight the selected user
-                    },
-                ]}
-            >
-                <View>
-                    <Ionicons
-                        name="person-circle-outline"
-                        size={80}
-                        color="black"
-                        style={styles.cavatar}
-                    />
+            <View style={styles.rowContainer}>
+                <View
+                    style={[
+                        styles.directoryBox,
+                        {
+                            borderColor: '#D3D5D7', 
+                            borderBottomWidth: 2,
+                            backgroundColor: '#F7EDCF', // Highlight the selected user
+                        },
+                    ]}
+                >
+                    <View>
+                        <Ionicons
+                            name="person-circle-outline"
+                            size={80}
+                            color="black"
+                            style={styles.cavatar}
+                        />
+                    </View>
+                        <View>
+                            <Text style={styles.directoryText}><Text style={{ fontWeight: 'bold' }}>{item.name}</Text></Text>
+                            <Text style={styles.directoryText}>Animal: {item.species}</Text>
+                            <Text style={styles.directoryText}>Veterinario: {item.veterinary}</Text>
+                        </View>
+                <View style={styles.columnContainer}>
+                    <Button
+                        title="Ver detalles"
+                            onPress={() => setanimal(item)}
+                            color={constantes.COLORS.tertiary}
+                            style={styles.journalButton}
+                        />
                 </View>
-                <View>
-                    <Text style={styles.directoryText}><Text style={{ fontWeight: 'bold' }}>{item.name}</Text></Text>
-                    <Text style={styles.directoryText}>Especie: {item.species}</Text>
-                    <Text style={styles.directoryText}>Veterinario: {item.veterinary}</Text>
-                </View>
-            </Pressable>
+            </View>
+
+            </View>
+
         </View>
     );
 
@@ -110,7 +122,6 @@ const Journal = () => {
                 renderItemDetails()
             ) : (
                 <View style={styles.directoryscreen}>
-                    <Text style={styles.modalsubheading}>Selecciona un animal</Text>
                     <FlatList
                         data={validAnimals}
                         renderItem={renderItem}

@@ -250,7 +250,18 @@ export const styles = StyleSheet.create({
 		color: COLORS.black,
 		flexDirection: "row",
 		padding: 10,
+		position: "relative",
 	},
+	columnContainer: {
+		flexDirection: 'column',
+		justifySelf: 'flex-end',
+		alignSelf: "flex-end",
+		margin: 10,
+	  },
+	rowContainer: {
+		flexDirection: 'row', 
+		justifyContent: 'flex-start', 
+	  },
 	directoryText: {
 		color: COLORS.black,
 
@@ -259,6 +270,7 @@ export const styles = StyleSheet.create({
 		color: COLORS.black,
 		flex: 1,
 		padding: 10,
+
 	},
 	mmessageWrapper: {
 		width: "100%",
@@ -453,8 +465,8 @@ export const styles = StyleSheet.create({
 	  directoryItemContent: {
 		flexDirection: 'row', // Esto alinea los elementos en fila (horizontalmente)
 		justifyContent: 'space-between', // Esto distribuye los elementos a lo largo del espacio disponible
-		alignItems: 'center', // Esto centra los elementos verticalmente
-		padding: 10, // Añade relleno si es necesario
+		alignItems: 'center', 
+		padding: 10, 
 	  },
 	  userInfo: {
 		alignItems: 'center', 
@@ -467,6 +479,15 @@ export const styles = StyleSheet.create({
 		alignItems: 'down',
 
 	  },
+	  journalButton: {
+		backgroundColor: COLORS.tertiary,
+		padding: 12,
+		borderRadius: 50,
+		elevation: 1,
+		alignSelf: 'flex-end',
+		marginBottom: 10,
+		justifySelf: 'flex-end', 
+	},
 
 });
 	
