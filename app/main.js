@@ -1,10 +1,34 @@
 import React from "react";
+import * as Localization from "expo-localization";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import { styles } from "../utils/styles";
 
+const translations = {
+  "en-US": {
+    chat: "Chat",
+    forum: "Forum",
+    directory: "Directory",
+    journal: "Journal",
+    profile: "Profile",
+  },
+  "es-ES": {
+    chat: "Chat",
+    forum: "Foro",
+    directory: "Directorio",
+    journal: "Bitácora",
+    profile: "Perfil",
+  },
+  // otros idiomas
+};
+
 const Main = () => {
   const router = useRouter();
+  const locale = Localization.locale;
+  const language = locale.split("-")[0];
+  const t =
+    translations[locale] || translations[language] || translations["es-ES"];
+
   const chat = () => {
     router.push("/chat");
   };
@@ -22,26 +46,26 @@ const Main = () => {
   };
 
   const perfil = () => {
-
+    //ruta
   };
 
   return (
     <View style={styles.mainMenuContainer}>
       <View style={styles.mainMenuButtonContainer}>
         <TouchableOpacity style={styles.mainMenuButton} onPress={chat}>
-          <Text style={styles.mainMenuButtonText}>Chat</Text>
+          <Text style={styles.mainMenuButtonText}>{t.chat}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.mainMenuButton} onPress={foro}>
-          <Text style={styles.mainMenuButtonText}>Foro</Text>
+          <Text style={styles.mainMenuButtonText}>{t.forum}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.mainMenuButton} onPress={directorio}>
-          <Text style={styles.mainMenuButtonText}>Directorio</Text>
+          <Text style={styles.mainMenuButtonText}>{t.directory}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.mainMenuButton} onPress={bitacora}>
-          <Text style={styles.mainMenuButtonText}>Bitácora</Text>
+          <Text style={styles.mainMenuButtonText}>{t.journal}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.mainMenuButton} onPress={perfil}>
-          <Text style={styles.mainMenuButtonText}>Perfil</Text>
+          <Text style={styles.mainMenuButtonText}>{t.profile}</Text>
         </TouchableOpacity>
       </View>
     </View>

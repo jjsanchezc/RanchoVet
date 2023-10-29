@@ -1,13 +1,38 @@
 import React, { useState, useLayoutEffect, useEffect } from "react";
-import { View, Text, Pressable, SafeAreaView, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  SafeAreaView,
+  FlatList,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
 import { useRouter } from "expo-router";
 import { Feather } from "@expo/vector-icons";
+import * as Localization from "expo-localization";
 import ChatComponent from "../components/chat/ChatComponent";
 import { styles } from "../utils/styles";
 import Menu from "../components/Menu/Menu";
 import { getData, fetchDataAndStoreLocally } from "../database/localdatabase";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as constantes from "../constants";
+
+const translations = {
+  "en-US": {
+    search: "Search",
+    searchPlaceholder: "Search",
+    noChats: "No chats created!",
+    clickToStart: "Click on the icon above to start a new chat",
+  },
+  "es-ES": {
+    search: "Buscar",
+    searchPlaceholder: "Buscar",
+    noChats: "No hay chats creados!",
+    clickToStart: "Dale click en el ícono de arriba para iniciar un nuevo chat",
+  },
+};
 
 const Chat = () => {
   const router = useRouter();
@@ -15,9 +40,12 @@ const Chat = () => {
   const [user_type, setuser_type] = useState("");
   var user = "";
   const chatIdentifiers = [];
+  const locale = Localization.locale;
+  const language = locale.split("-")[0];
+  const t =
+    translations[locale] || translations[language] || translations["es-ES"];
 
-  useLayoutEffect(() => {
-  }, []);
+  useLayoutEffect(() => {}, []);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -38,21 +66,39 @@ const Chat = () => {
     for (const chatid in userData.chats) {
       const chatData = await getData(userData.chats[chatid]);
       //console.log('Chat data:', userData.chats[chatid], chatData);
-      r.push(chatData)
+      r.push(chatData);
       chatIdentifiers.push(chatid);
     }
     setRooms(r);
     //console.log("rooms", r);
   }
-
+  const [searchText, setSearchText] = useState("");
+  const handleSearch = () => {
+    // Realiza acciones de búsqueda aquí con el valor de searchText
+    console.log("Realizar búsqueda con texto:", searchText);
+  };
   return (
     <SafeAreaView style={styles.chatscreen}>
       <View style={styles.chattopContainer}>
         <View style={styles.chatheader}>
-          <Text style={styles.chatheading}>Chats</Text>
-          {user_type !== 'vet' && (
+          <View style={styles.searchContainer}>
+            <TextInput
+              style={styles.searchInput}
+              placeholder={t.search}
+              value={searchText}
+              onChangeText={setSearchText}
+            />
+            <TouchableOpacity style={styles.searchBtn} onPress={handleSearch}>
+              <Text style={styles.searchButtonText}>{t.searchPlaceholder}</Text>
+            </TouchableOpacity>
+          </View>
+          {user_type !== "vet" && (
             <Pressable onPress={handleCreateGroup}>
-              <Feather name="edit" size={constantes.SIZES.xLarge} color={constantes.COLORS.tertiary} />
+              <Feather
+                name="edit"
+                size={constantes.SIZES.xLarge}
+                color={constantes.COLORS.tertiary}
+              />
             </Pressable>
           )}
         </View>
@@ -66,8 +112,8 @@ const Chat = () => {
           />
         ) : (
           <View style={styles.chatemptyContainer}>
-            <Text style={styles.chatemptyText}>No hay chats creados!</Text>
-            <Text>Dale click en el ícono de arriba para iniciar un nuevo chat</Text>
+            <Text style={styles.chatemptyText}>{t.noChats}</Text>
+            <Text>{t.clickToStart}</Text>
           </View>
         )}
       </View>

@@ -1,12 +1,45 @@
 import React, { useState, useLayoutEffect, useEffect } from "react";
-import { SafeAreaView, View, TextInput, Pressable, Text, Image } from "react-native";
+import {
+  SafeAreaView,
+  View,
+  TextInput,
+  Pressable,
+  Text,
+  Image,
+} from "react-native";
 import { Stack, useRouter } from "expo-router";
+import * as Localization from "expo-localization";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { styles } from "../utils/styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getUsersPasswords } from "../database/firebase";
 import { fetchDataAndStoreLocally } from "../database/localdatabase";
 
+const translations = {
+  "en-US": {
+    login: "Login",
+    usernamePlaceholder: "Username",
+    passwordPlaceholder: "Password",
+    errorFetchingUserPassword: "Error fetching user's password",
+    errorSavingUser: "Error while saving user",
+    errorLoadingUser: "Error while loading user",
+    incorrectUsernameOrPassword: "Incorrect username or password",
+    usernameAndPasswordRequired: "Username and password are required",
+    getStarted: "Get Started",
+  },
+  "es-ES": {
+    login: "Iniciar sesión",
+    usernamePlaceholder: "Nombre de usuario",
+    passwordPlaceholder: "Contraseña",
+    errorFetchingUserPassword: "Error al obtener contraseña de usuario",
+    errorSavingUser: "Error al guardar el usuario",
+    errorLoadingUser: "Error al cargar el usuario",
+    incorrectUsernameOrPassword: "Usuario o contraseña incorrectos",
+    usernameAndPasswordRequired: "Usuario y contraseña son requeridos",
+    getStarted: "Iniciar",
+  },
+  // otros idiomas
+};
 const Login = () => {
   const router = useRouter();
   const [username, setUsername] = useState("");
@@ -14,6 +47,10 @@ const Login = () => {
   const [error, setError] = useState("");
   const [validUsers, setValidUsers] = useState([]);
   const [validPass, setValidPass] = useState([]);
+  const locale = Localization.locale;
+  const language = locale.split("-")[0];
+  const t =
+    translations[locale] || translations[language] || translations["es-ES"];
 
   useEffect(() => {
     const fetchUsersPasswords = async () => {
@@ -22,7 +59,7 @@ const Login = () => {
         setValidUsers(Object.values(users));
         setValidPass(Object.keys(users));
       } catch (error) {
-        console.error("Error al obtener contraseña de usuario", error);
+        console.error(t.errorFetchingUserPassword, error);
       }
     };
     fetchUsersPasswords();
@@ -36,7 +73,7 @@ const Login = () => {
       fetchDataAndStoreLocally(validPass[userIdIndex]);
       router.push("/main");
     } catch (e) {
-      console.error("Error! mientras se guardaba el usuario");
+      console.error(t.errorSavingUser);
     }
   };
 
@@ -49,10 +86,10 @@ const Login = () => {
       if (validUser) {
         storeUsername(validUser);
       } else {
-        setError("Usuario o contraseña incorrectos."); // Set error message
+        setError(t.incorrectUsernameOrPassword); // Set error message
       }
     } else {
-      setError("Usuario y contraseña son requeridos."); // Set error message
+      setError(t.usernameAndPasswordRequired); // Set error message
     }
   };
 
@@ -65,7 +102,7 @@ const Login = () => {
           router.push("/main");
         }
       } catch (e) {
-        console.error("Error mientras cargaba el usuario");
+        console.error(t.errorLoadingUser);
       }
     };
     getUsername();
@@ -74,14 +111,14 @@ const Login = () => {
   return (
     <SafeAreaView style={styles.loginscreen}>
       <View style={styles.loginBox}>
-        <Image source={require("../logo.png")} style={styles.logo}/>
-        <Text style={styles.loginheading}>Iniciar sesión</Text>
+        <Image source={require("../logo.png")} style={styles.logo} />
+        <Text style={styles.loginheading}>{t.login}</Text>
         <View style={styles.logininputContainer}>
           <View style={styles.inputWrapper}>
             <Icon name="user" size={24} color="#ccc" style={styles.icon} />
             <TextInput
               autoCorrect={false}
-              placeholder="Nombre de usuario"
+              placeholder={t.usernamePlaceholder}
               style={styles.logininput}
               onChangeText={(value) => setUsername(value)}
             />
@@ -91,7 +128,7 @@ const Login = () => {
             <TextInput
               autoCorrect={false}
               secureTextEntry={true} // Password input
-              placeholder="Contraseña"
+              placeholder={t.passwordPlaceholder}
               style={styles.logininput}
               onChangeText={(value) => setPassword(value)}
             />
@@ -99,7 +136,7 @@ const Login = () => {
 
           <Pressable onPress={handleSignIn} style={styles.loginbutton}>
             <View>
-              <Text style={styles.loginbuttonText}>Iniciar</Text>
+              <Text style={styles.loginbuttonText}>{t.getStarted}</Text>
             </View>
           </Pressable>
 
