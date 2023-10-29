@@ -1,4 +1,4 @@
-import { View, Text, Pressable, FlatList,Picker, Button } from "react-native";
+import { View, Text, Pressable, FlatList, Button } from "react-native";
 import React, { useState, useEffect } from "react";
 import { styles } from "../utils/styles";
 import { createNewChat } from "../database/firebase";
@@ -159,7 +159,7 @@ const Directory = () => {
     const renderFilterPicker = () => (
         <View style={styles.filterContainer}>
           <Text>Filtrar por: </Text>
-          <Picker
+          {/** <Pickercmomenté esto
             selectedValue={filterBy}
             style={styles.pickerStyle}
             onValueChange={(itemValue) => handleFilterChange(itemValue)}
@@ -170,6 +170,7 @@ const Directory = () => {
             <Picker.Item label="Calificación" value="calificacion" />
             <Picker.Item label="Especialización" value="especializacion" />
           </Picker>
+          */}
           <Pressable onPress={handleSearch} style={styles.searchButton}>
             <Text style={styles.loginbuttonText}>Buscar</Text>
           </Pressable>
