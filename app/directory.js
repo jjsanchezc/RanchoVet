@@ -157,25 +157,24 @@ const Directory = () => {
         console.log("Realizar búsqueda con filtro:", filterBy);
     };
     const renderFilterPicker = () => (
-            <View style={styles.filterContainer}>
-                <Text>Filtrar por: </Text>
-                <Picker
-                    selectedValue={filterBy}
-                    style={styles.pickerStyle}
-                    onValueChange={(itemValue) => handleFilterChange(itemValue)}
-                >
-                    <Picker.Item label="Seleccionar filtro" value="" />
-                    <Picker.Item label="Ubicación" value="ubicacion" />
-                    <Picker.Item label="Precio" value="precio" />
-                    <Picker.Item label="Calificación" value="calificacion" />
-                    <Picker.Item label="Especialización" value="especializacion" />
-                </Picker>
-                <Button style={styles.loginbutton}
-                title="Buscar"
-                onPress={handleSearch}
-            />
-            </View>
-    );
+        <View style={styles.filterContainer}>
+          <Text>Filtrar por: </Text>
+          <Picker
+            selectedValue={filterBy}
+            style={styles.pickerStyle}
+            onValueChange={(itemValue) => handleFilterChange(itemValue)}
+          >
+            <Picker.Item label="Seleccionar filtro" value="" />
+            <Picker.Item label="Ubicación" value="ubicacion" />
+            <Picker.Item label="Precio" value="precio" />
+            <Picker.Item label="Calificación" value="calificacion" />
+            <Picker.Item label="Especialización" value="especializacion" />
+          </Picker>
+          <Pressable onPress={handleSearch} style={styles.searchButton}>
+            <Text style={styles.loginbuttonText}>Buscar</Text>
+          </Pressable>
+        </View>
+      );
 
     return (
         <View style={styles.directoryscreen}>

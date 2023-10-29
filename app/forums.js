@@ -7,6 +7,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getForums } from "../database/firebase";
 import { styles } from "../utils/styles";
 import * as constantes from "../constants";
+import { ScrollView } from "react-native";
 
 const Forums = () => {
   const [threadList, setThreadList] = useState({});
@@ -87,30 +88,32 @@ const Forums = () => {
 
   return (
     <View style={styles.forumScreen}>
-      <Text style={styles.loginheading}>Haz una pregunta!</Text>
-      <TextInput
-        autoCorrect={true}
-        placeholder='Ingresa tu pregunta'
-        style={styles.forumInput}
-        value={inputValue}
-        onChangeText={setInputValue}
-      />
-      <Button
-        title="CREAR PREGUNTA"
-        onPress={createThread}
-        color={constantes.COLORS.tertiary}
-        style={styles.forumButton}
-      />
-      <View style={styles.forumThreadContainer}>
-        {Object.keys(threadList).map(threadId => (
-          <View style={styles.forumThreadItem} key={threadId}>
-            <Text style={styles.forumThreadTitle}>{threadList[threadId].title.title}</Text>
-            <Comments
-              navigateToReplies={() => navigate.push({ pathname: "/Replies", params: { threadId, title: threadList[threadId].title.title }})}
-            />
-          </View>
-        ))}
-      </View>
+      <ScrollView style={styles.scrollView}>
+        <Text style={styles.loginheading}>Haz una pregunta!</Text>
+        <TextInput
+          autoCorrect={true}
+          placeholder='Ingresa tu pregunta'
+          style={styles.forumInput}
+          value={inputValue}
+          onChangeText={setInputValue}
+        />
+        <Button
+          title="CREAR PREGUNTA"
+          onPress={createThread}
+          color={constantes.COLORS.tertiary}
+          style={styles.forumButton}
+        />
+        <View style={styles.forumThreadContainer}>
+          {Object.keys(threadList).map(threadId => (
+            <View style={styles.forumThreadItem} key={threadId}>
+              <Text style={styles.forumThreadTitle}>{threadList[threadId].title.title}</Text>
+              <Comments
+                navigateToReplies={() => navigate.push({ pathname: "/Replies", params: { threadId, title: threadList[threadId].title.title }})}
+              />
+            </View>
+          ))}
+        </View>
+      </ScrollView>
     </View>
   );
 };

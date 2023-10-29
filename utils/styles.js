@@ -3,6 +3,7 @@ import { COLORS } from "../constants";
 import { FONT } from "../constants";
 import { ColorSpace } from "react-native-reanimated";
 
+
 export const styles = StyleSheet.create({
 	loginBox: {
 		width: "50%", // Adjust the width as needed
@@ -35,7 +36,7 @@ export const styles = StyleSheet.create({
 		backgroundColor: COLORS.tertiary,
 		padding: 12,
 		marginVertical: 10,
-		width: "40%",
+		width: "60%",
 		borderRadius: 50,
 		elevation: 1,
 	},
@@ -393,5 +394,13 @@ export const styles = StyleSheet.create({
 	  menuItemLabel: {
 		color: COLORS.tertiary,
 		fontSize: 16,
+	  },
+	  searchButton: {
+		backgroundColor: COLORS.tertiary,
+		padding: 12,
+		marginVertical: 10,
+		width: "60%",
+		borderRadius: 50,
+		elevation: 1,
 	  },
 });

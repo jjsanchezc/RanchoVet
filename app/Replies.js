@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import { Button } from "react-native";
 import * as constantes from "../constants";
 import { createNewReply, getReplies } from "../database/firebase";
+import { ScrollView } from "react-native";
 
 const Replies = () => {
   const [reply, setReply] = useState([]);
@@ -90,31 +91,35 @@ useEffect(() => {
 
   return (
     <>
-      <View style={styles.forumScreen}>
-        <Text style={styles.loginheading}>{params.title}{params.threadId}</Text>
-        <TextInput
-          autoCorrect={true}
-          placeholder='Ingresa tu respuesta'
-          style={styles.forumInput}
-          value={inputValue}
-          onChangeText={setInputValue}
-        />
-        <Button
-          title="CREAR RESPUESTA"
-          onPress={handleSubmit(createReply)}
-          color={constantes.COLORS.tertiary}
-          style={styles.forumButton}
-        />
-        <View style={styles.forumThreadContainer}>
-          {reply.map((reply, index) => (
-            <View style={styles.forumThreadItem} key={index}>
-              <Text style={styles.forumThreadTitle}>{reply.Respuesta}</Text>
-            </View>
-          ))}
+
+        <View style={styles.forumScreen}>
+          <ScrollView style={styles.scrollView}>
+              <Text style={styles.loginheading}>{params.title}</Text>
+              <TextInput
+                autoCorrect={true}
+                placeholder='Ingresa tu respuesta'
+                style={styles.forumInput}
+                value={inputValue}
+                onChangeText={setInputValue}
+              />
+              <Button
+                title="CREAR RESPUESTA"
+                onPress={handleSubmit(createReply)}
+                color={constantes.COLORS.tertiary}
+                style={styles.forumButton}
+              />
+
+              <View style={styles.forumThreadContainer}>
+                {reply.map((reply, index) => (
+                  <View style={styles.forumThreadItem} key={index}>
+                    <Text style={styles.forumThreadTitle}>{reply.Respuesta}</Text>
+                  </View>
+                ))}
+              </View>
+          </ScrollView>
         </View>
-      </View>
     </>
-  );
-};
+    );
+  };
 
 export default Replies;
