@@ -3,17 +3,38 @@ import Comments from "../components/forums/comments";
 import { createNewForum } from "../database/firebase";
 import { useRouter } from "expo-router";
 import { View, TextInput, Text, Alert, Button } from "react-native";
+import * as Localization from "expo-localization";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getForums } from "../database/firebase";
 import { styles } from "../utils/styles";
 import * as constantes from "../constants";
 import { ScrollView } from "react-native";
 
+const translations = {
+  'en-US': {
+    askYourQuestion: "Ask your question here",
+    createQuestion: "CREATE QUESTION",
+    error: "Error",
+    pleaseEnterQuestion: "Please enter a question.",
+  },
+  'es-ES': {
+    askYourQuestion: "Realiza tu pregunta aquí",
+    createQuestion: "CREAR PREGUNTA",
+    error: "Error",
+    pleaseEnterQuestion: "Por favor ingresa una pregunta.",
+  },
+  // otros idiomas
+};
+
 const Forums = () => {
   const [threadList, setThreadList] = useState({});
   const [inputError, setInputError] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const navigate = useRouter();
+  const locale = Localization.locale;
+  const language = locale.split("-")[0];
+  const t =
+    translations[locale] || translations[language] || translations["es-ES"];
 
   // Load data from AsyncStorage
   useEffect(() => {
@@ -61,7 +82,7 @@ const Forums = () => {
 
       if (!inputValue) {
         setInputError(true);
-        Alert.alert("Error", "Por favor ingresa una pregunta.");
+        Alert.alert(t.error, t.pleaseEnterQuestion);
         return;
       }
 
@@ -92,13 +113,13 @@ const Forums = () => {
       <ScrollView style={styles.scrollView}>
         <TextInput
           autoCorrect={true}
-          placeholder='Realiza tu pregunta aqui'
+          placeholder={t.askYourQuestion}
           style={styles.forumInput}
           value={inputValue}
           onChangeText={setInputValue}
         />
         <Button
-          title="CREAR PREGUNTA"
+          title={t.createQuestion}
           onPress={createThread}
           color={constantes.COLORS.tertiary}
           style={styles.forumButton}

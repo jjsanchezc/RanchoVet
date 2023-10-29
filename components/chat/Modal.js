@@ -1,14 +1,32 @@
 import { View, Text, Pressable, FlatList } from "react-native";
 import React, { useState, useEffect } from "react";
 import { styles } from "../../utils/styles";
+import * as Localization from "expo-localization";
 import { createNewChat } from "../../database/firebase";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getUsersPasswords } from "../../database/firebase";
+
+const translations = {
+  "en-US": {
+    selectVet: "Select a Vet",
+    create: "Create",
+    cancel: "Cancel",
+  },
+  "es-ES": {
+    selectVet: "Selecciona un veterinario",
+    create: "Crear",
+    cancel: "Cancelar",
+  },
+};
 
 const Modal = ({ setVisible, getChats }) => {
   const closeModal = () => setVisible(false);
   const [destinatary, setDestinatary] = useState("");
   const [validUsers, setValidUsers] = useState([]);
+  const locale = Localization.locale;
+  const language = locale.split("-")[0];
+  const t =
+    translations[locale] || translations[language] || translations["es-ES"];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,7 +36,7 @@ const Modal = ({ setVisible, getChats }) => {
         const ids = Object.keys(users);
         const vetUsers = [];
         for (let index = 0; index < Vusers.length; index++) {
-          if (Vusers[index].type == 'vet') {
+          if (Vusers[index].type == "vet") {
             Vusers[index].id = ids[index];
             vetUsers.push(Vusers[index]);
           }
@@ -48,7 +66,8 @@ const Modal = ({ setVisible, getChats }) => {
       style={[
         styles.modalbutton,
         {
-          backgroundColor: destinatary && destinatary.id === item.id ? 'green' : '#E14D2A', // Highlight the selected user
+          backgroundColor:
+            destinatary && destinatary.id === item.id ? "green" : "#E14D2A", // Highlight the selected user
         },
       ]}
     >
@@ -58,7 +77,7 @@ const Modal = ({ setVisible, getChats }) => {
 
   return (
     <View style={styles.modalContainer}>
-      <Text style={styles.modalsubheading}>Selecciona un veterinario</Text>
+      <Text style={styles.modalsubheading}>{t.selectVet}</Text>
       <FlatList
         data={validUsers}
         renderItem={renderItem}
@@ -66,17 +85,17 @@ const Modal = ({ setVisible, getChats }) => {
       />
       <View style={styles.modalbuttonContainer}>
         <Pressable
-          style={[styles.modalbutton, { backgroundColor: '#E14D2A' }]}
+          style={[styles.modalbutton, { backgroundColor: "#E14D2A" }]}
           onPress={handleCreateRoom}
           disabled={!destinatary} // Disable button if no user is selected
         >
-          <Text style={styles.modaltext}>Crear</Text>
+          <Text style={styles.modaltext}>{t.create}</Text>
         </Pressable>
         <Pressable
-          style={[styles.modalbutton, { backgroundColor: '#E14D2A' }]}
+          style={[styles.modalbutton, { backgroundColor: "#E14D2A" }]}
           onPress={closeModal}
         >
-          <Text style={styles.modaltext}>Cancelar</Text>
+          <Text style={styles.modaltext}>{t.cancel}</Text>
         </Pressable>
       </View>
     </View>
