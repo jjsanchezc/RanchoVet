@@ -4,18 +4,19 @@ from firebase_admin import credentials, db
 
 app = Flask(__name__)
 
-# Inicializar la app de Firebase
+'''# Inicializar la app de Firebase
 cred = credentials.Certificate('path/to/serviceAccountKey.json')  # Reemplaza con la ruta de tu archivo JSON de credenciales
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://tu_app.firebaseio.com'  # Reemplaza con la URL de tu base de datos Firebase
-})
+})'''
 
 # Ruta para obtener valores de Firebase sin parámetros
-@app.route('/get_data', methods=['GET'])
+@app.route('/get_dataa', methods=['GET'])
 def get_data():
-    ref = db.reference('/data')  # Reemplaza con la ruta de tu base de datos en Firebase
-    data = ref.get()
-    return jsonify(data)
+    #ref = db.reference('/data')  # Reemplaza con la ruta de tu base de datos en Firebase
+    #data = ref.get()
+    print('AÑLOKSDFÑASDHAHJUIASFKIJHASDFLKJASHDFLKAJSHDFLKSAJHFAS')
+    return jsonify({"hola":"holaaaa"})
 
 # Ruta para obtener valores de Firebase con un parámetro entero
 @app.route('/get_data_by_id/<int:item_id>', methods=['GET'])
