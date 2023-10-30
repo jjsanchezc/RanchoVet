@@ -1,20 +1,42 @@
 import React, { useEffect, useState } from "react";
-import Likes from "../components/forums/likes";
 import Comments from "../components/forums/comments";
-import { Stack, useRouter } from "expo-router";
-import { View, TextInput, Text, Alert } from "react-native";
+import { createNewForum } from "../database/firebase";
+import { useRouter } from "expo-router";
+import { View, TextInput, Text, Alert, Button } from "react-native";
+import * as Localization from "expo-localization";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getForums } from "../database/firebase";
 import { styles } from "../utils/styles";
-import { useForm, Controller } from 'react-hook-form';
-import { Button } from "react-native";
 import * as constantes from "../constants";
+import { ScrollView } from "react-native";
+
+const translations = {
+  'en-US': {
+    askYourQuestion: "Ask your question here",
+    createQuestion: "CREATE QUESTION",
+    error: "Error",
+    pleaseEnterQuestion: "Please enter a question.",
+  },
+  'es-ES': {
+    askYourQuestion: "Realiza tu pregunta aquí",
+    createQuestion: "CREAR PREGUNTA",
+    error: "Error",
+    pleaseEnterQuestion: "Por favor ingresa una pregunta.",
+  },
+  // otros idiomas
+};
 
 const Forums = () => {
-  const [threadList, setThreadList] = useState([]);
+  const [threadList, setThreadList] = useState({});
   const [inputError, setInputError] = useState(false);
-  const { control, handleSubmit } = useForm();
+  const [inputValue, setInputValue] = useState("");
   const navigate = useRouter();
+  const locale = Localization.locale;
+  const language = locale.split("-")[0];
+  const t =
+    translations[locale] || translations[language] || translations["es-ES"];
 
+  // Load data from AsyncStorage
   useEffect(() => {
     const loadLocalData = async () => {
       try {
@@ -28,9 +50,29 @@ const Forums = () => {
     };
     loadLocalData();
   }, []);
-  
 
-  const createThread = async (data) => {
+  // Load data from Firebase
+  useEffect(() => {
+    const loadFirebaseData = async () => {
+      try {
+        const threads = await getForums();
+
+        // If there are threads from Firebase, update AsyncStorage
+        if (Object.keys(threads).length > 0) {
+          const updatedThreadList = { ...threadList, ...threads };
+          await AsyncStorage.setItem("storedThreads", JSON.stringify(updatedThreadList));
+          setThreadList(updatedThreadList);
+        }
+      } catch (error) {
+        console.error("Error loading data from Firebase:", error);
+      }
+    };
+    loadFirebaseData();
+  }, [threadList]); // Include threadList as a dependency to trigger the effect when it changes
+
+
+  // Create a new thread and save it to Firebase and AsyncStorage
+  const createThread = async () => {
     try {
       const userId = await AsyncStorage.getItem("username");
       if (!userId) {
@@ -38,19 +80,28 @@ const Forums = () => {
         return;
       }
 
-      if (!data.Pregunta) {
+      if (!inputValue) {
         setInputError(true);
-        Alert.alert("Error", "Por favor ingresa una pregunta.");
+        Alert.alert(t.error, t.pleaseEnterQuestion);
         return;
       }
 
-      const newThread = { title: data.Pregunta, likes: [], replies: [] };
-      const updatedThreads = [...threadList, newThread];
+      // Create a new thread object
+    const newThread = { title: inputValue };
+    
+    // Save it to Firebase and get the generated ID
+    const newThreadId = await createNewForum(newThread);
 
-      await AsyncStorage.setItem("storedThreads", JSON.stringify(updatedThreads));
+    // Update the new thread with the generated ID
+    const updatedThread = { id: newThreadId, ...newThread };
 
-      setThreadList(updatedThreads);
-      setInputError(false);
+    // Save it to AsyncStorage
+    const updatedThreads = { ...threadList, [newThreadId]: updatedThread };
+    await AsyncStorage.setItem("storedThreads", JSON.stringify(updatedThreads));
+
+    setThreadList(updatedThreads);
+    setInputError(false);
+    setInputValue("");
 
     } catch (error) {
       console.error("Error:", error);
@@ -58,52 +109,32 @@ const Forums = () => {
   };
 
   return (
-    <View style={{ backgroundColor: constantes.COLORS.background, flex: 1 }}>
-    <View className='thread__container' style={styles.chatlistContainer}>
-      {threadList.map((thread, index) => (
-        <View className='thread__item' key={index}>
-          <Text>{thread.title}</Text>
-          <View className='react__container'>
-            <Likes
-              numberOfLikes={thread.likes.length}
-              threadId={index}
-            />
-            <Comments
-              numberOfComments={thread.replies.length}
-              threadId={index}
-              title={thread.title}
-            />
-          </View>
-        </View>
-      ))}
-    </View>
-    <View>
-
-    </View>
-      <Text style={styles.loginheading}>Haz una pregunta!</Text>
-      <View>
-        <Controller
-          control={control}
-          name="Pregunta"
-          render={({ field }) => (
-            <TextInput
-              autoCorrect={false}
-              placeholder='Ingresa tu pregunta'
-              style={[
-                styles.logininput,
-                { borderColor: inputError ? 'red' : 'black' }
-              ]}
-              value={field.value}
-              onChangeText={field.onChange}
-            />
-          )}
+    <View style={styles.forumScreen}>
+      <ScrollView style={styles.scrollView}>
+        <TextInput
+          autoCorrect={true}
+          placeholder={t.askYourQuestion}
+          style={styles.forumInput}
+          value={inputValue}
+          onChangeText={setInputValue}
         />
         <Button
-          title="CREAR PREGUNTA"
-          onPress={handleSubmit(createThread)}
+          title={t.createQuestion}
+          onPress={createThread}
           color={constantes.COLORS.tertiary}
+          style={styles.forumButton}
         />
-      </View>
+        <View style={styles.forumThreadContainer}>
+          {Object.keys(threadList).map(threadId => (
+            <View style={styles.forumThreadItem} key={threadId}>
+              <Text style={styles.forumThreadTitle}>{threadList[threadId].title.title}</Text>
+              <Comments
+                navigateToReplies={() => navigate.push({ pathname: "/Replies", params: { threadId, title: threadList[threadId].title.title }})}
+              />
+            </View>
+          ))}
+        </View>
+      </ScrollView>
     </View>
   );
 };

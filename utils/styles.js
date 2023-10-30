@@ -3,6 +3,7 @@ import { COLORS } from "../constants";
 import { FONT } from "../constants";
 import { ColorSpace } from "react-native-reanimated";
 
+
 export const styles = StyleSheet.create({
 	loginBox: {
 		width: "80%", // Adjust the width as needed
@@ -74,19 +75,59 @@ export const styles = StyleSheet.create({
 		fontSize: 16,
 		flex: 1,
 	},
-	loginbutton: {
-		backgroundColor: COLORS.tertiary,
-		padding: 12,
-		marginVertical: 10,
-		width: "30%",
-		borderRadius: 50,
-		elevation: 1,
+	mainMenuContainer: {
+		position: "absolute",
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0,
+		width: "100%",
+		display: "flex",
+		alignItems: "center",
+		backgroundColor: COLORS.background,
+		justifyContent: "center",
 	},
-	loginbuttonText: {
-		textAlign: "center",
-		color: "#fff",
-		fontWeight: "600",
+	mainMenuButtonContainer: {
+		flexDirection: "row",
+		flexWrap: "wrap",
+		justifyContent: "center", // Center the buttons horizontally
+		alignItems: "center", // Center the buttons vertically
 	},
+	mainMenuButton: {
+		borderRadius: 5,
+		width: "40%",
+		height: 50,
+		backgroundColor: "#CF5C36",
+		margin: 10,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	mainMenuButtonText: {
+		color: "white",
+		fontSize: 20,
+	},
+	//chat 
+	searchContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		backgroundColor: COLORS.secundary,
+		borderRadius: 8,
+		flex: 1,
+		marginRight: 16,
+	  },
+	  searchInput: {
+		flex: 1,
+		padding: 8,
+	  },
+	  searchBtn: {
+		padding: 6,
+		backgroundColor: '#CF5C36',
+		borderRadius: 10,
+	  },
+	  searchButtonText: {
+		color: '#050517',
+	  },
+
 	chatscreen: {
 		backgroundColor: COLORS.primary,
 		flex: 1,
@@ -99,7 +140,7 @@ export const styles = StyleSheet.create({
 		color: COLORS.tertiary,
 	},
 	chattopContainer: {
-		backgroundColor: COLORS.background,
+		backgroundColor: COLORS.secondary,
 		height: 70,
 		width: "100%",
 		padding: 20,
@@ -114,6 +155,7 @@ export const styles = StyleSheet.create({
 	},
 	chatlistContainer: {
 		paddingHorizontal: 10,
+		flex: 1,
 	},
 	chatemptyContainer: {
 		width: "100%",
@@ -199,21 +241,34 @@ export const styles = StyleSheet.create({
 	},
 	directoryBox: {
 		width: "100%",
-		height: "100%",
+		height: 200,
 		borderRadius: 5,
 		alignItems: "center",
-		justifyContent: "center",
+		justifyContent: "flex-start",
 		color: COLORS.black,
 		flexDirection: "row",
 		padding: 10,
+		position: "relative",
 	},
+	columnContainer: {
+		flexDirection: 'column',
+		justifySelf: 'flex-end',
+		alignSelf: "flex-end",
+		margin: 10,
+	  },
+	rowContainer: {
+		flexDirection: 'row', 
+		justifyContent: 'flex-start', 
+	  },
 	directoryText: {
-		color: COLORS.white,
+		color: COLORS.black,
+
 	},
 	directoryDetailsText: {
 		color: COLORS.black,
 		flex: 1,
 		padding: 10,
+
 	},
 	mmessageWrapper: {
 		width: "100%",
@@ -312,4 +367,126 @@ export const styles = StyleSheet.create({
 		color: "#342ead",
 		transitionDuration: "0.25s",
 	},
+	forumScreen: {
+		backgroundColor: COLORS.background,
+		flex: 1,
+		padding: 10,
+		position: "relative",
+	},
+	forumThreadContainer: {
+		width: "100%",
+		alignItems: "center",
+		backgroundColor: COLORS.background,
+		justifyContent: "center",
+	},
+	forumThreadItem: {
+		width: "90%",
+		margin: 10,
+		flexDirection: 'row', // Make the children display in a row
+		alignItems: 'center', // Align children vertically in the center
+		borderRadius: 5,
+		backgroundColor: COLORS.secondary,
+	},
+	forumInput: {
+		borderWidth: 2,
+		padding: 15,
+	},
+	forumButton: {
+		backgroundColor: COLORS.tertiary,
+		padding: 12,
+		marginVertical: 10,
+		width: "80%",
+		borderRadius: 50,
+		elevation: 1,
+	},
+	forumThreadTitle: {
+		flex: 1,
+		flexDirection: "row",
+		alignItems: "flex-start",
+		justifyContent: "space-between",
+		margin: 20,
+	},
+	filterMenu: {
+		position: "absolute",
+		top: 0,
+		right: 0,
+		left: 0,
+		backgroundColor: COLORS.background, // Color de fondo
+		padding: 10, // Espaciado interno
+		borderWidth: 1, // Ancho del borde
+		borderColor: COLORS.secondary, // Color del borde
+		borderRadius: 5, // Bordes redondeados
+		zIndex: 60, // Asegura que el menú esté sobre otros elementos
+	  },
+	  menuItem: {
+		padding: 10,
+		borderBottomWidth: 1,
+		borderBottomColor: COLORS.secondary,
+	  },
+	
+	  menuItemLabel: {
+		color: COLORS.tertiary,
+		fontSize: 16,
+	  },
+	  //Directory
+	  searchButton: {
+		backgroundColor: COLORS.tertiary,
+		padding: 12,
+		marginVertical: 10,
+		width: "60%",
+		borderRadius: 50,
+		elevation: 1,
+	  },
+	  container: {
+		flexDirection: 'row',
+		alignItems: 'center',
+	  },
+	  dropdownButton: {
+		backgroundColor: COLORS.primary,
+		padding: 10,
+		borderRadius: 5,
+		borderWidth: 1,
+		borderColor: '#ccc',
+		marginLeft: 10,
+	  },
+	  modalContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		backgroundColor: 'rgba(0, 0, 0, 0.5)',
+	  },
+	  modalItem: {
+		backgroundColor: COLORS.primary,
+		padding: 10,
+		borderBottomWidth: 1,
+		borderBottomColor: '#ccc',
+	  },
+	  directoryItemContent: {
+		flexDirection: 'row', // Esto alinea los elementos en fila (horizontalmente)
+		justifyContent: 'space-between', // Esto distribuye los elementos a lo largo del espacio disponible
+		alignItems: 'center', 
+		padding: 10, 
+	  },
+	  userInfo: {
+		alignItems: 'center', 
+		marginBottom: 10, 
+
+	  },
+	  buttonRow: {
+		flexDirection: 'row',
+		justifyContent: 'flex-start',
+		alignItems: 'down',
+
+	  },
+	  journalButton: {
+		backgroundColor: COLORS.tertiary,
+		padding: 12,
+		borderRadius: 50,
+		elevation: 1,
+		alignSelf: 'flex-end',
+		marginBottom: 10,
+		justifySelf: 'flex-end', 
+	},
+
 });
+	
+

@@ -127,7 +127,70 @@ async function editProfile(user, userData) {
     console.log("Profile edited in Firebase:", userData);
   } catch (error) {
     console.error("Error creating new chat:", error);
+
+async function createNewForum(title) {
+  try {
+    const forumData = {
+      id: null,
+      title: title
+    };
+    // New forum with auto-generated key
+    const newForumRef = push(ref(database, "forums"));
+    const newForumKey = newForumRef.key;
+    // ID with auto-generated key
+    forumData.id = newForumKey;
+    await set(ref(database, `forums/${newForumKey}`), forumData);
+    console.log("New forum added to Firebase with ID:", newForumKey);
+    return newForumKey;
+  } catch (error) {
+    console.error("Error creating new forum:", error);
     throw error;
+  }
+}
+
+async function createNewReply(threadId, reply) {
+  const repliesRef = ref(database, `forums/${threadId}/replies`);
+  try {
+    const newReplyRef = await push(repliesRef, reply);
+    const newReplyId = newReplyRef.key; // Get the auto-generated ID
+    console.log("New reply added to Firebase with ID:", newReplyId);
+    return newReplyId;
+  } catch (error) {
+    console.error("Error sending reply:", error);
+    throw error; // Re-throw the error to handle it in the calling code
+  }
+}
+
+async function getReplies(threadId) {
+  const repliesRef = ref(database, `forums/${threadId}/replies`);
+  try {
+    const snapshot = await get(repliesRef);
+    if (snapshot.exists()) {
+      const repliesData = snapshot.val();
+      return repliesData;
+    } else {
+      console.log("Item not found.");
+      return {}; // Return an empty object if no replies are found
+    }
+  } catch (error) {
+    console.error("Error retrieving replies:", error);
+    throw error;
+  }
+}
+
+async function getForums() {
+  const forumsRef = ref(database, `forums`);
+  try {
+    const snapshot = await get(forumsRef);
+    if (snapshot.exists()) {
+      const forumData = snapshot.val();
+      return forumData;
+    } else {
+      console.log("Item not found.");
+    }
+  } catch (error) {
+    console.error("Error retrieving forums:", error);
+    throw error; // Re-throw the error to handle it in the calling code
   }
 }
 
@@ -159,4 +222,4 @@ const isFirebaseConnected = async () => {
   });
 };
 
-export { getMessages, getUser, newMessage, createNewChat, getUsersPasswords, isFirebaseConnected, updateChat, editProfile };
+export { getMessages, getUser, newMessage, createNewChat, createNewForum, createNewReply, getReplies, getForums, getUsersPasswords, isFirebaseConnected, updateChat, editProfile };

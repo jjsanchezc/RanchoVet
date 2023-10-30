@@ -1,16 +1,43 @@
-import React, { useEffect, useState } from "react";
-import { Stack, useRouter } from "expo-router";
-import { View, TextInput, Text, Alert } from "react-native"; // Import Alert
+import React, { useState, useEffect } from "react";
+import { useRouter, useLocalSearchParams } from "expo-router";
+import { View, TextInput, Text, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { styles } from "../utils/styles";
-import { useForm, Controller } from 'react-hook-form';
+import * as Localization from "expo-localization";
+import { useForm } from "react-hook-form";
 import { Button } from "react-native";
+import * as constantes from "../constants";
+import { createNewReply, getReplies } from "../database/firebase";
+import { ScrollView } from "react-native";
+
+const translations = {
+  "en-US": {
+    placeholder: "Leave your reply",
+    createReply: "CREATE REPLY",
+    errorTitle: "Error",
+    errorMessage: "Please enter a reply.",
+  },
+  "es-ES": {
+    placeholder: "Deja tu respuesta",
+    createReply: "CREAR RESPUESTA",
+    errorTitle: "Error",
+    errorMessage: "Por favor ingresa una respuesta.",
+  },
+  // otros idiomas
+};
 
 const Replies = () => {
   const [reply, setReply] = useState([]);
-  const [inputError, setInputError] = useState(false); // State for input error
+  const [inputError, setInputError] = useState(false);
   const { control, handleSubmit } = useForm();
-  const navigate = useRouter();
+  const [inputValue, setInputValue] = useState("");
+  const params = useLocalSearchParams();
+  const router = useRouter();
+  const locale = Localization.locale;
+  const language = locale.split("-")[0];
+  const t =
+    translations[locale] || translations[language] || translations["es-ES"];
+  
   // Load data from AsyncStorage
   useEffect(() => {
     const loadAsyncStorageData = async () => {
@@ -25,7 +52,7 @@ const Replies = () => {
       } catch (error) {
         console.error("Error reading replies from AsyncStorage:", error);
       }
-    }
+    };
     loadAsyncStorageData();
   }, [params.threadId]);
 
@@ -40,7 +67,7 @@ const Replies = () => {
       } catch (error) {
         console.error("Error reading replies from Firebase:", error);
       }
-    }
+    };
     loadFirebaseData();
   }, [params.threadId]);
 
@@ -54,7 +81,7 @@ const Replies = () => {
 
       if (!inputValue) {
         setInputError(true);
-        Alert.alert("Error", "Por favor ingresa una respuesta.");
+        Alert.alert(t.errorTitle, t.errorMessage);
         return;
       }
 
@@ -77,36 +104,41 @@ const Replies = () => {
 
       setReply(updatedReplies);
       setInputError(false);
-
+      setInputValue("");
     } catch (error) {
       console.error("Error:", error);
     }
   };
 
   return (
-    <View style={styles.forumScreen}>
-      <Text style={styles.loginheading}>{params.title}</Text>
-      <TextInput
-        autoCorrect={true}
-        placeholder='Ingresa tu respuesta'
-        style={styles.forumInput}
-        value={inputValue}
-        onChangeText={setInputValue}
-      />
-      <Button
-        title="CREAR RESPUESTA"
-        onPress={handleSubmit(createReply)}
-        color={constantes.COLORS.tertiary}
-        style={styles.forumButton}
-      />
-      <View style={styles.forumThreadContainer}>
-        {reply.map((reply, index) => (
-          <View className='reply__item' key={index}>
-            <Text>{reply.Respuesta}</Text>
+    <>
+      <View style={styles.forumScreen}>
+        <ScrollView style={styles.scrollView}>
+          <Text style={styles.loginheading}>{params.title}</Text>
+          <TextInput
+            autoCorrect={true}
+            placeholder={t.placeholder}
+            style={styles.forumInput}
+            value={inputValue}
+            onChangeText={setInputValue}
+          />
+          <Button
+            title={t.createReply}
+            onPress={handleSubmit(createReply)}
+            color={constantes.COLORS.tertiary}
+            style={styles.forumButton}
+          />
+
+          <View style={styles.forumThreadContainer}>
+            {reply.map((reply, index) => (
+              <View style={styles.forumThreadItem} key={index}>
+                <Text style={styles.forumThreadTitle}>{reply.Respuesta}</Text>
+              </View>
+            ))}
           </View>
-        ))}
+        </ScrollView>
       </View>
-    </View>
+    </>
   );
 };
 

@@ -1,32 +1,54 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons'; // Asegúrate de instalar esta biblioteca
-import { Stack, useRouter } from "expo-router";
+import * as Localization from 'expo-localization';
+import { MaterialIcons } from '@expo/vector-icons';
+import { useRouter } from "expo-router";
+
+const translations = {
+  'en-US': {
+    menu: 'Menu',
+    chats: 'Chats',
+    directorio: 'Directory',
+    foro: 'Forum',
+    perfil: 'Profile',
+  },
+  'es-ES': {
+    menu: 'Menú',
+    chats: 'Chats',
+    directorio: 'Directorio',
+    foro: 'Foro',
+    perfil: 'Perfil',
+  },
+};
 
 const Menu = () => {
   const router = useRouter();
+  const locale = Localization.locale;
+  const language = locale.split('-')[0]; // Obtén solo el código de idioma, sin la región
+  const t = translations[locale] || translations[language] || translations['es-ES']; // Fallback a inglés si no se encuentra la traducción
+
   return (
     <View style={{ alignItems: 'center', justifyContent: 'center' }}>
       <View style={{ flexDirection: 'row' }}>
         <TouchableOpacity style={{ alignItems: 'center', marginRight: 20 }} onPress={() => router.back()}>
           <MaterialIcons name="home" size={24} color="#CF5C36" />
-          <Text>Menú</Text>
+          <Text>{t.menu}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={{ alignItems: 'center', marginRight: 20 }} onPress={() => router.replace("/chat")}>
           <MaterialIcons name="chat" size={24} color="#CF5C36" />
-          <Text>Chats</Text>
+          <Text>{t.chats}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={{ alignItems: 'center', marginRight: 20 }} onPress={() => router.replace("/directory")}>
           <MaterialIcons name="folder" size={24} color="#CF5C36" />
-          <Text>Directorio</Text>
+          <Text>{t.directorio}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={{ alignItems: 'center', marginRight: 20 }} onPress={() => router.replace("/forums")}>
           <MaterialIcons name="forum" size={24} color="#CF5C36" />
-          <Text>Foro</Text>
+          <Text>{t.foro}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={{ alignItems: 'center' }}>
           <MaterialIcons name="person" size={24} color="#CF5C36" />
-          <Text>Perfil</Text>
+          <Text>{t.perfil}</Text>
         </TouchableOpacity>
       </View>
     </View>
