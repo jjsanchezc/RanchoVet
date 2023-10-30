@@ -1,12 +1,4 @@
-import {
-  View,
-  Text,
-  Pressable,
-  TouchableOpacity,
-  Modal,
-  FlatList,
-  Button,
-} from "react-native";
+import { View, Text, Pressable, TouchableOpacity, Modal, FlatList, Button} from "react-native";
 import React, { useState, useEffect } from "react";
 import { styles } from "../utils/styles";
 import { createNewChat } from "../database/firebase";
