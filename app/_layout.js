@@ -37,6 +37,7 @@ const Layout = () => {
       <Stack.Screen name='answers' options={{ title: 'Respuestas' , headerStyle: {backgroundColor: "#CF5C36" , },  headerTitleStyle: { color: "#050517",  fontFamily: 'DMBold', }, }} />
       <Stack.Screen name='main' options={{ title: 'Menú principal', headerStyle: {backgroundColor: "#CF5C36" , },  headerTitleStyle: { color: "#050517",  fontFamily: 'DMBold', }, }}/>
       <Stack.Screen name='journal' options={{ title: 'Bitácora' , headerStyle: {backgroundColor: "#CF5C36" , },  headerTitleStyle: { color: "#050517",  fontFamily: 'DMBold', }, }}/>
+      <Stack.Screen name='profile' options={{ title: 'Perfil' , headerStyle: {backgroundColor: "#CF5C36" , },  headerTitleStyle: { color: "#050517",  fontFamily: 'DMBold', }, }} />
     </Stack>
   );
 };

@@ -37,7 +37,7 @@ const Replies = () => {
   const language = locale.split("-")[0];
   const t =
     translations[locale] || translations[language] || translations["es-ES"];
-
+  
   // Load data from AsyncStorage
   useEffect(() => {
     const loadAsyncStorageData = async () => {

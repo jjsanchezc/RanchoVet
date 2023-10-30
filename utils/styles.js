@@ -6,7 +6,7 @@ import { ColorSpace } from "react-native-reanimated";
 
 export const styles = StyleSheet.create({
 	loginBox: {
-		width: "50%", // Adjust the width as needed
+		width: "80%", // Adjust the width as needed
 		backgroundColor: COLORS.background,
 		padding: 20,
 		borderRadius: 10,
@@ -36,7 +36,6 @@ export const styles = StyleSheet.create({
 		backgroundColor: COLORS.tertiary,
 		padding: 12,
 		marginVertical: 10,
-		width: "60%",
 		borderRadius: 50,
 		elevation: 1,
 	},
@@ -69,7 +68,6 @@ export const styles = StyleSheet.create({
 		justifyContent: "center",
 	},
 	logininput: {
-		orderWidth: 1,
 		borderColor: COLORS.secondary,
 		borderRadius: 5,
 		padding: 10,
