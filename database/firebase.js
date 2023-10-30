@@ -127,6 +127,8 @@ async function editProfile(user, userData) {
     console.log("Profile edited in Firebase:", userData);
   } catch (error) {
     console.error("Error creating new chat:", error);
+  }
+}
 
 async function createNewForum(title) {
   try {

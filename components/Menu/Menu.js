@@ -46,7 +46,7 @@ const Menu = () => {
           <MaterialIcons name="forum" size={24} color="#CF5C36" />
           <Text>{t.foro}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{ alignItems: 'center' }}>
+        <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => router.replace("/profile")}>
           <MaterialIcons name="person" size={24} color="#CF5C36" />
           <Text>{t.perfil}</Text>
         </TouchableOpacity>
