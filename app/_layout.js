@@ -36,6 +36,7 @@ const Layout = () => {
       <Stack.Screen name='answers' options={{ title: 'Respuestas' }} />
       <Stack.Screen name='main' options={{ title: 'Menú principal' }} />
       <Stack.Screen name='journal' options={{ title: 'Bitacora' }} />
+      <Stack.Screen name='profile' options={{ title: 'Perfil' }} />
     </Stack>
   );
 };

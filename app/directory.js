@@ -25,9 +25,11 @@ const Directory = () => {
                 for (let index = 0; index < Vusers.length; index++) {
                     if (Vusers[index].type == 'vet') {
                         Vusers[index].id = ids[index];
+                        //console.log("Vusers", Vusers[index]);
                         vetUsers.push(Vusers[index]);
                     }
                 }
+                console.log("validUsers", vetUsers);
                 setValidUsers(vetUsers);
             } catch (error) {
                 console.error("Error al obtener contraseña del usuario:", error);
@@ -81,10 +83,15 @@ const Directory = () => {
         }
     };
 
+    const test = (item) => {
+        setDestinatary(item);
+        console.log(validUsers);
+    }
+
     const renderItem = ({ item }) => (
         <View style={styles.directoryBox}>
             <Pressable
-                onPress={() => setDestinatary(item)} // Set the selected user on press
+                onPress={() => test(item)} // Set the selected user on press
                 style={[
                     styles.directoryBox,
                     {

@@ -117,6 +117,20 @@ async function createNewChat(user, destinatary) {
   }
 }
 
+async function editProfile(user, userData) {
+  try {
+    console.log("user", user);
+    const userRef = ref(database, `users/${user}/`);
+    await set(userRef, userData);
+
+    // Log the success message
+    console.log("Profile edited in Firebase:", userData);
+  } catch (error) {
+    console.error("Error creating new chat:", error);
+    throw error;
+  }
+}
+
 async function getUsersPasswords() {
   const usersRef = ref(database, `users`);
   try {
@@ -145,4 +159,4 @@ const isFirebaseConnected = async () => {
   });
 };
 
-export { getMessages, getUser, newMessage, createNewChat, getUsersPasswords, isFirebaseConnected, updateChat };
+export { getMessages, getUser, newMessage, createNewChat, getUsersPasswords, isFirebaseConnected, updateChat, editProfile };

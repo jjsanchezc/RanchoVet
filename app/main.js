@@ -71,7 +71,7 @@ const Main = () => {
   };
 
   const perfil = () => {
-
+    router.push("/profile");
   };
 
   return (

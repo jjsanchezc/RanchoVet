@@ -5,8 +5,8 @@ import { ColorSpace } from "react-native-reanimated";
 
 export const styles = StyleSheet.create({
 	loginBox: {
-		width: "50%", // Adjust the width as needed
-		backgroundColor: COLORS.primary,
+		width: "80%", // Adjust the width as needed
+		backgroundColor: COLORS.background,
 		padding: 20,
 		borderRadius: 10,
 		elevation: 5,
@@ -30,6 +30,18 @@ export const styles = StyleSheet.create({
 		borderRadius: 5,
 		padding: 10,
 		marginBottom: 20,
+	},
+	loginbutton: {
+		backgroundColor: COLORS.tertiary,
+		padding: 12,
+		marginVertical: 10,
+		borderRadius: 50,
+		elevation: 1,
+	},
+	loginbuttonText: {
+		textAlign: "center",
+		color: "#fff",
+		fontWeight: "600",
 	},
 	inputWrapper: {
 		flexDirection: "row", // Alinea los elementos en fila horizontalmente
@@ -55,7 +67,6 @@ export const styles = StyleSheet.create({
 		justifyContent: "center",
 	},
 	logininput: {
-		orderWidth: 1,
 		borderColor: COLORS.secondary,
 		borderRadius: 5,
 		padding: 10,
