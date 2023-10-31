@@ -19,3 +19,9 @@ npm install -g eas-cli
 @expo/ngrok@^4.1.0
 npx expo start --tunnel
 npx eas build -p android --profile preview
+
+# Instalación con Docker
+## Solo la primera vez 
+-  docker-compose up --build
+## Resto de veces
+- docker-compose up
