@@ -21,7 +21,7 @@ RUN npm install && \
     npm install react-native-svg@13.4.0
 # Exponer el puerto 19000 para Metro Bundler
 EXPOSE 19000
-
+EXPOSE 5000
 # Exponer el puerto 19001 para el Debugger
 #EXPOSE 19001
 
