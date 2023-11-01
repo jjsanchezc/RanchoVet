@@ -41,6 +41,7 @@
     },
     "plugins": [
       "expo-localization"
-    ]
+    ],
+    "owner": "ranchovetteam"
   }
 }
