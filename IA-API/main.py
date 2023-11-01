@@ -1,9 +1,10 @@
 from flask import Flask, request, jsonify
 import firebase_admin
 from firebase_admin import credentials, db
+from flask_cors import CORS
 
 app = Flask(__name__)
-
+CORS(app, resources={r"/*": {"origins": "*"}})
 '''# Inicializar la app de Firebase
 cred = credentials.Certificate('path/to/serviceAccountKey.json')  # Reemplaza con la ruta de tu archivo JSON de credenciales
 firebase_admin.initialize_app(cred, {
@@ -15,8 +16,8 @@ firebase_admin.initialize_app(cred, {
 def get_data():
     #ref = db.reference('/data')  # Reemplaza con la ruta de tu base de datos en Firebase
     #data = ref.get()
-    
-    return jsonify({"hola":"holaaaa"})
+    print('ENTROOOO')
+    return "jsonify({'message': 'Respuesta a la solicitud GET'})"
 
 # Ruta para obtener valores de Firebase con un parámetro entero
 @app.route('/get_data_by_id/<int:item_id>', methods=['GET'])
@@ -26,4 +27,4 @@ def get_data_by_id(item_id):
     return jsonify(item)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,host="0.0.0.0")

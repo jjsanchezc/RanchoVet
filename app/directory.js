@@ -11,7 +11,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Menu from "../components/Menu/Menu";
 import RatingStars from "../components/forums/stars";
 import { ScrollView } from "react-native";
-
+import axios from "axios";
 const translations = {
   "en-US": {
     selectFilter: "Select Filter",
@@ -75,10 +75,6 @@ const Directory = () => {
 
   const clear = () => {
     setDestinatary({});
-  };
-
-  const handleFilterChange = (value) => {
-    setFilterBy(value); // Almacena la opción seleccionada
   };
 
   const handleCreateRoom = async () => {
@@ -222,19 +218,31 @@ const Directory = () => {
     </View>
   );
 
-  const handleSearch = () => {
+  const handleFilterChange = (itemValue) => {
+    console.log("Entra a handleFilter con el valor ", itemValue);
+    setFilterBy(itemValue);
+    console.log("Debug");
+    handleSearch(itemValue);
+    console.log("Debug");
+    setDropdownVisible(false);
+  };
+
+  const handleSearch = (filterBy) => {
     // Aquí puedes implementar la lógica de búsqueda según la opción seleccionada (filterBy)
     // Por ejemplo, filtrar la lista de veterinarios
     // ...lógica de filtrado
+      axios.get('http://127.0.0.1:5000/get_dataa')
+    .then(response => {
+      console.log("hay respuesta ",response.data); // Haz lo que necesites con los datos de la respuesta
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+    console.log("Debug");
     console.log("Realizar búsqueda con filtro:", filterBy);
   };
 
-
   const renderFilter = () => {
-    const handleFilterChange = (itemValue) => {
-      setFilterBy(itemValue);
-      setDropdownVisible(false);
-    };
 
     const options = [
       { label: t.selectFilter, value: "" },
@@ -243,8 +251,7 @@ const Directory = () => {
       { label: t.rating, value: "Calificación" },
       { label: t.specialization, value: "Especialización" },
     ];
-
-
+    
     return (
       <View style={styles.container}>
         <TouchableOpacity
