@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, Button } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { editProfile } from "../database/firebase";
+import Menu from "../components/Menu/Menu";
 
 const ProfileScreen = () => {
     const [userProfile, setUserProfile] = useState({});
@@ -87,6 +88,7 @@ const ProfileScreen = () => {
                     <Button title="Edit" onPress={() => setEditing(true)} />
                 </View>
             )}
+            <Menu />
         </View>
     );
 };
