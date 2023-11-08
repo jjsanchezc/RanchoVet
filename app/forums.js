@@ -7,6 +7,24 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getForums } from "../database/firebase";
 import { styles } from "../utils/styles";
 import * as constantes from "../constants";
+import { ScrollView } from "react-native";
+import Likes from "../components/forums/likes";
+
+const translations = {
+  'en-US': {
+    askYourQuestion: "Ask your question here",
+    createQuestion: "CREATE QUESTION",
+    error: "Error",
+    pleaseEnterQuestion: "Please enter a question.",
+  },
+  'es-ES': {
+    askYourQuestion: "Realiza tu pregunta aquí",
+    createQuestion: "CREAR PREGUNTA",
+    error: "Error",
+    pleaseEnterQuestion: "Por favor ingresa una pregunta.",
+  },
+  // otros idiomas
+};
 
 const Forums = () => {
   const [threadList, setThreadList] = useState({});
