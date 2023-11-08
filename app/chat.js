@@ -73,7 +73,6 @@ const Chat = () => {
         const chatData = await getData(userData.chats[chatid]);
         //console.log('Chat data:', userData.chats[chatid], chatData);
         r.push(chatData);
-        setRooms(r);
         chatIdentifiers.push(chatid);
       }
       setRooms(r);
