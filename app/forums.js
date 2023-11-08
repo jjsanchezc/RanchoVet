@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Comments from "../components/forums/comments";
-import { createNewForum } from "../database/firebase";
+import Likes from "../components/forums/likes";
+import { createNewForum, getLikeCount } from "../database/firebase";
 import { useRouter } from "expo-router";
 import { View, TextInput, Text, Alert, Button } from "react-native";
 import * as Localization from "expo-localization";
@@ -131,6 +132,8 @@ const Forums = () => {
               <Comments
                 navigateToReplies={() => navigate.push({ pathname: "/Replies", params: { threadId, title: threadList[threadId].title.title }})}
               />
+              <Likes threadId={threadId}/>
+              
             </View>
           ))}
         </View>
