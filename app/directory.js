@@ -223,7 +223,6 @@ const Directory = () => {
     setFilterBy(itemValue);
     console.log("Debug");
     handleSearch(itemValue);
-    console.log("Debug");
     setDropdownVisible(false);
   };
 
@@ -231,7 +230,8 @@ const Directory = () => {
     // Aquí puedes implementar la lógica de búsqueda según la opción seleccionada (filterBy)
     // Por ejemplo, filtrar la lista de veterinarios
     // ...lógica de filtrado
-      axios.get('http://127.0.0.1:5000/get_dataa')
+    console.log(typeof validUsers)
+      axios.post('http://127.0.0.1:5000/get_dataa',validUsers)
     .then(response => {
       console.log("hay respuesta ",response.data); // Haz lo que necesites con los datos de la respuesta
     })

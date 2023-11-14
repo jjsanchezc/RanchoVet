@@ -1,13 +1,11 @@
 FROM python:3.9.12-alpine
 
-RUN mkdir /API
 
 WORKDIR /API
 
+COPY . /API
 
-COPY . /API/
-
-RUN pip3 install -r /API/requirements.txt
+RUN pip3 install -r requirements.txt
 
 EXPOSE 5000
 
