@@ -25,9 +25,10 @@ def get_data():
     #print(data)
     # Extraer usuarios de los datos
     users = []
+    print(str(type(request.json)))
 
     # Devolver los usuarios como JSON
-    return jsonify({"a":type(request.json())})
+    return request.json
 
 '''# Ruta para obtener valores de Firebase con un parámetro entero
 @app.route('/get_data_by_id/<int:item_id>', methods=['GET'])
