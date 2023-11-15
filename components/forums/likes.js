@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { View, TouchableOpacity, Text } from "react-native";
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRoute } from "@react-navigation/native";
@@ -10,35 +10,44 @@ const Likes = ({ threadId }) => {
 	const navigate = useRoute();
 
 	//Get like count
-	useEffect(() => {
-		const loadLikeCount = async () => {
-			try {
-				const likes = await getLikeCount(threadId);
-				setLikeCount(likes);
-			} catch (error) {
-				console.error("Error getting like count:", error);
-			}
-		};
+	useLayoutEffect(() => {
 		loadLikeCount();
 	}, []);
 
+	useEffect(() => {
+		const intervalId = setInterval(() => {
+			loadLikeCount();
+		}, 200);
+		return () => clearInterval(intervalId);
+	}, [loadLikeCount]);
+
+	async function loadLikeCount() {
+		try {
+			const likes = await getLikeCount(threadId);
+			setLikeCount(likes);
+		} catch (error) {
+			console.error("Error getting like count:", error);
+		}
+	};
+
 	// Get username and create like
 	const createLike = async () => {
-		try{
+		try {
 			const userId = await AsyncStorage.getItem("username");
-			if (!userId){
+			if (!userId) {
 				navigate("/");
 				return;
 			}
 			await likeForum(threadId, userId);
 		} catch (error) {
 			console.error("Error creating like:", error);
-		}}
+		}
+	}
 
 	return (
 		<View>
 			<TouchableOpacity onPress={createLike} style={{ alignSelf: 'flex-end', marginRight: 20 }}>
-				<MaterialIcons name="thumb-up" size={24} color="#CF5C36" />				
+				<MaterialIcons name="thumb-up" size={24} color="#CF5C36" />
 			</TouchableOpacity>
 			<Text style={{ alignSelf: 'flex-end', marginRight: 20 }}>{likeCount}</Text>
 		</View>
