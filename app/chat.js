@@ -8,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { Feather } from "@expo/vector-icons";
@@ -24,13 +25,11 @@ const translations = {
     search: "Search",
     searchPlaceholder: "Search",
     noChats: "No chats created!",
-    clickToStart: "Click on the icon above to start a new chat",
   },
   "es-ES": {
     search: "Buscar",
     searchPlaceholder: "Buscar",
     noChats: "No hay chats creados!",
-    clickToStart: "Dale click en el ícono de arriba para iniciar un nuevo chat",
   },
 };
 
@@ -38,14 +37,22 @@ const Chat = () => {
   const router = useRouter();
   const [rooms, setRooms] = useState([]);
   const [user_type, setuser_type] = useState("");
-  var user = "";
+  const [user, setUser] = useState("");
   const chatIdentifiers = [];
   const locale = Localization.locale;
   const language = locale.split("-")[0];
   const t =
     translations[locale] || translations[language] || translations["es-ES"];
 
-  useLayoutEffect(() => {}, []);
+  useLayoutEffect(() => {
+    const values = async () => {
+      setUser(await AsyncStorage.getItem("username"));
+      console.log("user", user);
+      setuser_type(await AsyncStorage.getItem("user_type"));
+      getChats();
+    };
+    values();
+  }, []);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -57,20 +64,20 @@ const Chat = () => {
   const handleCreateGroup = () => router.push("/directory");
 
   async function getChats() {
-    user = await AsyncStorage.getItem("username");
-    setuser_type(await AsyncStorage.getItem("user_type"));
-    await fetchDataAndStoreLocally(user);
-    const userData = await getData(user);
-    //console.log("user data chats", userData.chats);
-    const r = [];
-    for (const chatid in userData.chats) {
-      const chatData = await getData(userData.chats[chatid]);
-      //console.log('Chat data:', userData.chats[chatid], chatData);
-      r.push(chatData);
-      chatIdentifiers.push(chatid);
+    if (user) {
+      fetchDataAndStoreLocally(user);
+      const userData = await getData(user);
+      //console.log("user data chats", userData.chats);
+      const r = [];
+      for (const chatid in userData.chats) {
+        const chatData = await getData(userData.chats[chatid]);
+        //console.log('Chat data:', userData.chats[chatid], chatData);
+        r.push(chatData);
+        chatIdentifiers.push(chatid);
+      }
+      setRooms(r);
+      //console.log("rooms", r);
     }
-    setRooms(r);
-    //console.log("rooms", r);
   }
   const [searchText, setSearchText] = useState("");
   const handleSearch = () => {
@@ -112,8 +119,7 @@ const Chat = () => {
           />
         ) : (
           <View style={styles.chatemptyContainer}>
-            <Text style={styles.chatemptyText}>{t.noChats}</Text>
-            <Text>{t.clickToStart}</Text>
+            <ActivityIndicator size="large" color="#CF5C36" />
           </View>
         )}
       </View>
