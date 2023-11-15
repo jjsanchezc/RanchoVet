@@ -1,4 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { View, Text, TextInput, Button, Image, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { editProfile, uploadImage } from "../database/firebase";
+import * as ImagePicker from 'expo-image-picker';
+import { Alert } from 'react-native';
 import * as constantes from "../constants";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { editProfile } from "../database/firebase";
@@ -24,6 +29,7 @@ const ProfileScreen = () => {
     const [userProfile, setUserProfile] = useState({});
     const [editing, setEditing] = useState(false);
     const [user, setUser] = useState("");
+    const [imageUri, setImageUri] = useState("");
 
     useEffect(() => {
         const getUsername = async () => {
@@ -47,6 +53,21 @@ const ProfileScreen = () => {
         setEditing(false);
         // Add logic to handle the updated profile data
     };
+
+    const onChooseImagePress = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync();
+        if (!result.cancelled) {
+            uploadImage(result.uri,userProfile.name+" profile")
+                .then((imageUrl) => {
+                    Alert.alert("Success");
+                    setUserProfile({ ...userProfile, image: imageUrl }); // Update the userProfile.image with the imageUrl
+                })
+                .catch((error) => {
+                    Alert.alert(error);
+                    console.log(error)
+                });
+        }
+    }
 
     return (
         <View style={styles.directoryscreen}>
@@ -80,7 +101,7 @@ const ProfileScreen = () => {
                         onChangeText={(text) => setUserProfile({ ...userProfile, location: text })}
                         style = {styles.distribution}
                     />
-        
+                    <Button title="Choose image..." onPress={onChooseImagePress} />
                     {userProfile.type === 'vet' && (
                         <View>
                             <Text style={styles.profileDetailsText}>Correo </Text> 
@@ -115,6 +136,10 @@ const ProfileScreen = () => {
                     <Text style={styles.profileDetailsText} >Dirección </Text>
                      <Text> {userProfile.location}</Text>
                     <Text style={styles.profileDetailsText} >Ocupación</Text> 
+                    <Image
+                        source={{ uri: userProfile.image }}
+                        style={{ width: 100, height: 100 }} // Puedes ajustar el tamaño de la imagen según tus necesidades
+                    />
 
                     {userProfile.type === 'vet' && (
                         <View>

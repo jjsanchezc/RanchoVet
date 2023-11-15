@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getDatabase, ref, set, get, push, onValue } from "firebase/database";
 import { saveData } from "./localdatabase";
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAXD32UYLrtra2OMgyxDC-Y9_M0HOctWA8",
@@ -18,6 +19,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 const database = getDatabase(app);
+const storage = getStorage(app);
 
 async function getUser(user) {
   const usersRef = ref(database, `users/${user}`);
@@ -224,4 +226,21 @@ const isFirebaseConnected = async () => {
   });
 };
 
-export { getMessages, getUser, newMessage, createNewChat, createNewForum, createNewReply, getReplies, getForums, getUsersPasswords, isFirebaseConnected, updateChat, editProfile };
+const uploadImage = async (uri, imageName) => {
+  const response = await fetch(uri);
+  const blob = await response.blob();
+  const storageReference = storageRef(storage, "images/" + imageName);
+
+  try {
+    const snapshot = await uploadBytes(storageReference, blob);
+    // Obtain the URL of the uploaded image
+    const downloadURL = await getDownloadURL(storageReference);
+
+    return downloadURL;
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    throw error;
+  }
+}
+
+export { getMessages, getUser, newMessage, createNewChat, createNewForum, createNewReply, getReplies, getForums, getUsersPasswords, isFirebaseConnected, updateChat, editProfile, uploadImage };
