@@ -73,9 +73,11 @@ const Main = () => {
             <Text style={styles.mainMenuButtonText}>{t.directory}</Text>
           </TouchableOpacity>
         )}
-        <TouchableOpacity style={styles.mainMenuButton} onPress={bitacora}>
-          <Text style={styles.mainMenuButtonText}>{t.journal}</Text>
-        </TouchableOpacity>
+        {user_type !== "vet" && (
+          <TouchableOpacity style={styles.mainMenuButton} onPress={bitacora}>
+            <Text style={styles.mainMenuButtonText}>{t.journal}</Text>
+          </TouchableOpacity>
+        )}
         <TouchableOpacity style={styles.mainMenuButton} onPress={perfil}>
           <Text style={styles.mainMenuButtonText}>{t.profile}</Text>
         </TouchableOpacity>
