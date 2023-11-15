@@ -1,12 +1,35 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, Button } from 'react-native';
+import { View, Text, TextInput, Button, Image, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { editProfile, uploadImage } from "../database/firebase";
+import * as ImagePicker from 'expo-image-picker';
+import { Alert } from 'react-native';
+import * as constantes from "../constants";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { editProfile } from "../database/firebase";
+import Menu from "../components/Menu/Menu";
+import { Feather } from "@expo/vector-icons";
+import {
+    SafeAreaView,
+    StyleSheet,
+    ScrollView,
+    View,
+    Text,
+    Pressable,
+    StatusBar,
+    FlatList,
+    TextInput, 
+    Button,
+    TouchableOpacity
+  } from 'react-native';
+  import { styles } from "../utils/styles";
+  import { Ionicons } from "@expo/vector-icons";
 
 const ProfileScreen = () => {
     const [userProfile, setUserProfile] = useState({});
     const [editing, setEditing] = useState(false);
     const [user, setUser] = useState("");
+    const [imageUri, setImageUri] = useState("");
 
     useEffect(() => {
         const getUsername = async () => {
@@ -31,62 +54,113 @@ const ProfileScreen = () => {
         // Add logic to handle the updated profile data
     };
 
+    const onChooseImagePress = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync();
+        if (!result.cancelled) {
+            uploadImage(result.uri,userProfile.name+" profile")
+                .then((imageUrl) => {
+                    Alert.alert("Success");
+                    setUserProfile({ ...userProfile, image: imageUrl }); // Update the userProfile.image with the imageUrl
+                })
+                .catch((error) => {
+                    Alert.alert(error);
+                    console.log(error)
+                });
+        }
+    }
+
     return (
-        <View>
+        <View style={styles.directoryscreen}>
+            <View>
+              <Ionicons
+                name="person-circle-outline"
+                size={200}
+                color="black"
+                style={styles.cavatar}
+              />
+            </View>
             {editing ? (
                 <View>
-                    <Text>Edit Profile</Text>
+                    <Text style={styles.profileDetailsText}>Usuario </Text> 
+                    <TextInput
+                    />
+
+                    <Text style={styles.profileDetailsText}>Contraseña </Text>
+                    <TextInput
+                    />
+
+                    <Text style={styles.profileDetailsText} >Nombre</Text>
                     <TextInput
                         value={userProfile.name}
                         onChangeText={(text) => setUserProfile({ ...userProfile, name: text })}
+                        style = {styles.distribution}
                     />
+                    <Text style={styles.profileDetailsText} >Dirección</Text>
                     <TextInput
                         value={userProfile.location}
                         onChangeText={(text) => setUserProfile({ ...userProfile, location: text })}
+                        style = {styles.distribution}
                     />
-                    <TextInput
-                        value={userProfile.image}
-                        onChangeText={(text) => setUserProfile({ ...userProfile, image: text })}
-                    />
+                    <Button title="Choose image..." onPress={onChooseImagePress} />
                     {userProfile.type === 'vet' && (
                         <View>
+                            <Text style={styles.profileDetailsText}>Correo </Text> 
                             <TextInput
                                 value={userProfile.vet_data.mail}
                                 onChangeText={(text) => setUserProfile({ ...userProfile, vet_data: { ...userProfile.vet_data, mail: text } })}
                             />
+                            <Text style={styles.profileDetailsText}>Celular </Text> 
                             <TextInput
                                 value={userProfile.vet_data.phone}
                                 onChangeText={(text) => setUserProfile({ ...userProfile, vet_data: { ...userProfile.vet_data, phone: text } })}
                             />
+                            <Text style={styles.profileDetailsText}>Precios </Text> 
                             <TextInput
                                 value={userProfile.vet_data.prices}
                                 onChangeText={(text) => setUserProfile({ ...userProfile, vet_data: { ...userProfile.vet_data, prices: text } })}
                             />
-                            <TextInput
-                                value={userProfile.vet_data.specialty}
-                                onChangeText={(text) => setUserProfile({ ...userProfile, vet_data: { ...userProfile.vet_data, specialty: text } })}
-                            />
                         </View>
                     )}
-                    <Button title="Save" onPress={handleSave} />
+                    <Pressable onPress={handleSave} style = {styles.loginbutton}> 
+                      <Text style={styles.loginbuttonText}>Guardar </Text>
+                    </Pressable>
                 </View>
             ) : (
-                <View>
-                    <Text>View Profile</Text>
-                    <Text>Name: {userProfile.name}</Text>
-                    <Text>Location: {userProfile.location}</Text>
-                    <Text>Image: {userProfile.image}</Text>
+                <View  >
+                    <Text style={styles.profileDetailsText}>Usuario </Text>
+                     <Text> {userProfile.user} </Text>
+                    <Text style={styles.profileDetailsText}>Contraseña </Text>
+
+                    <Text style={styles.profileDetailsText}>Nombre </Text> 
+                     <Text>{userProfile.name} </Text>
+                    <Text style={styles.profileDetailsText} >Dirección </Text>
+                     <Text> {userProfile.location}</Text>
+                    <Text style={styles.profileDetailsText} >Ocupación</Text> 
+                    <Image
+                        source={{ uri: userProfile.image }}
+                        style={{ width: 100, height: 100 }} // Puedes ajustar el tamaño de la imagen según tus necesidades
+                    />
+
                     {userProfile.type === 'vet' && (
                         <View>
-                            <Text>Mail: {userProfile.vet_data.mail}</Text>
-                            <Text>Phone: {userProfile.vet_data.phone}</Text>
-                            <Text>Prices: {userProfile.vet_data.prices}</Text>
-                            <Text>Specialty: {userProfile.vet_data.specialty}</Text>
+                            <Text style={styles.profileDetailsText}>Correo </Text>
+                                <Text>{userProfile.vet_data.mail}</Text>
+                            <Text style={styles.profileDetailsText}>Celular </Text>
+                            <Text>{userProfile.vet_data.phone}</Text>
+                            <Text style={styles.profileDetailsText}>Precios</Text>
+                            <Text>{userProfile.vet_data.prices}</Text>
+                            <Text style={styles.profileDetailsText}>Especialidad </Text>
+                            <Text>{userProfile.vet_data.specialty}</Text>
                         </View>
                     )}
-                    <Button title="Edit" onPress={() => setEditing(true)} />
+                    <Pressable onPress={() => setEditing(true)} style = {styles.loginbutton}> 
+                      <Text style={styles.loginbuttonText}>Editar</Text>
+                    </Pressable>
+                       
+                    
                 </View>
             )}
+            <Menu />
         </View>
     );
 };

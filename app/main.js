@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState, useLayoutEffect, useEffect } from "react";
 import * as Localization from "expo-localization";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import { styles } from "../utils/styles";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const translations = {
   "en-US": {
@@ -23,7 +24,16 @@ const translations = {
 };
 
 const Main = () => {
+  const [user_type, setuser_type] = useState("");
   const router = useRouter();
+
+  useLayoutEffect(() => {
+    const values = async () => {
+      setuser_type(await AsyncStorage.getItem("user_type"));
+    };
+    values();
+  }, []);
+
   const locale = Localization.locale;
   const language = locale.split("-")[0];
   const t =
@@ -58,9 +68,11 @@ const Main = () => {
         <TouchableOpacity style={styles.mainMenuButton} onPress={foro}>
           <Text style={styles.mainMenuButtonText}>{t.forum}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.mainMenuButton} onPress={directorio}>
-          <Text style={styles.mainMenuButtonText}>{t.directory}</Text>
-        </TouchableOpacity>
+        {user_type !== "vet" && (
+          <TouchableOpacity style={styles.mainMenuButton} onPress={directorio}>
+            <Text style={styles.mainMenuButtonText}>{t.directory}</Text>
+          </TouchableOpacity>
+        )}
         <TouchableOpacity style={styles.mainMenuButton} onPress={bitacora}>
           <Text style={styles.mainMenuButtonText}>{t.journal}</Text>
         </TouchableOpacity>

@@ -487,6 +487,19 @@ export const styles = StyleSheet.create({
 		justifySelf: 'flex-end', 
 	},
 
+	distribution: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		padding: 20,
+	  },
+
+	profileDetailsText: {
+		fontSize: 16,
+		marginVertical: 8,
+		fontWeight: 'bold',
+	  },
+
 });
 	
 
