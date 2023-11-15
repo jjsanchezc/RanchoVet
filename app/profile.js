@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import * as constantes from "../constants";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { editProfile } from "../database/firebase";
+import Menu from "../components/Menu/Menu";
 import { Feather } from "@expo/vector-icons";
 import {
     SafeAreaView,
@@ -134,6 +135,7 @@ const ProfileScreen = () => {
                     
                 </View>
             )}
+            <Menu />
         </View>
     );
 };

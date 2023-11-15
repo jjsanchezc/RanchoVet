@@ -55,10 +55,11 @@ const Messaging = () => {
   };
 
   const handleNewMessage = async () => {
-    if (user) {
-      await sendMessage(room_id, message, user);
-      getRoom();
+    if (user && message.trim() !== "") {
+      const send = message;
       setMessage("");
+      await sendMessage(room_id, send, user);
+      getRoom();
       if (flatListRef.current) {
         flatListRef.current.scrollToEnd({ animated: true });
       }
