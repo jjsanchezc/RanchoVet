@@ -198,6 +198,43 @@ async function getForums() {
   }
 }
 
+// Like forum, if user already liked, delete like
+async function likeForum(forumId, userId) {
+  const likesRef = ref(database, `likes/${forumId}/${userId}`);
+  try {
+    const snapshot = await get(likesRef);
+    if (snapshot.exists()) {
+      const likeData = snapshot.val();
+      await set(ref(database, `likes/${forumId}/${userId}`), null);
+      console.log("Like deleted from Firebase:", likeData);
+    } else {
+      await set(ref(database, `likes/${forumId}/${userId}`), true);
+      console.log("Like added to Firebase:", userId);
+    }
+  } catch (error) {
+    console.error("Error liking forum:", error);
+    throw error; // Re-throw the error to handle it in the calling code
+  }
+}
+
+// Count of likes for a forum
+async function getLikeCount(forumId) {
+  const likesRef = ref(database, `likes/${forumId}`);
+  try {
+    const snapshot = await get(likesRef);
+    if (snapshot.exists()) {
+      const likesData = snapshot.val();
+      const count = Object.values(likesData).filter(value => value === true).length;
+      return count;
+    } else {
+      return 0;
+    }
+  } catch (error) {
+    console.error("Error retrieving likes:", error);
+    throw error; // Re-throw the error to handle it in the calling code
+  }
+}
+
 async function getUsersPasswords() {
   const usersRef = ref(database, `users`);
   try {
@@ -243,4 +280,4 @@ const uploadImage = async (uri, imageName) => {
   }
 }
 
-export { getMessages, getUser, newMessage, createNewChat, createNewForum, createNewReply, getReplies, getForums, getUsersPasswords, isFirebaseConnected, updateChat, editProfile, uploadImage };
+export { getMessages, getUser, newMessage, createNewChat, createNewForum, createNewReply, getReplies, getForums, likeForum, getLikeCount, getUsersPasswords, isFirebaseConnected, updateChat, editProfile, uploadImage };
