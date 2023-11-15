@@ -55,7 +55,7 @@ const Messaging = () => {
   };
 
   const handleNewMessage = async () => {
-    if (user) {
+    if (user && message.trim() !== "") {
       await sendMessage(room_id, message, user);
       getRoom();
       setMessage("");
