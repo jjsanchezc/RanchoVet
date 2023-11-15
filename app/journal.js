@@ -16,6 +16,7 @@ const translations = {
     viewDetails: "View details",
     edit: "Edit",
     goBack: "Go Back",
+    create: "Create New Entry",
     errorFetchingUserPassword: "Error fetching user's password",
   },
   "es-ES": {
@@ -24,6 +25,7 @@ const translations = {
     viewDetails: "Ver detalles",
     edit: "Editar",
     goBack: "Regresar",
+    create: "Crear nueva entrada",
     errorFetchingUserPassword: "Error al obtener contraseña del usuario",
   },
 };
@@ -37,6 +39,7 @@ const Journal = () => {
   const t =
     translations[locale] || translations[language] || translations["es-ES"];
 
+  // Get Journals
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -161,6 +164,14 @@ const Journal = () => {
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
           />
+          <View style={styles.modalbuttonContainer}>
+            <Pressable
+              style={[styles.modalbutton, { backgroundColor: "#E14D2A" }]}
+              onPress={() => router.push("/newJournal")}
+            >
+              <Text style={styles.modaltext}>{t.create}</Text>
+            </Pressable>
+            </View>
         </View>
       )}
       <Menu />

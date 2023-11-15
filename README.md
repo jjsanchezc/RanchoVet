@@ -10,6 +10,7 @@ npx expo install socket.io-client
 npx expo install react-router-dom
 npx expo install react-hook-form
 npx expo install firebase
+npx expo install react-native-dropdown-select-list
 
 Servidor
 npm install

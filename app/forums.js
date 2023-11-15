@@ -133,7 +133,6 @@ const Forums = () => {
                 navigateToReplies={() => navigate.push({ pathname: "/Replies", params: { threadId, title: threadList[threadId].title.title }})}
               />
               <Likes threadId={threadId}/>
-              
             </View>
           ))}
         </View>
