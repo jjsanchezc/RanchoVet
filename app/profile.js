@@ -1,25 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, Button, Image, StyleSheet } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { editProfile, uploadImage } from "../database/firebase";
 import * as ImagePicker from 'expo-image-picker';
 import { Alert } from 'react-native';
 import * as constantes from "../constants";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { editProfile } from "../database/firebase";
 import Menu from "../components/Menu/Menu";
 import { Feather } from "@expo/vector-icons";
 import {
     SafeAreaView,
-    StyleSheet,
     ScrollView,
-    View,
-    Text,
     Pressable,
     StatusBar,
     FlatList,
-    TextInput, 
-    Button,
     TouchableOpacity
   } from 'react-native';
   import { styles } from "../utils/styles";

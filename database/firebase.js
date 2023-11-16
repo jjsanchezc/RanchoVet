@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { getDatabase, ref, set, get, push, onValue } from "firebase/database";
 import { saveData } from "./localdatabase";
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -243,4 +243,13 @@ const uploadImage = async (uri, imageName) => {
   }
 }
 
-export { getMessages, getUser, newMessage, createNewChat, createNewForum, createNewReply, getReplies, getForums, getUsersPasswords, isFirebaseConnected, updateChat, editProfile, uploadImage };
+const authUser = async (mail, userPasword) => {
+  const response = await signInWithEmailAndPassword(auth, mail, userPasword)
+}
+
+const createUser = async (mail, userPasword, username, type) => {
+  const response = await createUserWithEmailAndPassword(auth, mail, userPasword)
+
+}
+
+export { getMessages, getUser, newMessage, createNewChat, createNewForum, createNewReply, getReplies, getForums, getUsersPasswords, isFirebaseConnected, updateChat, editProfile, uploadImage, authUser, createUser };

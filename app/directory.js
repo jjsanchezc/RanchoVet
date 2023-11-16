@@ -6,6 +6,8 @@ import {
   Modal,
   FlatList,
   Button,
+  Image,
+  StyleSheet,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { styles } from "../utils/styles";
@@ -128,13 +130,29 @@ const Directory = () => {
     }
   };
 
+  const combinedStyles = StyleSheet.create({
+    ...styles,
+    circleContainer: {
+      width: 100,
+      height: 100,
+      borderRadius: 50,
+      overflow: "hidden",
+    },
+    circleImage: {
+      width: "100%",
+      height: "100%",
+      resizeMode: "cover",
+      borderRadius: 50,
+    },
+  });
+
   const renderItem = ({ item }) => (
-    <ScrollView style={styles.scrollView}>
-      <View style={styles.directoryBox}>
+    <ScrollView style={combinedStyles.scrollView}>
+      <View style={combinedStyles.directoryBox}>
         <Pressable
           onPress={() => setDestinatary(item)} // Set the selected user on press
           style={[
-            styles.directoryBox,
+            combinedStyles.directoryBox,
             {
               borderColor: "#D3D5D7",
               borderBottomWidth: 2,
@@ -142,12 +160,10 @@ const Directory = () => {
             },
           ]}
         >
-          <View>
-            <Ionicons
-              name="person-circle-outline"
-              size={80}
-              color="black"
-              style={styles.cavatar}
+          <View style={combinedStyles.circleContainer}>
+            <Image
+              source={{ uri: item.image }}
+              style={combinedStyles.circleImage}
             />
           </View>
           <View>
@@ -183,12 +199,12 @@ const Directory = () => {
   const renderItemDetails = () => (
     <View style={styles.directoryDetailsText}>
       <View>
-        <Ionicons
-          name="person-circle-outline"
-          size={80}
-          color="black"
-          style={styles.cavatar}
-        />
+          <View style={combinedStyles.circleContainer}>
+            <Image
+              source={{ uri: destinatary.image }}
+              style={combinedStyles.circleImage}
+            />
+          </View>
         <Text>{destinatary.name}</Text>
         <RatingStars rating={destinatary.vet_data.rating} maxRating={5} />
         <Text>
