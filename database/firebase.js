@@ -217,6 +217,20 @@ async function likeForum(forumId, userId) {
   }
 }
 
+// New journal entry
+async function newJournalEntry(user, folder, name, species, veterinary) {
+  const journalRef = ref(database, `users/${user}/journal`);
+  try {
+    const newJournalRef = await push(journalRef, { folder, name, species, veterinary });
+    const newJournalId = newJournalRef.key; // Get the auto-generated ID
+    console.log("New journal entry added to Firebase with ID:", newJournalId);
+    return newJournalId;
+  } catch (error) {
+    console.error("Error sending journal entry:", error);
+    throw error; // Re-throw the error to handle it in the calling code
+  }
+}
+
 // Count of likes for a forum
 async function getLikeCount(forumId) {
   const likesRef = ref(database, `likes/${forumId}`);
@@ -280,4 +294,4 @@ const uploadImage = async (uri, imageName) => {
   }
 }
 
-export { getMessages, getUser, newMessage, createNewChat, createNewForum, createNewReply, getReplies, getForums, likeForum, getLikeCount, getUsersPasswords, isFirebaseConnected, updateChat, editProfile, uploadImage };
+export { getMessages, getUser, newMessage, createNewChat, newJournalEntry, createNewForum, createNewReply, getReplies, getForums, likeForum, getLikeCount, getUsersPasswords, isFirebaseConnected, updateChat, editProfile, uploadImage };
