@@ -231,6 +231,18 @@ async function newJournalEntry(user, folder, name, species, veterinary) {
   }
 }
 
+// Edit journal entry
+async function editJournalEntry(user, folder, name, species, veterinary, journalId) {
+  const journalRef = ref(database, `users/${user}/journal/${journalId}`);
+  try {
+    await set(journalRef, { folder, name, species, veterinary });
+    console.log("Journal entry edited in Firebase with ID:", journalId);
+  } catch (error) {
+    console.error("Error editing journal entry:", error);
+    throw error; // Re-throw the error to handle it in the calling code
+  }
+}
+
 // Count of likes for a forum
 async function getLikeCount(forumId) {
   const likesRef = ref(database, `likes/${forumId}`);
@@ -294,4 +306,4 @@ const uploadImage = async (uri, imageName) => {
   }
 }
 
-export { getMessages, getUser, newMessage, createNewChat, newJournalEntry, createNewForum, createNewReply, getReplies, getForums, likeForum, getLikeCount, getUsersPasswords, isFirebaseConnected, updateChat, editProfile, uploadImage };
+export { getMessages, getUser, newMessage, createNewChat, newJournalEntry, editJournalEntry, createNewForum, createNewReply, getReplies, getForums, likeForum, getLikeCount, getUsersPasswords, isFirebaseConnected, updateChat, editProfile, uploadImage };

@@ -1,6 +1,7 @@
 import { View, Text, Pressable, FlatList, Button } from "react-native";
 import React, { useState, useEffect } from "react";
 import { styles } from "../utils/styles";
+import { getUsersPasswords } from "../database/firebase";
 import * as Localization from "expo-localization";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
@@ -34,6 +35,7 @@ const Journal = () => {
   const router = useRouter();
   const [animal, setanimal] = useState({});
   const [validAnimals, setvalidAnimals] = useState([]);
+  const [validUsers, setValidUsers] = useState([]);
   const locale = Localization.locale;
   const language = locale.split("-")[0];
   const t =
@@ -61,6 +63,37 @@ const Journal = () => {
     };
     fetchData();
   }, []);
+
+  // Get Veterinarians
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const users = await getUsersPasswords();
+        const Vusers = Object.values(users);
+        const ids = Object.keys(users);
+        const vetUsers = [];
+        for (let index = 0; index < Vusers.length; index++) {
+          if (Vusers[index].type === "vet") {
+            Vusers[index].id = ids[index];
+            vetUsers.push({
+              key: Vusers[index].id,
+              value: Vusers[index].name, // Adjust this to the actual property you want to display
+            });
+          }
+        }
+        setValidUsers(vetUsers);
+      } catch (error) {
+        console.error("Error al obtener contraseña del usuario:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const getVeterinarianName = (vetId) => {
+    const vetUser = validUsers.find((user) => user.key === vetId);
+    return vetUser ? vetUser.value : "";
+  };
+
 
   const back = () => {
     router.back();
@@ -103,7 +136,7 @@ const Journal = () => {
               </Text>
               <Text style={styles.directoryText}>
                 {t.veterinarian}
-                {item.veterinary}
+                {getVeterinarianName(item.veterinary)}
               </Text>
             </View>
             <View style={styles.columnContainer}>
@@ -137,7 +170,7 @@ const Journal = () => {
         <View style={styles.modalbuttonContainer}>
           <Pressable
             style={[styles.modalbutton, { backgroundColor: "#E14D2A" }]}
-            onPress={handleCreateRoom}
+            onPress= {() => {router.push({ pathname: "/editJournal", params: { id: animal.id, name: animal.name, species: animal.species, veterinary: getVeterinarianName(animal.veterinary), entry: animal.folder }})}}
           >
             <Text style={styles.modaltext}>{t.edit}</Text>
           </Pressable>
