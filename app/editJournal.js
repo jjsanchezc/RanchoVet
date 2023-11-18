@@ -82,7 +82,7 @@ const newJournal = () => {
             species = params.species;
         }
         if (veterinary == "") {
-            veterinary = params.veterinary;
+            veterinary = params.veterinaryId;
         }
         if (entry == "") {
             entry = params.entry;
@@ -128,7 +128,7 @@ const newJournal = () => {
         <SelectList
             setSelected={(val) => setInputVeterinarian(val)}
             data={validUsers}
-            placeholder={params.veterinary}
+            placeholder={params.veterinaryName}
             save="key"
         />
 
