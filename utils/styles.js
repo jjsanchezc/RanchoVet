@@ -96,7 +96,7 @@ export const styles = StyleSheet.create({
 	mainMenuButton: {
 		borderRadius: 5,
 		width: "40%",
-		height: 50,
+		height: 70,
 		backgroundColor: "#CF5C36",
 		margin: 10,
 		justifyContent: "center",
@@ -105,6 +105,11 @@ export const styles = StyleSheet.create({
 	mainMenuButtonText: {
 		color: "white",
 		fontSize: 20,
+	},
+	mainMenuButtonSubText: {
+		color: "white",
+		fontSize: 10,
+		textAlign: "center",
 	},
 	//chat 
 	searchContainer: {
