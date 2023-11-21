@@ -200,9 +200,7 @@ async function fetchData(){
         <View style={styles.modalbuttonContainer}>
           <Pressable
             style={[styles.modalbutton, { backgroundColor: "#E14D2A" }]}
-            onPress= {() => {router.push({ pathname: "/editJournal", 
-            params: { id: animal.id, name: animal.name, species: animal.species,
-            veterinaryName: getVeterinarianName(animal.veterinary), veterinaryId: animal.veterinary, entry: animal.folder }})}}
+            onPress= {() => {router.push({ pathname: "/editJournal", params: { id: animal.id, name: animal.name, species: animal.species, veterinaryName: getVeterinarianName(animal.veterinary), veterinaryId: animal.veterinary, entry: animal.folder }})}}
           >
             <Text style={styles.modaltext}>{t.edit}</Text>
           </Pressable>
