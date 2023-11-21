@@ -11,6 +11,7 @@ npx expo install react-router-dom
 npx expo install react-hook-form
 npx expo install firebase
 npx expo install expo-image-picker@~14.1.1
+npx expo install react-native-dropdown-select-list
 
 Servidor
 npm install
