@@ -3,11 +3,9 @@ import { styles } from "../utils/styles";
 import * as Localization from "expo-localization";
 import { editJournalEntry, getUsersPasswords } from "../database/firebase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { View, TextInput, Text, Button } from "react-native";
+import { View, TextInput, Text, Pressable } from "react-native";
 import { SelectList } from "react-native-dropdown-select-list";
 import { useRouter, useLocalSearchParams } from "expo-router";
-import Menu from "../components/Menu/Menu";
-import * as constantes from "../constants";
 
 const translations = {
     "en-US": {
@@ -132,15 +130,17 @@ const newJournal = () => {
             placeholder={params.veterinaryName}
             save="key"
         />
-
-        <Button
-          title={t.edit}
-          color={constantes.COLORS.tertiary}
-          style={styles.forumButton}
-          onPress={() => {
-            edJournalEntry(inputName, inputSpecies, inputVeterinarian, inputEntry);
-            router.push("/journal");
-          }}/>
+        <View style={styles.modalbuttonContainer}>
+            <Pressable
+              style={[styles.modalbutton, { backgroundColor: "#E14D2A" }]}
+              onPress={() => {
+                edJournalEntry(inputName, inputSpecies, inputVeterinarian, inputEntry);
+                router.push("/journal");
+              }}
+            >
+              <Text style={styles.modaltext}>{t.edit}</Text>
+            </Pressable>
+        </View>
     </View>
   )
 };

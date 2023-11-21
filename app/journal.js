@@ -234,7 +234,7 @@ async function fetchData(){
             >
               <Text style={styles.modaltext}>{t.create}</Text>
             </Pressable>
-            </View>
+          </View>
         </View>
       )}
       <Menu />
