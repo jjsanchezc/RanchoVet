@@ -37,6 +37,7 @@ const newJournal = () => {
   const params = useLocalSearchParams();
   const router = useRouter();
   const locale = Localization.locale;
+  const language = locale.split("-")[0];
   const t =
     translations[locale] || translations[language] || translations["es-ES"];
 
