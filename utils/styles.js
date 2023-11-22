@@ -13,6 +13,14 @@ export const styles = StyleSheet.create({
 		elevation: 5,
 		alignItems: "center",
 	},
+	signupBox: {
+		width: "100%", // Adjust the width as needed
+		backgroundColor: COLORS.background,
+		padding: 20,
+		borderRadius: 5,
+		elevation: 5,
+		alignItems: "center",
+	},
 	logo: {
 		width: 100, // Adjust the width as needed
 		height: 100, // Adjust the height as needed
@@ -67,6 +75,10 @@ export const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 	},
+	signupinputContainer: {
+		alignItems: "center",
+		justifyContent: "center",
+	},
 	logininput: {
 		borderColor: COLORS.secondary,
 		borderRadius: 5,
@@ -75,6 +87,19 @@ export const styles = StyleSheet.create({
 		marginBottom: 5,
 		fontSize: 16,
 		flex: 1,
+	},
+	signupinput: {
+		width: 100,
+		height: 35,
+		borderColor: COLORS.secondary,
+		borderRadius: 5,
+		borderWidth: 4,
+		padding: 10,
+		marginBottom: 4,
+		fontSize: 10,
+	},signuptoggle: {
+		trackColor: {   false: "#767577", true: COLORS.secondary },
+		thumbColor: COLORS.secondary
 	},
 	mainMenuContainer: {
 		position: "absolute",

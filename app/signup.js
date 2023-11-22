@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, TextInput, Switch, Text, Button, Alert, Image, Pressable } from "react-native";
+import { View, TextInput, Switch, Text, SafeAreaView, Alert, Image, Pressable } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import { uploadImage, createUser } from "../database/firebase";
 import { styles } from "../utils/styles";
 import { Stack, useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { fetchDataAndStoreLocally } from "../database/localdatabase";
+import { COLORS } from "../constants";
 const SignupScreen = () => {
   const [username, setUsername] = useState('');
   const [EMAIL, setEMAIL] = useState('');
@@ -26,6 +27,8 @@ const SignupScreen = () => {
   const [validUsers, setValidUsers] = useState([]);
   const [validPass, setValidPass] = useState([]);
   const router = useRouter();
+  const [signUpInProgress, setSignUpInProgress] = useState(false);
+  
 
   const storeUsername = async (validUser) => {
     try {
@@ -37,6 +40,7 @@ const SignupScreen = () => {
       }, 1000);
       setTimeout(() => {
         router.push("/main");
+        setSignUpInProgress(false);
       }, 8000);
     } catch (e) {
       console.error("errorSavingUser");
@@ -82,6 +86,8 @@ const SignupScreen = () => {
   }, [number, prices, speciality]);
 
   const handleSignUp = async () => {
+    if (!signUpInProgress){
+      setSignUpInProgress(true);
     if (username.trim() && password.trim() && EMAIL.trim()) {
       try {
         const userId = await createUser(EMAIL, password, username, isVet, vetData, image, location); // Wait for createUser to return the user ID
@@ -106,17 +112,19 @@ const SignupScreen = () => {
     } else {
       setError("Username, email, and password are required.");
     }
+   }
   };
   return (
-    <View style={styles.loginscreen}>
-      <View style={styles.loginBox}>
-        <View style={styles.logininputContainer}>
+    <SafeAreaView style={styles.loginscreen}>
+      <View style={styles.signupBox}>
+      <View style={styles.inputWrapper}>
+        <View style={styles.signupinputContainer}>
           {/* Username */}
           <TextInput
             placeholder="Nombre"
             value={username}
             onChangeText={(text) => setUsername(text)}
-            style={styles.logininput}
+            style={styles.signupinput}
           />
 
           {/* EMAIL */}
@@ -124,7 +132,7 @@ const SignupScreen = () => {
             placeholder="Mail"
             value={EMAIL}
             onChangeText={(text) => setEMAIL(text)}
-            style={styles.logininput}
+            style={styles.signupinput}
           />
 
           {/* Password */}
@@ -133,7 +141,7 @@ const SignupScreen = () => {
             secureTextEntry
             value={password}
             onChangeText={(text) => setPassword(text)}
-            style={styles.logininput}
+            style={styles.signupinput}
           />
 
           {/* Location */}
@@ -141,9 +149,10 @@ const SignupScreen = () => {
             placeholder="Ubicacion"
             value={location}
             onChangeText={(text) => setLocation(text)}
-            style={styles.logininput}
+            style={styles.signupinput}
           />
         </View>
+          </View>
 
         {/* Toggle Bar */}
         <View style={styles.inputWrapper}>
@@ -151,32 +160,34 @@ const SignupScreen = () => {
           <Switch
             value={isVet}
             onValueChange={(value) => setIsVet(value)}
+            trackColor={{ false: "#767577", true: COLORS.secondary }} // Change the colors to your preference
+            thumbColor={isVet ? COLORS.tertiary : "#f4f3f4"}
           />
           <Text>Vet</Text>
         </View>
 
         {/* Vet-specific inputs */}
         {isVet && (
-          <View style={styles.logininputContainer}>
+          <View style={styles.signupinputContainer}>
             <TextInput
               placeholder="Numero telefonico"
               value={number}
               onChangeText={(text) => setNumber(text)}
-              style={styles.logininput}
+              style={styles.signupinput}
             />
 
             <TextInput
               placeholder="Precios"
               value={prices}
               onChangeText={(text) => setPrices(text)}
-              style={styles.logininput}
+              style={styles.signupinput}
             />
 
             <TextInput
               placeholder="Especilidad"
               value={speciality}
               onChangeText={(text) => setSpeciality(text)}
-              style={styles.logininput}
+              style={styles.signupinput}
             />
           </View>
         )}
@@ -195,7 +206,7 @@ const SignupScreen = () => {
         </Pressable>
         {error ? <Text style={styles.errorText}>{error}</Text> : null}
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
