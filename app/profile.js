@@ -62,7 +62,11 @@ const ProfileScreen = () => {
                         source={{ uri: userProfile.image }}
                         style={{ width: 100, height: 100 }} // Puedes ajustar el tamaño de la imagen según tus necesidades
                     />
-                    <Button title="Choose image..." onPress={onChooseImagePress} />
+                    <Pressable onPress={() => { onChooseImagePress(); }} style={styles.searchButton}>
+                        <View>
+                            <Text style={styles.loginbuttonText}>{"Elegir imagen"}</Text>
+                        </View>
+                    </Pressable>
 
                     <Text style={styles.profileDetailsText}>Contraseña </Text>
                     <TextInput

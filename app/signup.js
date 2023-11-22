@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, TextInput, Switch, Text, Button, Alert, Image } from "react-native";
+import { View, TextInput, Switch, Text, Button, Alert, Image, Pressable } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import { uploadImage, createUser } from "../database/firebase";
 import { styles } from "../utils/styles";
@@ -26,7 +26,7 @@ const SignupScreen = () => {
   const [validUsers, setValidUsers] = useState([]);
   const [validPass, setValidPass] = useState([]);
   const router = useRouter();
-  
+
   const storeUsername = async (validUser) => {
     try {
       const userIdIndex = validUsers.indexOf(validUser); // Find the index of the valid user
@@ -42,7 +42,7 @@ const SignupScreen = () => {
       console.error("errorSavingUser");
     }
   };
-    
+
   const onChooseImagePress = async () => {
     try {
       const result = await ImagePicker.launchImageLibraryAsync();
@@ -93,7 +93,7 @@ const SignupScreen = () => {
           user_type: isVet ? "vet" : "user",
         };
         setTimeout(() => {
-            storeUsername(newUser);
+          storeUsername(newUser);
         }, 5000);
       } catch (error) {
         if (error.code === 'auth/email-already-in-use') {
@@ -110,38 +110,40 @@ const SignupScreen = () => {
   return (
     <View style={styles.loginscreen}>
       <View style={styles.loginBox}>
-        {/* Username */}
-        <TextInput
-          placeholder="Username"
-          value={username}
-          onChangeText={(text) => setUsername(text)}
-          style={styles.logininput}
-        />
+        <View style={styles.logininputContainer}>
+          {/* Username */}
+          <TextInput
+            placeholder="Nombre"
+            value={username}
+            onChangeText={(text) => setUsername(text)}
+            style={styles.logininput}
+          />
 
-        {/* EMAIL */}
-        <TextInput
-          placeholder="EMAIL"
-          value={EMAIL}
-          onChangeText={(text) => setEMAIL(text)}
-          style={styles.logininput}
-        />
+          {/* EMAIL */}
+          <TextInput
+            placeholder="Mail"
+            value={EMAIL}
+            onChangeText={(text) => setEMAIL(text)}
+            style={styles.logininput}
+          />
 
-        {/* Password */}
-        <TextInput
-          placeholder="Password"
-          secureTextEntry
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-          style={styles.logininput}
-        />
+          {/* Password */}
+          <TextInput
+            placeholder="Contraseña"
+            secureTextEntry
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            style={styles.logininput}
+          />
 
-        {/* Location */}
-        <TextInput
-          placeholder="Location"
-          value={location}
-          onChangeText={(text) => setLocation(text)}
-          style={styles.logininput}
-        />
+          {/* Location */}
+          <TextInput
+            placeholder="Ubicacion"
+            value={location}
+            onChangeText={(text) => setLocation(text)}
+            style={styles.logininput}
+          />
+        </View>
 
         {/* Toggle Bar */}
         <View style={styles.inputWrapper}>
@@ -155,23 +157,23 @@ const SignupScreen = () => {
 
         {/* Vet-specific inputs */}
         {isVet && (
-          <View>
+          <View style={styles.logininputContainer}>
             <TextInput
-              placeholder="Number"
+              placeholder="Numero telefonico"
               value={number}
               onChangeText={(text) => setNumber(text)}
               style={styles.logininput}
             />
 
             <TextInput
-              placeholder="Prices"
+              placeholder="Precios"
               value={prices}
               onChangeText={(text) => setPrices(text)}
               style={styles.logininput}
             />
 
             <TextInput
-              placeholder="Speciality"
+              placeholder="Especilidad"
               value={speciality}
               onChangeText={(text) => setSpeciality(text)}
               style={styles.logininput}
@@ -181,13 +183,16 @@ const SignupScreen = () => {
 
         {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
 
-        <Button title="Choose image..." onPress={onChooseImagePress} />
-        <View style={{ marginTop: 10 }} />
-        <Button
-          title="Create User"
-          onPress={handleSignUp}
-        />
-        <View style={{ marginTop: 10 }} />
+        <Pressable onPress={() => { onChooseImagePress(); }} style={styles.searchButton}>
+          <View>
+            <Text style={styles.loginbuttonText}>{"Elegir imagen"}</Text>
+          </View>
+        </Pressable>
+        <Pressable onPress={() => { handleSignUp(); }} style={styles.loginbutton}>
+          <View>
+            <Text style={styles.loginbuttonText}>{"Crear usuario"}</Text>
+          </View>
+        </Pressable>
         {error ? <Text style={styles.errorText}>{error}</Text> : null}
       </View>
     </View>

@@ -70,6 +70,7 @@ export const styles = StyleSheet.create({
 	logininput: {
 		borderColor: COLORS.secondary,
 		borderRadius: 5,
+		borderWidth: 4,
 		padding: 10,
 		marginBottom: 5,
 		fontSize: 16,
