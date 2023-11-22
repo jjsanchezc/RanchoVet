@@ -130,17 +130,16 @@ const Directory = () => {
       var chatKey = "";
       var newChat = true;
       var chat;
-      if (!Array.isArray(userChats))
-        {
-          for (let index = 0; index < userChats.length; index++) {
+      if (!Array.isArray(userChats)) {
+        for (let index = 0; index < userChats.length; index++) {
           chat = JSON.parse(await AsyncStorage.getItem(userChats[index]));
           console.log("chat", chat);
           //console.log("chat.user", chat.usuarios);
           //console.log("destinatary.id", destinatary.id);
           if (
-            chat != "" &&(
-            chat.usuarios[0] == destinatary.id ||
-            chat.usuarios[1] == destinatary.id)
+            chat != "" && (
+              chat.usuarios[0] == destinatary.id ||
+              chat.usuarios[1] == destinatary.id)
           ) {
             newChat = false;
             chatKey = chat.id;
@@ -231,12 +230,12 @@ const Directory = () => {
   const renderItemDetails = () => (
     <View style={styles.directoryDetailsText}>
       <View>
-          <View style={combinedStyles.circleContainer}>
-            <Image
-              source={{ uri: destinatary.image }}
-              style={combinedStyles.circleImage}
-            />
-          </View>
+        <View style={combinedStyles.circleContainer}>
+          <Image
+            source={{ uri: destinatary.image }}
+            style={combinedStyles.circleImage}
+          />
+        </View>
         <Text>{destinatary.name}</Text>
         <RatingStars rating={destinatary.vet_data.rating} maxRating={5} />
         <Text>
@@ -287,23 +286,23 @@ const Directory = () => {
   };
 
   const handleSearch = (filterBy) => {
-    
-  
+
+
     // Lógica de búsqueda
     const requestData = {
       filterBy: filterBy,
       validUsers: validUsers,
-    }; 
-      axios.post('http://127.0.0.1:5000/get_dataa',requestData)//tengo que ver como se envia cuando es requestData en vez de validUsers
-    .then(response => {
-      console.log("FILTRO",filterBy)
-      console.log("hay respuesta ",response.data);
-      setValidUsers(Object.values(response.data));
-      //setValidUsers(response.data)
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
+    };
+    axios.post('http://127.0.0.1:5000/get_dataa', requestData)//tengo que ver como se envia cuando es requestData en vez de validUsers
+      .then(response => {
+        console.log("FILTRO", filterBy)
+        console.log("hay respuesta ", response.data);
+        setValidUsers(Object.values(response.data));
+        //setValidUsers(response.data)
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
     console.log("Debug");
     console.log("Realizar búsqueda con filtro:", filterBy);
   };
@@ -316,7 +315,7 @@ const Directory = () => {
       { label: t.rating, value: "Calificación" },
       { label: t.specialization, value: "Especialización" },
     ];
-    
+
     return (
       <View style={styles.filterContainer}>
         <TouchableOpacity
@@ -358,7 +357,7 @@ const Directory = () => {
             <TextInput
               style={styles.searchInput}
               placeholder={"Buscar"}
-              value={handleSearchBar}
+              value={searchText}
               onChangeText={setSearchText}
             />
           </View>
