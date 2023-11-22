@@ -22,6 +22,7 @@ const translations = {
     eJournal: "Edit Journal",
     nJournal: "New Journal",
     profile: "Profile",
+    signup: "Signup",
   },
   "es-ES": {
     login: "Inicio de sesión",
@@ -34,6 +35,7 @@ const translations = {
     eJournal: "Editar Bitácora",
     nJournal: "Nueva Bitácora",
     profile: "Perfil",
+    signup: "Crear Usuario",
   },
 };
 
@@ -72,6 +74,7 @@ const Layout = () => {
       <Stack.Screen name='newJournal' options={{ title: t.nJournal, headerStyle: { backgroundColor: "#CF5C36", }, headerTitleStyle: { color: "#050517", fontFamily: 'DMBold', }, }} />
       <Stack.Screen name='editJournal' options={{ title: t.eJournal, headerStyle: { backgroundColor: "#CF5C36", }, headerTitleStyle: { color: "#050517", fontFamily: 'DMBold', }, }} />
       <Stack.Screen name='profile' options={{ title: t.profile, headerStyle: { backgroundColor: "#CF5C36", }, headerTitleStyle: { color: "#050517", fontFamily: 'DMBold', }, }} />
+      <Stack.Screen name='signup' options={{ title: t.signup, headerStyle: { backgroundColor: "#CF5C36", }, headerTitleStyle: { color: "#050517", fontFamily: 'DMBold', }, }} />
     </Stack>
   );
 };

@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { getDatabase, ref, set, get, push, onValue } from "firebase/database";
 import { saveData } from "./localdatabase";
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -306,4 +306,34 @@ const uploadImage = async (uri, imageName) => {
   }
 }
 
-export { getMessages, getUser, newMessage, createNewChat, newJournalEntry, editJournalEntry, createNewForum, createNewReply, getReplies, getForums, likeForum, getLikeCount, getUsersPasswords, isFirebaseConnected, updateChat, editProfile, uploadImage };
+const authUser = async (mail, userPasword) => {
+  const response = await signInWithEmailAndPassword(auth, mail, userPasword)
+}
+
+const createUser = async (mail, userPassword, username, type, vetData, image, location) => {
+  try {
+    const response = await createUserWithEmailAndPassword(auth, mail, userPassword);
+    const userData = {
+      image: image,
+      location: location,
+      name: username,
+      pass: userPassword,
+      type: type ? "vet" : "user",
+      Email: mail,
+      chats:"",
+    };
+    if (type) {
+      userData.vet_data = vetData;
+    }
+    const userRef = ref(database, `users/${response.user.uid}/`);
+    await set(userRef, userData);
+    return response.user.uid;
+  } catch (error) {
+    console.error("Error, the EMAIL is already in use:", error);
+    // Maneja el error según tus necesidades
+    throw error;
+  }
+};
+
+export { getMessages, getUser, newMessage, createNewChat, newJournalEntry, editJournalEntry, createNewForum, createNewReply, getReplies, getForums, likeForum, getLikeCount, getUsersPasswords, isFirebaseConnected, updateChat, editProfile, uploadImage, authUser, createUser };
+
