@@ -227,16 +227,19 @@ const Directory = () => {
   };
 
   const handleSearch = (filterBy) => {
-    // Aquí puedes implementar la lógica de búsqueda según la opción seleccionada (filterBy)
-    // Por ejemplo, filtrar la lista de veterinarios
-    // ...lógica de filtrado
-    const requestData={
-      filterBy:filterBy,
-      validUsers:validUsers,
+    
+  
+    // Lógica de búsqueda
+    const requestData = {
+      filterBy: filterBy,
+      validUsers: validUsers,
     }; 
-      axios.post('http://127.0.0.1:5000/get_dataa',validUsers)//tengo que ver como se envia cuando es requestData en vez de validUsers
+      axios.post('http://127.0.0.1:5000/get_dataa',requestData)//tengo que ver como se envia cuando es requestData en vez de validUsers
     .then(response => {
-      console.log("hay respuesta ",response.data); // Haz lo que necesites con los datos de la respuesta
+      console.log("FILTRO",filterBy)
+      console.log("hay respuesta ",response.data);
+      setValidUsers(Object.values(response.data));
+      //setValidUsers(response.data)
     })
     .catch(error => {
       console.error('Error:', error);
@@ -249,7 +252,6 @@ const Directory = () => {
 
     const options = [
       { label: t.selectFilter, value: "" },
-      { label: t.location, value: "Ubicación" },
       { label: t.price, value: "Precio" },
       { label: t.rating, value: "Calificación" },
       { label: t.specialization, value: "Especialización" },
