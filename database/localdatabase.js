@@ -49,6 +49,7 @@ const fetchDataAndStoreLocally = async (user) => {
                 else otherUser = chatData.usuarios[0];
                 const otherUserData = await getUser(otherUser);
                 chatData["name"] = otherUserData.name;
+                chatData["image"] = otherUserData.image;
                 //console.log('Chat data:', chatid, chatData);
                 if (chatData.mensajes.hasOwnProperty("null"))
                     delete chatData.mensajes["null"];

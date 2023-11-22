@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, StyleSheet, Image } from "react-native";
 import React, { useLayoutEffect, useState } from "react";
 import * as Localization from "expo-localization";
 import { Ionicons } from "@expo/vector-icons";
@@ -41,6 +41,22 @@ const ChatComponent = ({ item }) => {
       console.error("Error! While saving room", e);
     }
   };
+  const combinedStyles = StyleSheet.create({
+    ...styles,
+    circleContainer: {
+      width: 50,
+      height: 50,
+      borderRadius: 50,
+      overflow: "hidden",
+      marginRight: 10
+    },
+    circleImage: {
+      width: "100%",
+      height: "100%",
+      resizeMode: "cover",
+      borderRadius: 50,
+    },
+  });
 
   return (
     item && (
@@ -48,12 +64,14 @@ const ChatComponent = ({ item }) => {
         style={styles.cchat}
         onPress={() => handleNavigation(item.id, item.name)}
       >
-        <Ionicons
-          name="person-circle-outline"
-          size={45}
-          color="black"
-          style={styles.cavatar}
-        />
+        <View style={combinedStyles.circleContainer}>
+          <Image
+            source={{ uri: item.image }}
+            style={combinedStyles.circleImage}
+            onError={(error) => console.error("Image loading error:", error)}
+          />
+
+        </View>
 
         <View style={styles.crightContainer}>
           <View>

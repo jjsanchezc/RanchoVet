@@ -6,19 +6,21 @@ import {
   Pressable,
   Text,
   Image,
+  TouchableOpacity,
 } from "react-native";
 import { Stack, useRouter } from "expo-router";
 import * as Localization from "expo-localization";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { styles } from "../utils/styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getUsersPasswords } from "../database/firebase";
+import { getUsersPasswords, authUser, createUser } from "../database/firebase";
 import { fetchDataAndStoreLocally } from "../database/localdatabase";
 
 const translations = {
   "en-US": {
     login: "Login",
     usernamePlaceholder: "Username",
+    mailPlaceholder: "Email",
     passwordPlaceholder: "Password",
     errorFetchingUserPassword: "Error fetching user's password",
     errorSavingUser: "Error while saving user",
@@ -26,10 +28,12 @@ const translations = {
     incorrectUsernameOrPassword: "Incorrect username or password",
     usernameAndPasswordRequired: "Username and password are required",
     getStarted: "Get Started",
+    signup: "Sign Up",
   },
   "es-ES": {
     login: "Iniciar sesión",
     usernamePlaceholder: "Nombre de usuario",
+    mailPlaceholder: "Correo",
     passwordPlaceholder: "Contraseña",
     errorFetchingUserPassword: "Error al obtener contraseña de usuario",
     errorSavingUser: "Error al guardar el usuario",
@@ -37,6 +41,7 @@ const translations = {
     incorrectUsernameOrPassword: "Usuario o contraseña incorrectos",
     usernameAndPasswordRequired: "Usuario y contraseña son requeridos",
     getStarted: "Iniciar",
+    signup: "Crear Cuenta",
   },
   // otros idiomas
 };
@@ -77,19 +82,38 @@ const Login = () => {
     }
   };
 
-  const handleSignIn = () => {
-    if (username.trim() && password.trim()) {
-      const validUser = validUsers.find(
-        (user) => user.name === username.trim() && user.pass === password
-      );
+  const signup = () => {
+    router.push("/signup");
+  };
 
-      if (validUser) {
-        storeUsername(validUser);
-      } else {
-        setError(t.incorrectUsernameOrPassword); // Set error message
+  const handleSignIn = async () => {
+    if (username.trim() && password.trim()) {
+      try {
+        var validUser = null;
+        if (username.includes('@')) {
+          await authUser(username, password);
+          validUser = validUsers.find(
+            (user) => user.Email === username.trim() && user.pass === password
+          );
+        } else {
+          validUser = validUsers.find(
+            (user) => user.name === username.trim() && user.pass === password
+          );
+        }
+        if (validUser) {
+          if (validUser.hasOwnProperty("Email"))
+            await authUser(validUser.Email, password);
+          storeUsername(validUser);
+        } else {
+          setError(t.incorrectUsernameOrPassword);
+        }
+
+      } catch (error) {
+        // Si authUser arroja un error, manejas la situación según tus necesidades
+        console.error("Error en authUser:", error);
       }
     } else {
-      setError(t.usernameAndPasswordRequired); // Set error message
+      setError(t.usernameAndPasswordRequired);
     }
   };
 
@@ -133,12 +157,14 @@ const Login = () => {
               onChangeText={(value) => setPassword(value)}
             />
           </View>
-
-          <Pressable onPress={handleSignIn} style={styles.loginbutton}>
+          <Pressable onPress={() => { handleSignIn(); }} style={styles.loginbutton}>
             <View>
               <Text style={styles.loginbuttonText}>{t.getStarted}</Text>
             </View>
           </Pressable>
+          <TouchableOpacity style={styles.mainMenuButton} onPress={signup}>
+            <Text style={styles.mainMenuButtonText}>{t.signup}</Text>
+          </TouchableOpacity>
 
           {/* Display error message */}
           {error ? <Text style={styles.errorText}>{error}</Text> : null}

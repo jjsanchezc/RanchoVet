@@ -1,7 +1,8 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { getDatabase, ref, set, get, push, onValue } from "firebase/database";
 import { saveData } from "./localdatabase";
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAXD32UYLrtra2OMgyxDC-Y9_M0HOctWA8",
@@ -18,6 +19,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 const database = getDatabase(app);
+const storage = getStorage(app);
 
 async function getUser(user) {
   const usersRef = ref(database, `users/${user}`);
@@ -117,6 +119,19 @@ async function createNewChat(user, destinatary) {
   }
 }
 
+async function editProfile(user, userData) {
+  try {
+    console.log("user", user);
+    const userRef = ref(database, `users/${user}/`);
+    await set(userRef, userData);
+
+    // Log the success message
+    console.log("Profile edited in Firebase:", userData);
+  } catch (error) {
+    console.error("Error creating new chat:", error);
+  }
+}
+
 async function createNewForum(title) {
   try {
     const forumData = {
@@ -183,6 +198,69 @@ async function getForums() {
   }
 }
 
+// Like forum, if user already liked, delete like
+async function likeForum(forumId, userId) {
+  const likesRef = ref(database, `likes/${forumId}/${userId}`);
+  try {
+    const snapshot = await get(likesRef);
+    if (snapshot.exists()) {
+      const likeData = snapshot.val();
+      await set(ref(database, `likes/${forumId}/${userId}`), null);
+      console.log("Like deleted from Firebase:", likeData);
+    } else {
+      await set(ref(database, `likes/${forumId}/${userId}`), true);
+      console.log("Like added to Firebase:", userId);
+    }
+  } catch (error) {
+    console.error("Error liking forum:", error);
+    throw error; // Re-throw the error to handle it in the calling code
+  }
+}
+
+// New journal entry
+async function newJournalEntry(user, folder, name, species, veterinary) {
+  const journalRef = ref(database, `users/${user}/journal`);
+  try {
+    const newJournalRef = await push(journalRef, { folder, name, species, veterinary });
+    const newJournalId = newJournalRef.key; // Get the auto-generated ID
+    console.log("New journal entry added to Firebase with ID:", newJournalId);
+    return newJournalId;
+  } catch (error) {
+    console.error("Error sending journal entry:", error);
+    throw error; // Re-throw the error to handle it in the calling code
+  }
+}
+
+// Edit journal entry
+async function editJournalEntry(user, folder, name, species, veterinary, journalId) {
+  const journalRef = ref(database, `users/${user}/journal/${journalId}`);
+  try {
+    await set(journalRef, { folder, name, species, veterinary });
+    console.log("Journal entry edited in Firebase with ID:", journalId);
+  } catch (error) {
+    console.error("Error editing journal entry:", error);
+    throw error; // Re-throw the error to handle it in the calling code
+  }
+}
+
+// Count of likes for a forum
+async function getLikeCount(forumId) {
+  const likesRef = ref(database, `likes/${forumId}`);
+  try {
+    const snapshot = await get(likesRef);
+    if (snapshot.exists()) {
+      const likesData = snapshot.val();
+      const count = Object.values(likesData).filter(value => value === true).length;
+      return count;
+    } else {
+      return 0;
+    }
+  } catch (error) {
+    console.error("Error retrieving likes:", error);
+    throw error; // Re-throw the error to handle it in the calling code
+  }
+}
+
 async function getUsersPasswords() {
   const usersRef = ref(database, `users`);
   try {
@@ -211,4 +289,51 @@ const isFirebaseConnected = async () => {
   });
 };
 
-export { getMessages, getUser, newMessage, createNewChat, createNewForum, createNewReply, getReplies, getForums, getUsersPasswords, isFirebaseConnected, updateChat };
+const uploadImage = async (uri, imageName) => {
+  const response = await fetch(uri);
+  const blob = await response.blob();
+  const storageReference = storageRef(storage, "images/" + imageName);
+
+  try {
+    const snapshot = await uploadBytes(storageReference, blob);
+    // Obtain the URL of the uploaded image
+    const downloadURL = await getDownloadURL(storageReference);
+
+    return downloadURL;
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    throw error;
+  }
+}
+
+const authUser = async (mail, userPasword) => {
+  const response = await signInWithEmailAndPassword(auth, mail, userPasword)
+}
+
+const createUser = async (mail, userPassword, username, type, vetData, image, location) => {
+  try {
+    const response = await createUserWithEmailAndPassword(auth, mail, userPassword);
+    const userData = {
+      image: image,
+      location: location,
+      name: username,
+      pass: userPassword,
+      type: type ? "vet" : "user",
+      Email: mail,
+      chats:"",
+    };
+    if (type) {
+      userData.vet_data = vetData;
+    }
+    const userRef = ref(database, `users/${response.user.uid}/`);
+    await set(userRef, userData);
+    return response.user.uid;
+  } catch (error) {
+    console.error("Error, the EMAIL is already in use:", error);
+    // Maneja el error según tus necesidades
+    throw error;
+  }
+};
+
+export { getMessages, getUser, newMessage, createNewChat, newJournalEntry, editJournalEntry, createNewForum, createNewReply, getReplies, getForums, likeForum, getLikeCount, getUsersPasswords, isFirebaseConnected, updateChat, editProfile, uploadImage, authUser, createUser };
+

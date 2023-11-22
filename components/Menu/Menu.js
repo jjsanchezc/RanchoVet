@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useLayoutEffect, useEffect } from "react";
 import { View, Text, TouchableOpacity } from 'react-native';
 import * as Localization from 'expo-localization';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const translations = {
   'en-US': {
@@ -23,6 +24,15 @@ const translations = {
 
 const Menu = () => {
   const router = useRouter();
+  const [user_type, setuser_type] = useState("");
+
+  useLayoutEffect(() => {
+    const values = async () => {
+      setuser_type(await AsyncStorage.getItem("user_type"));
+    };
+    values();
+  }, []);
+
   const locale = Localization.locale;
   const language = locale.split('-')[0]; // Obtén solo el código de idioma, sin la región
   const t = translations[locale] || translations[language] || translations['es-ES']; // Fallback a inglés si no se encuentra la traducción
@@ -38,15 +48,17 @@ const Menu = () => {
           <MaterialIcons name="chat" size={24} color="#CF5C36" />
           <Text>{t.chats}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{ alignItems: 'center', marginRight: 20 }} onPress={() => router.replace("/directory")}>
-          <MaterialIcons name="folder" size={24} color="#CF5C36" />
-          <Text>{t.directorio}</Text>
-        </TouchableOpacity>
+        {user_type !== "vet" && (
+          <TouchableOpacity style={{ alignItems: 'center', marginRight: 20 }} onPress={() => router.replace("/directory")}>
+            <MaterialIcons name="folder" size={24} color="#CF5C36" />
+            <Text>{t.directorio}</Text>
+          </TouchableOpacity>
+        )}
         <TouchableOpacity style={{ alignItems: 'center', marginRight: 20 }} onPress={() => router.replace("/forums")}>
           <MaterialIcons name="forum" size={24} color="#CF5C36" />
           <Text>{t.foro}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{ alignItems: 'center' }}>
+        <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => router.replace("/profile")}>
           <MaterialIcons name="person" size={24} color="#CF5C36" />
           <Text>{t.perfil}</Text>
         </TouchableOpacity>

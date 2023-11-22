@@ -6,7 +6,7 @@ import { ColorSpace } from "react-native-reanimated";
 
 export const styles = StyleSheet.create({
 	loginBox: {
-		width: "50%", // Adjust the width as needed
+		width: "80%", // Adjust the width as needed
 		backgroundColor: COLORS.background,
 		padding: 20,
 		borderRadius: 10,
@@ -36,7 +36,6 @@ export const styles = StyleSheet.create({
 		backgroundColor: COLORS.tertiary,
 		padding: 12,
 		marginVertical: 10,
-		width: "60%",
 		borderRadius: 50,
 		elevation: 1,
 	},
@@ -69,9 +68,9 @@ export const styles = StyleSheet.create({
 		justifyContent: "center",
 	},
 	logininput: {
-		orderWidth: 1,
 		borderColor: COLORS.secondary,
 		borderRadius: 5,
+		borderWidth: 4,
 		padding: 10,
 		marginBottom: 5,
 		fontSize: 16,
@@ -98,7 +97,7 @@ export const styles = StyleSheet.create({
 	mainMenuButton: {
 		borderRadius: 5,
 		width: "40%",
-		height: 50,
+		height: 70,
 		backgroundColor: "#CF5C36",
 		margin: 10,
 		justifyContent: "center",
@@ -108,27 +107,32 @@ export const styles = StyleSheet.create({
 		color: "white",
 		fontSize: 20,
 	},
+	mainMenuButtonSubText: {
+		color: "white",
+		fontSize: 10,
+		margin: 10,
+		textAlign: "center",
+	},
 	//chat 
 	searchContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		backgroundColor: COLORS.secundary,
 		borderRadius: 8,
-		flex: 1,
 		marginRight: 16,
-	  },
-	  searchInput: {
+	},
+	searchInput: {
 		flex: 1,
 		padding: 8,
-	  },
-	  searchBtn: {
+	},
+	searchBtn: {
 		padding: 6,
 		backgroundColor: '#CF5C36',
 		borderRadius: 10,
-	  },
-	  searchButtonText: {
+	},
+	searchButtonText: {
 		color: '#050517',
-	  },
+	},
 
 	chatscreen: {
 		backgroundColor: COLORS.primary,
@@ -241,6 +245,9 @@ export const styles = StyleSheet.create({
 		padding: 10,
 		position: "relative",
 	},
+	directorylistContainer: {
+		flex: 1,
+	},
 	directoryBox: {
 		width: "100%",
 		height: 200,
@@ -257,11 +264,11 @@ export const styles = StyleSheet.create({
 		justifySelf: 'flex-end',
 		alignSelf: "flex-end",
 		margin: 10,
-	  },
+	},
 	rowContainer: {
-		flexDirection: 'row', 
-		justifyContent: 'flex-start', 
-	  },
+		flexDirection: 'row',
+		justifyContent: 'flex-start',
+	},
 	directoryText: {
 		color: COLORS.black,
 
@@ -419,76 +426,94 @@ export const styles = StyleSheet.create({
 		borderColor: COLORS.secondary, // Color del borde
 		borderRadius: 5, // Bordes redondeados
 		zIndex: 60, // Asegura que el menú esté sobre otros elementos
-	  },
-	  menuItem: {
+	},
+	menuItem: {
 		padding: 10,
 		borderBottomWidth: 1,
 		borderBottomColor: COLORS.secondary,
-	  },
-	
-	  menuItemLabel: {
+	},
+
+	menuItemLabel: {
 		color: COLORS.tertiary,
 		fontSize: 16,
-	  },
-	  //Directory
-	  searchButton: {
+	},
+	//Directory
+	searchButton: {
 		backgroundColor: COLORS.tertiary,
 		padding: 12,
 		marginVertical: 10,
 		width: "60%",
 		borderRadius: 50,
 		elevation: 1,
-	  },
-	  container: {
+	},
+	container: {
 		flexDirection: 'row',
 		alignItems: 'center',
-	  },
-	  dropdownButton: {
+	},
+	filterContainer: {
+		flexDirection: 'row',
+		justifyContent: 'flex-end',
+		alignItems: 'center',
+	},
+	dropdownButton: {
 		backgroundColor: COLORS.primary,
 		padding: 10,
 		borderRadius: 5,
 		borderWidth: 1,
 		borderColor: '#ccc',
 		marginLeft: 10,
-	  },
-	  modalContainer: {
+	},
+	modalContainer: {
 		flex: 1,
 		justifyContent: 'center',
 		backgroundColor: 'rgba(0, 0, 0, 0.5)',
-	  },
-	  modalItem: {
+	},
+	modalItem: {
 		backgroundColor: COLORS.primary,
 		padding: 10,
 		borderBottomWidth: 1,
 		borderBottomColor: '#ccc',
-	  },
-	  directoryItemContent: {
+	},
+	directoryItemContent: {
 		flexDirection: 'row', // Esto alinea los elementos en fila (horizontalmente)
 		justifyContent: 'space-between', // Esto distribuye los elementos a lo largo del espacio disponible
-		alignItems: 'center', 
-		padding: 10, 
-	  },
-	  userInfo: {
-		alignItems: 'center', 
-		marginBottom: 10, 
+		alignItems: 'center',
+		padding: 10,
+	},
+	userInfo: {
+		alignItems: 'center',
+		marginBottom: 10,
 
-	  },
-	  buttonRow: {
+	},
+	buttonRow: {
 		flexDirection: 'row',
 		justifyContent: 'flex-start',
 		alignItems: 'down',
 
-	  },
-	  journalButton: {
+	},
+	journalButton: {
 		backgroundColor: COLORS.tertiary,
 		padding: 12,
 		borderRadius: 50,
 		elevation: 1,
 		alignSelf: 'flex-end',
 		marginBottom: 10,
-		justifySelf: 'flex-end', 
+		justifySelf: 'flex-end',
+	},
+
+	distribution: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		padding: 20,
+	},
+
+	profileDetailsText: {
+		fontSize: 16,
+		marginVertical: 8,
+		fontWeight: 'bold',
 	},
 
 });
-	
+
 

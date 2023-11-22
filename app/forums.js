@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import Comments from "../components/forums/comments";
-import { createNewForum } from "../database/firebase";
+import Likes from "../components/forums/likes";
+import { createNewForum, getLikeCount } from "../database/firebase";
 import { useRouter } from "expo-router";
 import { View, TextInput, Text, Alert, Button } from "react-native";
 import * as Localization from "expo-localization";
@@ -37,38 +38,54 @@ const Forums = () => {
     translations[locale] || translations[language] || translations["es-ES"];
 
   // Load data from AsyncStorage
-  useEffect(() => {
-    const loadLocalData = async () => {
-      try {
-        const storedThreads = await AsyncStorage.getItem("storedThreads");
-        if (storedThreads) {
-          setThreadList(JSON.parse(storedThreads));
-        }
-      } catch (error) {
-        console.error("Error reading storedThreads from AsyncStorage:", error);
-      }
-    };
+  useLayoutEffect(() => {
     loadLocalData();
+    loadFirebaseData();
   }, []);
 
-  // Load data from Firebase
   useEffect(() => {
-    const loadFirebaseData = async () => {
-      try {
-        const threads = await getForums();
+    const intervalId = setInterval(() => {
+      loadFirebaseData();
+    }, 200);
+    return () => clearInterval(intervalId);
+  }, [loadFirebaseData]);
 
-        // If there are threads from Firebase, update AsyncStorage
-        if (Object.keys(threads).length > 0) {
-          const updatedThreadList = { ...threadList, ...threads };
-          await AsyncStorage.setItem("storedThreads", JSON.stringify(updatedThreadList));
-          setThreadList(updatedThreadList);
-        }
-      } catch (error) {
-        console.error("Error loading data from Firebase:", error);
+  async function loadLocalData() {
+    try {
+      const storedThreads = await AsyncStorage.getItem("storedThreads");
+      if (storedThreads) {
+        setThreadList(JSON.parse(storedThreads));
       }
-    };
-    loadFirebaseData();
-  }, [threadList]); // Include threadList as a dependency to trigger the effect when it changes
+    } catch (error) {
+      console.error("Error reading storedThreads from AsyncStorage:", error);
+    }
+  };
+
+  async function loadFirebaseData() {
+    try {
+      const threads = reverseOrderOfKeys(await getForums());
+
+      // If there are threads from Firebase, update AsyncStorage
+      if (Object.keys(threads).length > 0) {
+        const updatedThreadList = { ...threads, ...threadList };
+        await AsyncStorage.setItem("storedThreads", JSON.stringify(updatedThreadList));
+        setThreadList(updatedThreadList);
+      }
+    } catch (error) {
+      console.error("Error loading data from Firebase:", error);
+    }
+  };
+
+  function reverseOrderOfKeys(jsonObject) {
+    const reversedKeys = Object.keys(jsonObject).reverse();
+    const reversedObject = {};
+
+    reversedKeys.forEach(key => {
+      reversedObject[key] = jsonObject[key];
+    });
+
+    return reversedObject;
+  }
 
 
   // Create a new thread and save it to Firebase and AsyncStorage
@@ -87,21 +104,21 @@ const Forums = () => {
       }
 
       // Create a new thread object
-    const newThread = { title: inputValue };
-    
-    // Save it to Firebase and get the generated ID
-    const newThreadId = await createNewForum(newThread);
+      const newThread = { title: inputValue };
 
-    // Update the new thread with the generated ID
-    const updatedThread = { id: newThreadId, ...newThread };
+      // Save it to Firebase and get the generated ID
+      const newThreadId = await createNewForum(newThread);
 
-    // Save it to AsyncStorage
-    const updatedThreads = { ...threadList, [newThreadId]: updatedThread };
-    await AsyncStorage.setItem("storedThreads", JSON.stringify(updatedThreads));
+      // Update the new thread with the generated ID
+      const updatedThread = { id: newThreadId, ...newThread };
 
-    setThreadList(updatedThreads);
-    setInputError(false);
-    setInputValue("");
+      // Save it to AsyncStorage
+      const updatedThreads = { [newThreadId]: updatedThread, ...threadList };
+      await AsyncStorage.setItem("storedThreads", JSON.stringify(updatedThreads));
+
+      setThreadList(updatedThreads);
+      setInputError(false);
+      setInputValue("");
 
     } catch (error) {
       console.error("Error:", error);
@@ -129,8 +146,10 @@ const Forums = () => {
             <View style={styles.forumThreadItem} key={threadId}>
               <Text style={styles.forumThreadTitle}>{threadList[threadId].title.title}</Text>
               <Comments
-                navigateToReplies={() => navigate.push({ pathname: "/Replies", params: { threadId, title: threadList[threadId].title.title }})}
+                navigateToReplies={() => navigate.push({ pathname: "/Replies", params: { threadId, title: threadList[threadId].title.title } })}
               />
+              <Likes threadId={threadId} />
+
             </View>
           ))}
         </View>

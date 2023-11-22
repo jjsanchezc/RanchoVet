@@ -10,6 +10,8 @@ npx expo install socket.io-client
 npx expo install react-router-dom
 npx expo install react-hook-form
 npx expo install firebase
+npx expo install expo-image-picker@~14.1.1
+npx expo install react-native-dropdown-select-list
 
 Servidor
 npm install
@@ -19,3 +21,9 @@ npm install -g eas-cli
 @expo/ngrok@^4.1.0
 npx expo start --tunnel
 npx eas build -p android --profile preview
+
+# Instalación con Docker
+## Solo la primera vez 
+-  docker-compose up --build
+## Resto de veces
+- docker-compose up

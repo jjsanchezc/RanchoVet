@@ -1,4 +1,15 @@
-import { View, Text, Pressable, TouchableOpacity, Modal, FlatList, Button} from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  TouchableOpacity,
+  Modal,
+  TextInput,
+  FlatList,
+  Button,
+  Image,
+  StyleSheet,
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import { styles } from "../utils/styles";
 import { createNewChat } from "../database/firebase";
@@ -41,6 +52,7 @@ const Directory = () => {
   const router = useRouter();
   const [destinatary, setDestinatary] = useState({});
   const [validUsers, setValidUsers] = useState([]);
+  const [searchText, setSearchText] = useState("");
   const [filterBy, setFilterBy] = useState(""); // Estado para almacenar la opción de filtrado
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const locale = Localization.locale;
@@ -49,25 +61,26 @@ const Directory = () => {
     translations[locale] || translations[language] || translations["es-ES"];
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const users = await getUsersPasswords();
-        const Vusers = Object.values(users);
-        const ids = Object.keys(users);
-        const vetUsers = [];
-        for (let index = 0; index < Vusers.length; index++) {
-          if (Vusers[index].type == "vet") {
-            Vusers[index].id = ids[index];
-            vetUsers.push(Vusers[index]);
-          }
-        }
-        setValidUsers(vetUsers);
-      } catch (error) {
-        console.error("Error al obtener contraseña del usuario:", error);
-      }
-    };
     fetchData();
   }, []);
+
+  const fetchData = async () => {
+    try {
+      const users = await getUsersPasswords();
+      const Vusers = Object.values(users);
+      const ids = Object.keys(users);
+      const vetUsers = [];
+      for (let index = 0; index < Vusers.length; index++) {
+        if (Vusers[index].type == "vet") {
+          Vusers[index].id = ids[index];
+          vetUsers.push(Vusers[index]);
+        }
+      }
+      setValidUsers(vetUsers);
+    } catch (error) {
+      console.error("Error al obtener contraseña del usuario:", error);
+    }
+  };
 
   const back = () => {
     router.back();
@@ -77,6 +90,35 @@ const Directory = () => {
     setDestinatary({});
   };
 
+  const handleSearchBar = async () => {
+    // Realiza acciones de búsqueda aquí con el valor de searchText
+    const users = await getUsersPasswords();
+    const Vusers = Object.values(users);
+    const ids = Object.keys(users);
+    const vetUsers = [];
+    for (let index = 0; index < Vusers.length; index++) {
+      if (Vusers[index].type == "vet") {
+        Vusers[index].id = ids[index];
+        vetUsers.push(Vusers[index]);
+      }
+    }
+
+    const filteredUsers = vetUsers.filter(element => {
+      // Convert both the element and the search string to lowercase for case-insensitive comparison
+      const lowercasedElement = String(element.name).toLowerCase();
+      const lowercasedSearchString = searchText.toLowerCase();
+
+      // Check if the element contains the search string
+      return lowercasedElement.includes(lowercasedSearchString);
+    });
+
+    setValidUsers(filteredUsers);
+  };
+
+  useEffect(() => {
+    handleSearchBar();
+  }, [searchText]);
+
   const handleCreateRoom = async () => {
     if (destinatary) {
       const user = await AsyncStorage.getItem("username");
@@ -84,22 +126,26 @@ const Directory = () => {
       console.log("user", user);
       console.log("userData", userData);
       const userChats = Object.values(JSON.parse(userData).chats);
-      //console.log("userChats", userChats);
+      console.log("userChats", userChats);
       var chatKey = "";
       var newChat = true;
       var chat;
-      for (let index = 0; index < userChats.length; index++) {
-        chat = JSON.parse(await AsyncStorage.getItem(userChats[index]));
-        //console.log("chat", chat);
-        //console.log("chat.user", chat.usuarios);
-        //console.log("destinatary.id", destinatary.id);
-        if (
-          chat.usuarios[0] == destinatary.id ||
-          chat.usuarios[1] == destinatary.id
-        ) {
-          newChat = false;
-          chatKey = chat.id;
-          break;
+      if (!Array.isArray(userChats))
+        {
+          for (let index = 0; index < userChats.length; index++) {
+          chat = JSON.parse(await AsyncStorage.getItem(userChats[index]));
+          console.log("chat", chat);
+          //console.log("chat.user", chat.usuarios);
+          //console.log("destinatary.id", destinatary.id);
+          if (
+            chat != "" &&(
+            chat.usuarios[0] == destinatary.id ||
+            chat.usuarios[1] == destinatary.id)
+          ) {
+            newChat = false;
+            chatKey = chat.id;
+            break;
+          }
         }
       }
       if (newChat) chatKey = await createNewChat(user, destinatary.id);
@@ -116,13 +162,29 @@ const Directory = () => {
     }
   };
 
+  const combinedStyles = StyleSheet.create({
+    ...styles,
+    circleContainer: {
+      width: 100,
+      height: 100,
+      borderRadius: 50,
+      overflow: "hidden",
+    },
+    circleImage: {
+      width: "100%",
+      height: "100%",
+      resizeMode: "cover",
+      borderRadius: 50,
+    },
+  });
+
   const renderItem = ({ item }) => (
-    <ScrollView style={styles.scrollView}>
-      <View style={styles.directoryBox}>
+    <ScrollView style={combinedStyles.scrollView}>
+      <View style={combinedStyles.directoryBox}>
         <Pressable
           onPress={() => setDestinatary(item)} // Set the selected user on press
           style={[
-            styles.directoryBox,
+            combinedStyles.directoryBox,
             {
               borderColor: "#D3D5D7",
               borderBottomWidth: 2,
@@ -130,12 +192,10 @@ const Directory = () => {
             },
           ]}
         >
-          <View>
-            <Ionicons
-              name="person-circle-outline"
-              size={80}
-              color="black"
-              style={styles.cavatar}
+          <View style={combinedStyles.circleContainer}>
+            <Image
+              source={{ uri: item.image }}
+              style={combinedStyles.circleImage}
             />
           </View>
           <View>
@@ -171,12 +231,12 @@ const Directory = () => {
   const renderItemDetails = () => (
     <View style={styles.directoryDetailsText}>
       <View>
-        <Ionicons
-          name="person-circle-outline"
-          size={80}
-          color="black"
-          style={styles.cavatar}
-        />
+          <View style={combinedStyles.circleContainer}>
+            <Image
+              source={{ uri: destinatary.image }}
+              style={combinedStyles.circleImage}
+            />
+          </View>
         <Text>{destinatary.name}</Text>
         <RatingStars rating={destinatary.vet_data.rating} maxRating={5} />
         <Text>
@@ -258,7 +318,7 @@ const Directory = () => {
     ];
     
     return (
-      <View style={styles.container}>
+      <View style={styles.filterContainer}>
         <TouchableOpacity
           onPress={() => setDropdownVisible(true)}
           style={styles.dropdownButton}
@@ -294,12 +354,22 @@ const Directory = () => {
         renderItemDetails()
       ) : (
         <View style={styles.directoryscreen}>
+          <View style={styles.searchContainer}>
+            <TextInput
+              style={styles.searchInput}
+              placeholder={"Buscar"}
+              value={handleSearchBar}
+              onChangeText={setSearchText}
+            />
+          </View>
           {renderFilter()}
-          <FlatList
-            data={validUsers}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-          />
+          <View style={styles.directorylistContainer}>
+            <FlatList
+              data={validUsers}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id}
+            />
+          </View>
         </View>
       )}
       <Menu />
