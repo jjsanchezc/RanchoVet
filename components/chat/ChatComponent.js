@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import { View, Text, Pressable,StyleSheet,Image } from "react-native";
+import { View, Text, Pressable, StyleSheet, Image } from "react-native";
 import React, { useLayoutEffect, useState } from "react";
 import * as Localization from "expo-localization";
 import { Ionicons } from "@expo/vector-icons";
@@ -48,6 +48,7 @@ const ChatComponent = ({ item }) => {
       height: 50,
       borderRadius: 50,
       overflow: "hidden",
+      marginRight: 10
     },
     circleImage: {
       width: "100%",
@@ -63,14 +64,14 @@ const ChatComponent = ({ item }) => {
         style={styles.cchat}
         onPress={() => handleNavigation(item.id, item.name)}
       >
-          <View style={combinedStyles.circleContainer}>
+        <View style={combinedStyles.circleContainer}>
           <Image
             source={{ uri: item.image }}
             style={combinedStyles.circleImage}
             onError={(error) => console.error("Image loading error:", error)}
           />
 
-          </View>
+        </View>
 
         <View style={styles.crightContainer}>
           <View>

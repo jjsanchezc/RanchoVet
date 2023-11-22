@@ -101,7 +101,8 @@ const Login = () => {
           );
         }
         if (validUser) {
-          await authUser(validUser.Email, password);
+          if (validUser.hasOwnProperty("Email"))
+            await authUser(validUser.Email, password);
           storeUsername(validUser);
         } else {
           setError(t.incorrectUsernameOrPassword);
