@@ -19,6 +19,8 @@ const translations = {
     replies: "replies",
     menu: "Main menu",
     journal: "Journal",
+    eJournal: "Edit Journal",
+    nJournal: "New Journal",
     profile: "Profile",
     signup: "Signup",
   },
@@ -30,6 +32,8 @@ const translations = {
     replies: "Respuestas",
     menu: "Menú principal",
     journal: "Bitácora",
+    eJournal: "Editar Bitácora",
+    nJournal: "Nueva Bitácora",
     profile: "Perfil",
     signup: "Crear Usuario",
   },
@@ -67,6 +71,8 @@ const Layout = () => {
       <Stack.Screen name='Replies' options={{ title: t.replies, headerStyle: { backgroundColor: "#CF5C36", }, headerTitleStyle: { color: "#050517", fontFamily: 'DMBold', }, }} />
       <Stack.Screen name='main' options={{ title: t.menu, headerStyle: { backgroundColor: "#CF5C36", }, headerTitleStyle: { color: "#050517", fontFamily: 'DMBold', }, }} />
       <Stack.Screen name='journal' options={{ title: t.journal, headerStyle: { backgroundColor: "#CF5C36", }, headerTitleStyle: { color: "#050517", fontFamily: 'DMBold', }, }} />
+      <Stack.Screen name='newJournal' options={{ title: t.nJournal, headerStyle: { backgroundColor: "#CF5C36", }, headerTitleStyle: { color: "#050517", fontFamily: 'DMBold', }, }} />
+      <Stack.Screen name='editJournal' options={{ title: t.eJournal, headerStyle: { backgroundColor: "#CF5C36", }, headerTitleStyle: { color: "#050517", fontFamily: 'DMBold', }, }} />
       <Stack.Screen name='profile' options={{ title: t.profile, headerStyle: { backgroundColor: "#CF5C36", }, headerTitleStyle: { color: "#050517", fontFamily: 'DMBold', }, }} />
       <Stack.Screen name='signup' options={{ title: t.signup, headerStyle: { backgroundColor: "#CF5C36", }, headerTitleStyle: { color: "#050517", fontFamily: 'DMBold', }, }} />
     </Stack>

@@ -37,8 +37,8 @@ const Chat = () => {
   const router = useRouter();
   const [rooms, setRooms] = useState([]);
   const [user_type, setuser_type] = useState("");
+  const [searchText, setSearchText] = useState("");
   const [user, setUser] = useState("");
-  const chatIdentifiers = [];
   const locale = Localization.locale;
   const language = locale.split("-")[0];
   const t =
@@ -56,7 +56,9 @@ const Chat = () => {
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      getChats();
+      if (searchText == "") {
+        getChats();
+      }
     }, 200);
     return () => clearInterval(intervalId);
   }, [getChats]);
@@ -73,17 +75,40 @@ const Chat = () => {
         const chatData = await getData(userData.chats[chatid]);
         //console.log('Chat data:', userData.chats[chatid], chatData);
         r.push(chatData);
-        chatIdentifiers.push(chatid);
       }
       setRooms(r);
       //console.log("rooms", r);
     }
   }
-  const [searchText, setSearchText] = useState("");
-  const handleSearch = () => {
+
+  const handleSearch = async () => {
     // Realiza acciones de búsqueda aquí con el valor de searchText
-    console.log("Realizar búsqueda con texto:", searchText);
+    const r = [];
+    if (user) {
+      fetchDataAndStoreLocally(user);
+      const userData = await getData(user);
+      for (const chatid in userData.chats) {
+        const chatData = await getData(userData.chats[chatid]);
+        r.push(chatData);
+      }
+    }
+
+    const filteredRooms = r.filter(element => {
+      // Convert both the element and the search string to lowercase for case-insensitive comparison
+      const lowercasedElement = String(element.name).toLowerCase();
+      const lowercasedSearchString = searchText.toLowerCase();
+
+      // Check if the element contains the search string
+      return lowercasedElement.includes(lowercasedSearchString);
+    });
+
+    setRooms(filteredRooms);
   };
+
+  useEffect(() => {
+    handleSearch();
+  }, [searchText]);
+
   return (
     <SafeAreaView style={styles.chatscreen}>
       <View style={styles.chattopContainer}>
@@ -95,9 +120,6 @@ const Chat = () => {
               value={searchText}
               onChangeText={setSearchText}
             />
-            <TouchableOpacity style={styles.searchBtn} onPress={handleSearch}>
-              <Text style={styles.searchButtonText}>{t.searchPlaceholder}</Text>
-            </TouchableOpacity>
           </View>
           {user_type !== "vet" && (
             <Pressable onPress={handleCreateGroup}>

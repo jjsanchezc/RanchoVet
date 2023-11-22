@@ -1,6 +1,8 @@
 import { View, Text, Pressable, FlatList, Button } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { styles } from "../utils/styles";
+import { getUsersPasswords } from "../database/firebase";
+import { fetchDataAndStoreLocally } from "../database/localdatabase";
 import * as Localization from "expo-localization";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
@@ -16,6 +18,7 @@ const translations = {
     viewDetails: "View details",
     edit: "Edit",
     goBack: "Go Back",
+    create: "Create New Entry",
     errorFetchingUserPassword: "Error fetching user's password",
   },
   "es-ES": {
@@ -24,6 +27,7 @@ const translations = {
     viewDetails: "Ver detalles",
     edit: "Editar",
     goBack: "Regresar",
+    create: "Crear nueva entrada",
     errorFetchingUserPassword: "Error al obtener contraseña del usuario",
   },
 };
@@ -32,32 +36,96 @@ const Journal = () => {
   const router = useRouter();
   const [animal, setanimal] = useState({});
   const [validAnimals, setvalidAnimals] = useState([]);
+  const [validUsers, setValidUsers] = useState([]);
   const locale = Localization.locale;
   const language = locale.split("-")[0];
   const t =
     translations[locale] || translations[language] || translations["es-ES"];
 
+
+// Load data
+useLayoutEffect(() => {
+  fetchAndStore();
+  fetchData();
+}, []);
+
+// Update in real-time
+useEffect(() => {
+  const intervalId = setInterval(() => {
+    fetchAndStore();
+  }, 200);
+  return () => clearInterval(intervalId);
+}, [fetchAndStore]);
+
+useEffect(() => {
+  const intervalId = setInterval(() => {
+    fetchData();
+  }, 200);
+  return () => clearInterval(intervalId);
+}, [fetchData]);
+// End of real-time update
+
+// Fetch data from Firebase and store it locally
+async function fetchAndStore() {
+  try {
+    const user = await AsyncStorage.getItem("username");
+    await fetchDataAndStoreLocally(user);
+  } catch (error) {
+    console.error(t.errorFetchingUserPassword, error);
+  }
+};
+
+// Get Journals
+async function fetchData(){
+  try {
+    const user = await AsyncStorage.getItem("username");
+    const userJournal = JSON.parse(
+      await AsyncStorage.getItem(user)
+    ).journal;
+    const Vanimals = Object.values(userJournal);
+    const ids = Object.keys(userJournal);
+    const animals = [];
+    for (let index = 0; index < Vanimals.length; index++) {
+      Vanimals[index].id = ids[index];
+      animals.push(Vanimals[index]);
+    }
+    setvalidAnimals(animals);
+  } catch (error) {
+    console.error("Error al obtener contraseña del usuario:", error);
+  }
+};
+
+  // Get Veterinarians
   useEffect(() => {
-    const fetchData = async () => {
+    const getVets = async () => {
       try {
-        const user = await AsyncStorage.getItem("username");
-        const userJournal = JSON.parse(
-          await AsyncStorage.getItem(user)
-        ).journal;
-        const Vanimals = Object.values(userJournal);
-        const ids = Object.keys(userJournal);
-        const animals = [];
-        for (let index = 0; index < Vanimals.length; index++) {
-          Vanimals[index].id = ids[index];
-          animals.push(Vanimals[index]);
+        const users = await getUsersPasswords();
+        const Vusers = Object.values(users);
+        const ids = Object.keys(users);
+        const vetUsers = [];
+        for (let index = 0; index < Vusers.length; index++) {
+          if (Vusers[index].type === "vet") {
+            Vusers[index].id = ids[index];
+            vetUsers.push({
+              key: Vusers[index].id,
+              value: Vusers[index].name,
+            });
+          }
         }
-        setvalidAnimals(animals);
+        setValidUsers(vetUsers);
       } catch (error) {
         console.error("Error al obtener contraseña del usuario:", error);
       }
     };
-    fetchData();
+    getVets();
   }, []);
+
+  // Utility function to get veterinarian name
+  const getVeterinarianName = (vetId) => {
+    const vetUser = validUsers.find((user) => user.key === vetId);
+    return vetUser ? vetUser.value : "";
+  };
+
 
   const back = () => {
     router.back();
@@ -66,8 +134,6 @@ const Journal = () => {
   const clear = () => {
     setanimal({});
   };
-
-  const handleCreateRoom = async () => {};
 
   const renderItem = ({ item }) => (
     <ScrollView style={styles.scrollView}>
@@ -100,7 +166,7 @@ const Journal = () => {
               </Text>
               <Text style={styles.directoryText}>
                 {t.veterinarian}
-                {item.veterinary}
+                {getVeterinarianName(item.veterinary)}
               </Text>
             </View>
             <View style={styles.columnContainer}>
@@ -134,7 +200,7 @@ const Journal = () => {
         <View style={styles.modalbuttonContainer}>
           <Pressable
             style={[styles.modalbutton, { backgroundColor: "#E14D2A" }]}
-            onPress={handleCreateRoom}
+            onPress= {() => {router.push({ pathname: "/editJournal", params: { id: animal.id, name: animal.name, species: animal.species, veterinaryName: getVeterinarianName(animal.veterinary), veterinaryId: animal.veterinary, entry: animal.folder }})}}
           >
             <Text style={styles.modaltext}>{t.edit}</Text>
           </Pressable>
@@ -161,6 +227,14 @@ const Journal = () => {
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
           />
+          <View style={styles.modalbuttonContainer}>
+            <Pressable
+              style={[styles.modalbutton, { backgroundColor: "#E14D2A" }]}
+              onPress={() => router.push("/newJournal")}
+            >
+              <Text style={styles.modaltext}>{t.create}</Text>
+            </Pressable>
+          </View>
         </View>
       )}
       <Menu />
