@@ -6,6 +6,7 @@
     Pressable,
     Text,
     Image,
+    TouchableOpacity,
   } from "react-native";
   import { Stack, useRouter } from "expo-router";
   import * as Localization from "expo-localization";
@@ -82,6 +83,10 @@
       }
     };
 
+    const signup = () => {
+      router.push("/signup");
+    };
+
     const handleSignIn = async () => {
       if (username.trim() && password.trim() && email.trim()) {
         try {
@@ -95,19 +100,6 @@
           } else {
             setError(t.incorrectUsernameOrPassword);
           }
-        } catch (error) {
-          // Si authUser arroja un error, manejas la situación según tus necesidades
-          console.error("Error en authUser:", error);
-        }
-      } else {
-        setError(t.usernameAndPasswordRequired);
-      }
-    };
-
-    const handleSignUp = async () => {
-      if (username.trim() && password.trim() && email.trim()) {
-        try {
-          await createUser(email, password, username);
         } catch (error) {
           // Si authUser arroja un error, manejas la situación según tus necesidades
           console.error("Error en authUser:", error);
@@ -168,11 +160,9 @@
                 <Text style={styles.loginbuttonText}>{t.getStarted}</Text>
               </View>
             </Pressable>
-            <Pressable onPress={() => {handleSignUp();}} style={styles.loginbutton}>
-              <View>
-                <Text style={styles.loginbuttonText}>{t.signup}</Text>
-              </View>
-            </Pressable>
+            <TouchableOpacity style={styles.mainMenuButton} onPress={signup}>
+              <Text style={styles.mainMenuButtonText}>{t.signup}</Text>
+            </TouchableOpacity>
 
             {/* Display error message */}
             {error ? <Text style={styles.errorText}>{error}</Text> : null}

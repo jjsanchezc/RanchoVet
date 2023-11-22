@@ -20,6 +20,7 @@ const translations = {
     menu: "Main menu",
     journal: "Journal",
     profile: "Profile",
+    signup: "Signup",
   },
   "es-ES": {
     login: "Inicio de sesión",
@@ -30,6 +31,7 @@ const translations = {
     menu: "Menú principal",
     journal: "Bitácora",
     profile: "Perfil",
+    signup: "Crear Usuario",
   },
 };
 
@@ -66,6 +68,7 @@ const Layout = () => {
       <Stack.Screen name='main' options={{ title: t.menu, headerStyle: { backgroundColor: "#CF5C36", }, headerTitleStyle: { color: "#050517", fontFamily: 'DMBold', }, }} />
       <Stack.Screen name='journal' options={{ title: t.journal, headerStyle: { backgroundColor: "#CF5C36", }, headerTitleStyle: { color: "#050517", fontFamily: 'DMBold', }, }} />
       <Stack.Screen name='profile' options={{ title: t.profile, headerStyle: { backgroundColor: "#CF5C36", }, headerTitleStyle: { color: "#050517", fontFamily: 'DMBold', }, }} />
+      <Stack.Screen name='signup' options={{ title: t.signup, headerStyle: { backgroundColor: "#CF5C36", }, headerTitleStyle: { color: "#050517", fontFamily: 'DMBold', }, }} />
     </Stack>
   );
 };

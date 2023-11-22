@@ -65,23 +65,13 @@ const ProfileScreen = () => {
     return (
         <View style={styles.directoryscreen}>
             <View>
-              <Ionicons
-                name="person-circle-outline"
-                size={200}
-                color="black"
-                style={styles.cavatar}
-              />
+            <Image
+                source={{ uri: userProfile.image }}
+                style={{ width: 100, height: 100 }} // Puedes ajustar el tamaño de la imagen según tus necesidades
+            />
             </View>
             {editing ? (
                 <View>
-                    <Text style={styles.profileDetailsText}>Usuario </Text> 
-                    <TextInput
-                    />
-
-                    <Text style={styles.profileDetailsText}>Contraseña </Text>
-                    <TextInput
-                    />
-
                     <Text style={styles.profileDetailsText} >Nombre</Text>
                     <TextInput
                         value={userProfile.name}
@@ -120,19 +110,11 @@ const ProfileScreen = () => {
                 </View>
             ) : (
                 <View  >
-                    <Text style={styles.profileDetailsText}>Usuario </Text>
-                     <Text> {userProfile.user} </Text>
-                    <Text style={styles.profileDetailsText}>Contraseña </Text>
-
                     <Text style={styles.profileDetailsText}>Nombre </Text> 
                      <Text>{userProfile.name} </Text>
                     <Text style={styles.profileDetailsText} >Dirección </Text>
                      <Text> {userProfile.location}</Text>
                     <Text style={styles.profileDetailsText} >Ocupación</Text> 
-                    <Image
-                        source={{ uri: userProfile.image }}
-                        style={{ width: 100, height: 100 }} // Puedes ajustar el tamaño de la imagen según tus necesidades
-                    />
 
                     {userProfile.type === 'vet' && (
                         <View>

@@ -247,9 +247,28 @@ const authUser = async (mail, userPasword) => {
   const response = await signInWithEmailAndPassword(auth, mail, userPasword)
 }
 
-const createUser = async (mail, userPasword, username, type) => {
-  const response = await createUserWithEmailAndPassword(auth, mail, userPasword)
-
-}
+const createUser = async (mail, userPassword, username, type, vetData, image, location) => {
+  try {
+    const response = await createUserWithEmailAndPassword(auth, mail, userPassword);
+    const userData = {
+      image: image,
+      location: location,
+      name: username,
+      pass: userPassword,
+      type: type ? "vet" : "user",
+      Email: mail
+    };
+    if (type) {
+      userData.vet_data = vetData;
+    }
+    const userRef = ref(database, `users/${response.user.uid}/`);
+    await set(userRef, userData);
+    return response.user.uid;
+  } catch (error) {
+    console.error("Error, the EMAIL is already in use:", error);
+    // Maneja el error según tus necesidades
+    throw error;
+  }
+};
 
 export { getMessages, getUser, newMessage, createNewChat, createNewForum, createNewReply, getReplies, getForums, getUsersPasswords, isFirebaseConnected, updateChat, editProfile, uploadImage, authUser, createUser };
