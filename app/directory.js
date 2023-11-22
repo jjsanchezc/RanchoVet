@@ -98,22 +98,26 @@ const Directory = () => {
       console.log("user", user);
       console.log("userData", userData);
       const userChats = Object.values(JSON.parse(userData).chats);
-      //console.log("userChats", userChats);
+      console.log("userChats", userChats);
       var chatKey = "";
       var newChat = true;
       var chat;
-      for (let index = 0; index < userChats.length; index++) {
-        chat = JSON.parse(await AsyncStorage.getItem(userChats[index]));
-        //console.log("chat", chat);
-        //console.log("chat.user", chat.usuarios);
-        //console.log("destinatary.id", destinatary.id);
-        if (
-          chat.usuarios[0] == destinatary.id ||
-          chat.usuarios[1] == destinatary.id
-        ) {
-          newChat = false;
-          chatKey = chat.id;
-          break;
+      if (!Array.isArray(userChats))
+        {
+          for (let index = 0; index < userChats.length; index++) {
+          chat = JSON.parse(await AsyncStorage.getItem(userChats[index]));
+          console.log("chat", chat);
+          //console.log("chat.user", chat.usuarios);
+          //console.log("destinatary.id", destinatary.id);
+          if (
+            chat != "" &&(
+            chat.usuarios[0] == destinatary.id ||
+            chat.usuarios[1] == destinatary.id)
+          ) {
+            newChat = false;
+            chatKey = chat.id;
+            break;
+          }
         }
       }
       if (newChat) chatKey = await createNewChat(user, destinatary.id);

@@ -256,7 +256,8 @@ const createUser = async (mail, userPassword, username, type, vetData, image, lo
       name: username,
       pass: userPassword,
       type: type ? "vet" : "user",
-      Email: mail
+      Email: mail,
+      chats:"",
     };
     if (type) {
       userData.vet_data = vetData;
