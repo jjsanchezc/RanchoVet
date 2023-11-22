@@ -18,12 +18,6 @@ export default function MessageComponent({ item, user }) {
         }
       >
         <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Ionicons
-            name='person-circle-outline'
-            size={30}
-            color='black'
-            style={styles.mvatar}
-          />
           <View
             style={
               isCurrentUser

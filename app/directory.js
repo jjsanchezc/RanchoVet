@@ -4,6 +4,7 @@ import {
   Pressable,
   TouchableOpacity,
   Modal,
+  TextInput,
   FlatList,
   Button,
 } from "react-native";
@@ -49,6 +50,7 @@ const Directory = () => {
   const router = useRouter();
   const [destinatary, setDestinatary] = useState({});
   const [validUsers, setValidUsers] = useState([]);
+  const [searchText, setSearchText] = useState("");
   const [filterBy, setFilterBy] = useState(""); // Estado para almacenar la opción de filtrado
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const locale = Localization.locale;
@@ -57,25 +59,26 @@ const Directory = () => {
     translations[locale] || translations[language] || translations["es-ES"];
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const users = await getUsersPasswords();
-        const Vusers = Object.values(users);
-        const ids = Object.keys(users);
-        const vetUsers = [];
-        for (let index = 0; index < Vusers.length; index++) {
-          if (Vusers[index].type == "vet") {
-            Vusers[index].id = ids[index];
-            vetUsers.push(Vusers[index]);
-          }
-        }
-        setValidUsers(vetUsers);
-      } catch (error) {
-        console.error("Error al obtener contraseña del usuario:", error);
-      }
-    };
     fetchData();
   }, []);
+
+  const fetchData = async () => {
+    try {
+      const users = await getUsersPasswords();
+      const Vusers = Object.values(users);
+      const ids = Object.keys(users);
+      const vetUsers = [];
+      for (let index = 0; index < Vusers.length; index++) {
+        if (Vusers[index].type == "vet") {
+          Vusers[index].id = ids[index];
+          vetUsers.push(Vusers[index]);
+        }
+      }
+      setValidUsers(vetUsers);
+    } catch (error) {
+      console.error("Error al obtener contraseña del usuario:", error);
+    }
+  };
 
   const back = () => {
     router.back();
@@ -88,6 +91,35 @@ const Directory = () => {
   const handleFilterChange = (value) => {
     setFilterBy(value); // Almacena la opción seleccionada
   };
+
+  const handleSearch = async () => {
+    // Realiza acciones de búsqueda aquí con el valor de searchText
+    const users = await getUsersPasswords();
+    const Vusers = Object.values(users);
+    const ids = Object.keys(users);
+    const vetUsers = [];
+    for (let index = 0; index < Vusers.length; index++) {
+      if (Vusers[index].type == "vet") {
+        Vusers[index].id = ids[index];
+        vetUsers.push(Vusers[index]);
+      }
+    }
+
+    const filteredUsers = vetUsers.filter(element => {
+      // Convert both the element and the search string to lowercase for case-insensitive comparison
+      const lowercasedElement = String(element.name).toLowerCase();
+      const lowercasedSearchString = searchText.toLowerCase();
+
+      // Check if the element contains the search string
+      return lowercasedElement.includes(lowercasedSearchString);
+    });
+
+    setValidUsers(filteredUsers);
+  };
+
+  useEffect(() => {
+    handleSearch();
+  }, [searchText]);
 
   const handleCreateRoom = async () => {
     if (destinatary) {
@@ -230,13 +262,6 @@ const Directory = () => {
     </View>
   );
 
-  const handleSearch = () => {
-    // Aquí puedes implementar la lógica de búsqueda según la opción seleccionada (filterBy)
-    // Por ejemplo, filtrar la lista de veterinarios
-    // ...lógica de filtrado
-    console.log("Realizar búsqueda con filtro:", filterBy);
-  };
-
 
   const renderFilter = () => {
     const handleFilterChange = (itemValue) => {
@@ -254,7 +279,7 @@ const Directory = () => {
 
 
     return (
-      <View style={styles.container}>
+      <View style={styles.filterContainer}>
         <TouchableOpacity
           onPress={() => setDropdownVisible(true)}
           style={styles.dropdownButton}
@@ -290,12 +315,22 @@ const Directory = () => {
         renderItemDetails()
       ) : (
         <View style={styles.directoryscreen}>
+          <View style={styles.searchContainer}>
+            <TextInput
+              style={styles.searchInput}
+              placeholder={"Buscar"}
+              value={searchText}
+              onChangeText={setSearchText}
+            />
+          </View>
           {renderFilter()}
-          <FlatList
-            data={validUsers}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-          />
+          <View style={styles.directorylistContainer}>
+            <FlatList
+              data={validUsers}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id}
+            />
+          </View>
         </View>
       )}
       <Menu />

@@ -63,11 +63,11 @@ const Forums = () => {
 
   async function loadFirebaseData() {
     try {
-      const threads = await getForums();
+      const threads = reverseOrderOfKeys(await getForums());
 
       // If there are threads from Firebase, update AsyncStorage
       if (Object.keys(threads).length > 0) {
-        const updatedThreadList = { ...threadList, ...threads };
+        const updatedThreadList = { ...threads, ...threadList };
         await AsyncStorage.setItem("storedThreads", JSON.stringify(updatedThreadList));
         setThreadList(updatedThreadList);
       }
@@ -75,6 +75,17 @@ const Forums = () => {
       console.error("Error loading data from Firebase:", error);
     }
   };
+
+  function reverseOrderOfKeys(jsonObject) {
+    const reversedKeys = Object.keys(jsonObject).reverse();
+    const reversedObject = {};
+
+    reversedKeys.forEach(key => {
+      reversedObject[key] = jsonObject[key];
+    });
+
+    return reversedObject;
+  }
 
 
   // Create a new thread and save it to Firebase and AsyncStorage
@@ -102,7 +113,7 @@ const Forums = () => {
       const updatedThread = { id: newThreadId, ...newThread };
 
       // Save it to AsyncStorage
-      const updatedThreads = { ...threadList, [newThreadId]: updatedThread };
+      const updatedThreads = { [newThreadId]: updatedThread, ...threadList };
       await AsyncStorage.setItem("storedThreads", JSON.stringify(updatedThreads));
 
       setThreadList(updatedThreads);
