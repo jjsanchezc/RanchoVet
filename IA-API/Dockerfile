@@ -1,13 +1,11 @@
-FROM python:3.9-alpine
+FROM python:3.9.12
 
-RUN mkdir /API
 
 WORKDIR /API
 
-
-COPY . /API/
-
-RUN pip3 install -r /API/requirements.txt
+COPY . /API
+RUN python -m pip install --upgrade pip
+RUN pip install -r requirements.txt
 
 EXPOSE 5000
 
